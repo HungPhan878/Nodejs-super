@@ -15,3 +15,7 @@
 ## Giải thích package:
 + Package-lock là hiển thị chi tiết version và sự phụ thuộc của sự phụ thuộc của các gói packages
 + Package.json hiển thị các version của các gói sử dụng trong dự án của chúng ta thôi để khi npm i thì sẽ nhin vào đó để cài thư viện.
+## NPX: 
++ Là câu lệnh dùng để tải các nhiều package cùng một lúc or được đóng gói sẵn trong một câu lệnh (create-react-app) và không cần phải có file package.json 
+## Cách đưa package lên npm thì đọc kĩ trong blog nha:
++ Chủ yếu là npm link đã liên kết với npm rồi thì lần sau update chỉ cần vào folder cần đẩy lên npm nhấn npm publish nữa là ok nha

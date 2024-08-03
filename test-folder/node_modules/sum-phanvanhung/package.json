@@ -1,0 +1,21 @@
+{
+  "name": "sum-phanvanhung",
+  "version": "1.0.0",
+  "description": "Một thư viện giúp bạn tính tổng của 2 số bất kỳ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duthanhduoc/sum-duthanhduoc"
+  },
+  "keywords": [
+    "sum",
+    "add",
+    "tong",
+    "cong"
+  ],
+  "author": "Phan Van Hung",
+  "license": "MIT"
+}
