@@ -1,18 +1,20 @@
-const http = require('http');
+const express = require('express');
+const app = express();
+const port = 4000; // Bạn có thể chọn bất kỳ cổng nào khác nếu muốn
 
-// Định nghĩa cổng
-const port = 5000;
+// Định nghĩa một route cơ bản
+app.get('/', (req, res) => {
+  res.send('Hello World!');
+});
 
-// Tạo server
-const server = http.createServer((req, res) => {
-  // Đặt tiêu đề HTTP
+app.get('/user', (req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'application/json');
 
   // Tạo một đối tượng JSON
   const responseObject = {
-    message: 'Hello, World!',
-    success: true,
+    hi: 'HELLO, World!',
+    name: 'Hung',
   };
 
   // Trả về chuỗi JSON
@@ -20,7 +22,6 @@ const server = http.createServer((req, res) => {
 });
 
 // Khởi động server
-server.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}/`);
+app.listen(port, () => {
+  console.log(`Server is running at http://localhost:${port}`);
 });
-
