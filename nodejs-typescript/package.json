@@ -1,0 +1,33 @@
+{
+  "name": "nodejs-typescript",
+  "version": "1.0.0",
+  "description": "+ Tự cài một dự án ban đầu và đăng lên github\r + Đăng với nd là Init project là ok.\r + Chỉ cần tải zip folder này về và giải nén ra đổi tên là xong\r + Ưu điểm : nhanh và gọn.\r + Nhược điểm: nếu để lâu khi các package nâng cấp thì vẫn chỉ ở version cũ mà thôi nếu dùng version mới thì đến c2.\r ## Cách 2:\r + Lên trang blog tự cài thủ công hoặc cài nhanh bằng thư viện.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npx nodemon",
+    "build": "rimraf ./dist && tsc && tsc-alias",
+    "start": "node dist/index.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^22.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
+    "eslint": "^9.8.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "nodemon": "^3.1.4",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "tsc-alias": "^1.8.10",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.5.4"
+  }
+}
