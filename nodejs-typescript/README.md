@@ -11,3 +11,7 @@
 ## Cách 2:
 
 - Lên trang blog tự cài thủ công hoặc cài nhanh bằng thư viện.
+
+# Note:
+
+#### Khi sử dụng dự án ts thì khi cài các thư viện có tích hợp ts trước thì ok nhưng chưa có thì phải tải thêm file thư viên có @type/ ở trước là ok nha.
