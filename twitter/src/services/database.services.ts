@@ -1,17 +1,33 @@
 import { MongoClient } from 'mongodb'
-const uri =
-  'mongodb+srv://phanvanhung:Phanvanhung789@twitter.z2myd.mongodb.net/?retryWrites=true&w=majority&appName=Twitter'
+import { config } from 'dotenv'
 
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri)
+// help me use file .env
+config()
 
-export async function run() {
-  try {
-    // Send a ping to confirm a successful connection
-    await client.db('admin').command({ ping: 1 })
-    console.log('Pinged your deployment. You successfully connected to MongoDB!')
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close()
+console.log(process.env.DB_USERNAME)
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@twitter.z2myd.mongodb.net/?retryWrites=true&w=majority&appName=Twitter`
+
+// Create a MongoClient and connect to MongoDB by class constructor
+class DatabaseService {
+  private client
+  constructor() {
+    this.client = new MongoClient(uri)
+  }
+  async connect() {
+    try {
+      // Send a ping to confirm a successful connection
+      await this.client.db('admin').command({ ping: 1 })
+      console.log('Pinged your deployment. You successfully connected to MongoDB!')
+    } catch (err) {
+      console.dir('Failed to ping your deployment. Please check your MongoDB connection details.', err)
+      throw err
+    } finally {
+      // Ensures that the client will close when you finish/error
+      await this.client.close()
+    }
   }
 }
+
+const dbService = new DatabaseService()
+
+export default dbService

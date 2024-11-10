@@ -2,13 +2,13 @@
 import express from 'express'
 
 // component
-import { run } from './services/database.services'
+import dbService from './services/database.services'
 import userRouter from './routes/user.routes'
 
 const app = express()
 const port = 3000
 
-run().catch(console.dir)
+dbService.connect()
 
 // add middleware handlers for json
 app.use(express.json())
