@@ -20,6 +20,7 @@ export const registerController = async (
   next: NextFunction
 ): Promise<any> => {
   try {
+    // Should use try catch in  outermost function
     const result = await userService.createUser(req.body)
     return res.status(200).json({ message: 'User registered successfully', result })
   } catch (error) {
