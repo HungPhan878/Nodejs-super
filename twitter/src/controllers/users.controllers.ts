@@ -1,6 +1,4 @@
 import { Request, Response, NextFunction } from 'express'
-import User from '~/models/schemas/user.schema'
-import dbService from '~/services/database.services'
 import { ParamsDictionary } from 'express-serve-static-core'
 import userService from '~/services/users.services'
 import { RegisterBodyReq } from '~/models/requests/User.requests'
@@ -19,11 +17,7 @@ export const registerController = async (
   res: Response,
   next: NextFunction
 ): Promise<any> => {
-  try {
-    // Should use try catch in  outermost function
-    const result = await userService.createUser(req.body)
-    return res.status(200).json({ message: 'User registered successfully', result })
-  } catch (error) {
-    return res.status(400).json({ message: 'Failed to register user', error })
-  }
+  // Should use try catch in  outermost function
+  const result = await userService.createUser(req.body)
+  return res.status(200).json({ message: 'User registered successfully', result })
 }
