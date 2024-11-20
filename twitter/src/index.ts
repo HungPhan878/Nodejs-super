@@ -1,9 +1,8 @@
 // index.js hoặc app.js
-import express, { Request, Response, NextFunction } from 'express'
-
-// component
+import express from 'express'
 import dbService from './services/database.services'
 import userRouter from './routes/user.routes'
+import defaultErrorHandler from './middlewares/error.middlewares'
 
 const app = express()
 const port = 3000
@@ -15,9 +14,7 @@ app.use(express.json())
 // Gắn router user vào đường dẫn /users
 app.use('/users', userRouter)
 // error handler
-app.use((err: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(400).json({ message: err.message })
-})
+app.use(defaultErrorHandler)
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)
 })
