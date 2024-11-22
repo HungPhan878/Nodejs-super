@@ -1,11 +1,12 @@
-import { Request, Response, NextFunction } from 'express'
+import { ErrorRequestHandler } from 'express'
 import omit from 'lodash/omit'
 import HTTP_STATUS from '~/constants/httpStatusCode'
 import { ErrorWithStatus } from '~/models/Errors'
 
-const defaultErrorHandler = (err: any, req: Request, res: Response, next: NextFunction): any => {
+const defaultErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof ErrorWithStatus) {
-    return res.status(err.status).json(omit(err, 'status'))
+    res.status(err.status).json(omit(err, 'status'))
+    return
   }
 
   // Return an error when progress logic on server throw errors
