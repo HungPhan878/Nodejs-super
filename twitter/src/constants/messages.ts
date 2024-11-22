@@ -17,7 +17,8 @@ const MESSAGES_ERROR = {
   CONFIRM_PASSWORD_MUST_BE_STRONG:
     'Confirm password must be 6-50 characters long and contain at least 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol',
   CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD: 'Confirm password must be the same as password',
-  DATE_OF_BIRTH_MUST_BE_ISO8601: 'Date of birth must be ISO8601'
+  DATE_OF_BIRTH_MUST_BE_ISO8601: 'Date of birth must be ISO8601',
+  USER_NOT_FOUND: 'User not found'
 } as const
 
 export default MESSAGES_ERROR

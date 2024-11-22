@@ -1,21 +1,62 @@
-import { Request, Response, NextFunction } from 'express'
 import { checkSchema } from 'express-validator'
 import MESSAGES_ERROR from '~/constants/messages'
-import { ErrorWithStatus } from '~/models/Errors'
+import dbService from '~/services/database.services'
 import userService from '~/services/users.services'
+import { hashPassword } from '~/utils/crypto'
 
 // components
 import { validate } from '~/utils/validation'
 
-export const loginValidator = (req: Request, res: Response, next: NextFunction): any => {
-  const { username, password } = req.body
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required' })
-  } else {
-    next()
-  }
-}
-
+export const loginValidator = validate(
+  checkSchema({
+    email: {
+      isEmail: {
+        errorMessage: MESSAGES_ERROR.EMAIL_IS_INVALID
+      },
+      notEmpty: {
+        errorMessage: MESSAGES_ERROR.EMAIL_IS_REQUIRED
+      },
+      trim: true,
+      custom: {
+        options: async (value: string, { req }) => {
+          const user = await dbService.users.findOne({
+            email: value,
+            password: hashPassword(req.body.password)
+          })
+          if (user === null) {
+            throw new Error(MESSAGES_ERROR.USER_NOT_FOUND)
+          }
+          req.user = user
+          return true
+        }
+      }
+    },
+    password: {
+      notEmpty: { errorMessage: MESSAGES_ERROR.PASSWORD_IS_REQUIRED },
+      isString: {
+        errorMessage: MESSAGES_ERROR.PASSWORD_MUST_BE_A_STRING
+      },
+      isLength: {
+        options: {
+          min: 8,
+          max: 50
+        },
+        errorMessage: MESSAGES_ERROR.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
+      },
+      trim: true,
+      isStrongPassword: {
+        options: {
+          minLength: 8,
+          minLowercase: 1,
+          minUppercase: 1,
+          minNumbers: 1,
+          minSymbols: 1
+        },
+        errorMessage: MESSAGES_ERROR.PASSWORD_MUST_BE_STRONG
+      }
+    }
+  })
+)
 export const registerValidator = validate(
   checkSchema({
     email: {

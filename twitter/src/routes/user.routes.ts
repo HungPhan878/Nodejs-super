@@ -8,7 +8,7 @@ import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
 
 const userRouter = Router()
 
-userRouter.post('/login', loginValidator, loginController)
+userRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
 userRouter.post('/register', registerValidator, wrapRequestHandler(registerController))
 
 export default userRouter
