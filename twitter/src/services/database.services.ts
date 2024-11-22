@@ -1,6 +1,7 @@
 import { Collection, MongoClient } from 'mongodb'
 import { config } from 'dotenv'
 import User from '~/models/schemas/user.schema'
+import { RefreshToken } from '~/models/schemas/RefreshToken.schema'
 
 // help me use file .env
 config()
@@ -21,7 +22,10 @@ class DatabaseService {
       await this.db.command({ ping: 1 })
       console.log('Pinged your deployment. You successfully connected to MongoDB!')
     } catch (err) {
-      console.dir('Failed to ping your deployment. Please check your MongoDB connection details.', err)
+      console.dir(
+        'Failed to ping your deployment. Please check your MongoDB connection details.',
+        err
+      )
       throw err
     }
     // finally {
@@ -31,7 +35,11 @@ class DatabaseService {
   }
 
   get users(): Collection<User> {
-    return this.db.collection(process.env.DB_COLLECTION as string)
+    return this.db.collection(process.env.DB_USERS_COLLECTION as string)
+  }
+
+  get refreshToken(): Collection<RefreshToken> {
+    return this.db.collection(process.env.DB_REFRESH_TOKENS_COLLECTION as string)
   }
 }
 
