@@ -1,6 +1,7 @@
 import { checkSchema } from 'express-validator'
 import { JsonWebTokenError } from 'jsonwebtoken'
 import capitalize from 'lodash/capitalize'
+import { Request } from 'express'
 
 import HTTP_STATUS from '~/constants/httpStatusCode'
 import MESSAGES_ERROR from '~/constants/messages'
@@ -191,7 +192,7 @@ export const accessTokenValidator = validate(
             }
             try {
               const decoded_authorization = await verifyToken({ token: access_token })
-              req.decoded_authorization = decoded_authorization
+              ;(req as Request).decoded_authorization = decoded_authorization
             } catch (error) {
               throw new ErrorWithStatus({
                 message: capitalize((error as JsonWebTokenError).message),
@@ -228,7 +229,9 @@ export const refreshTokenValidator = validate(
                   status: HTTP_STATUS.UNAUTHORIZED
                 })
               }
-              req.decoded_refresh_token = decoded_refresh_token
+              // why is this cast as Request  here?
+              //Because req is not the req from express so we need to cast it as Request to use type defined in type.d.ts
+              ;(req as Request).decoded_refresh_token = decoded_refresh_token
             } catch (error) {
               // If the error is verifyToken failed
               if (error instanceof JsonWebTokenError) {

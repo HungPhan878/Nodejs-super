@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import userService from '~/services/users.services'
-import { RegisterBodyReq } from '~/models/requests/User.requests'
+import { LogoutBodyReq, RegisterBodyReq } from '~/models/requests/User.requests'
 import { ObjectId } from 'mongodb'
 import User from '~/models/schemas/user.schema'
 import MESSAGES_ERROR from '~/constants/messages'
@@ -25,7 +25,11 @@ export const registerController = async (
   return res.status(200).json({ message: MESSAGES_ERROR.REGISTER_SUCCESS, result })
 }
 
-export const logoutController = async (req: Request, res: Response, next: NextFunction) => {
+export const logoutController = async (
+  req: Request<ParamsDictionary, any, LogoutBodyReq>,
+  res: Response,
+  next: NextFunction
+) => {
   const { refresh_token } = req.body
   const result = await userService.logout(refresh_token)
   return res.status(200).json({ message: MESSAGES_ERROR.LOGOUT_SUCCESS, result })
