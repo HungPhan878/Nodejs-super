@@ -29,7 +29,7 @@ const MESSAGES_ERROR = {
   ACCESS_TOKEN_IS_REQUIRED: 'Access token is required',
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
   REFRESH_TOKEN_USED_OR_NOT_EXIST: 'Refresh token used or not exists',
-  REFRESH_TOKEN_INVALID: 'Refresh token invalid'
+  REFRESH_TOKEN_IS_INVALID: 'Refresh token is invalid'
 } as const
 
 export default MESSAGES_ERROR

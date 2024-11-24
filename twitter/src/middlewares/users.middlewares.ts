@@ -1,4 +1,7 @@
 import { checkSchema } from 'express-validator'
+import { JsonWebTokenError } from 'jsonwebtoken'
+import capitalize from 'lodash/capitalize'
+
 import HTTP_STATUS from '~/constants/httpStatusCode'
 import MESSAGES_ERROR from '~/constants/messages'
 import { ErrorWithStatus } from '~/models/Errors'
@@ -186,8 +189,15 @@ export const accessTokenValidator = validate(
                 status: HTTP_STATUS.UNAUTHORIZED
               })
             }
-            const decoded_authorization = await verifyToken({ token: access_token })
-            req.decoded_authorization = decoded_authorization
+            try {
+              const decoded_authorization = await verifyToken({ token: access_token })
+              req.decoded_authorization = decoded_authorization
+            } catch (error) {
+              throw new ErrorWithStatus({
+                message: capitalize((error as JsonWebTokenError).message),
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
             return true
           }
         }
@@ -219,11 +229,16 @@ export const refreshTokenValidator = validate(
                 })
               }
               req.decoded_refresh_token = decoded_refresh_token
-            } catch (error: any) {
-              throw new ErrorWithStatus({
-                message: error.message,
-                status: HTTP_STATUS.UNAUTHORIZED
-              })
+            } catch (error) {
+              // If the error is verifyToken failed
+              if (error instanceof JsonWebTokenError) {
+                throw new ErrorWithStatus({
+                  message: capitalize((error as JsonWebTokenError).message),
+                  status: HTTP_STATUS.UNAUTHORIZED
+                })
+              }
+              // if the error is refresh_token === null
+              throw error
             }
             return true
           }

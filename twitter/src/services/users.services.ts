@@ -68,6 +68,11 @@ class UserService {
       refreshToken
     }
   }
+
+  async logout(refresh_token: string) {
+    const result = await dbService.refreshToken.deleteOne({ token: refresh_token })
+    return result
+  }
 }
 
 const userService = new UserService()

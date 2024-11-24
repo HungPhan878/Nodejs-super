@@ -7,7 +7,7 @@ import {
   refreshTokenValidator,
   registerValidator
 } from '~/middlewares/users.middlewares'
-import { loginController } from '~/controllers/users.controllers'
+import { loginController, logoutController } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
 
@@ -51,9 +51,7 @@ userRouter.post(
   '/logout',
   accessTokenValidator,
   refreshTokenValidator,
-  wrapRequestHandler((req, res) => {
-    res.json('Logout successful')
-  })
+  wrapRequestHandler(logoutController)
 )
 
 export default userRouter
