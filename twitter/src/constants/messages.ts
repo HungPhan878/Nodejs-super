@@ -25,7 +25,11 @@ const MESSAGES_ERROR = {
   LOGOUT_SUCCESS: 'Logout successfully',
   USER_UPDATED_SUCCESSFULLY: 'User updated successfully',
   USER_UPDATED_WITH_ERRORS: 'User updated with errors',
-  USER_DELETED_SUCCESSFULLY: 'User deleted successfully'
+  USER_DELETED_SUCCESSFULLY: 'User deleted successfully',
+  ACCESS_TOKEN_IS_REQUIRED: 'Access token is required',
+  REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
+  REFRESH_TOKEN_USED_OR_NOT_EXIST: 'Refresh token used or not exists',
+  REFRESH_TOKEN_INVALID: 'Refresh token invalid'
 } as const
 
 export default MESSAGES_ERROR
