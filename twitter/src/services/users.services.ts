@@ -7,6 +7,7 @@ import { signToken } from '~/utils/jwt'
 import { config } from 'dotenv'
 import { RefreshToken } from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
+import { addTokenBlackList } from '~/utils/storage'
 
 config()
 class UserService {
@@ -72,6 +73,18 @@ class UserService {
   async logout(refresh_token: string) {
     const result = await dbService.refreshToken.deleteOne({ token: refresh_token })
     return result
+  }
+
+  async refreshToken(user_id: string, refresh_token: string) {
+    const [access_token, new_refresh_token] = await this.signAccessAndRefreshToken(user_id)
+    await dbService.refreshToken.insertOne(
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
+    )
+    addTokenBlackList(refresh_token)
+    return {
+      access_token,
+      new_refresh_token
+    }
   }
 }
 

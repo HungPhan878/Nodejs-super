@@ -7,7 +7,7 @@ import {
   refreshTokenValidator,
   registerValidator
 } from '~/middlewares/users.middlewares'
-import { loginController, logoutController } from '~/controllers/users.controllers'
+import { loginController, logoutController, refreshToken } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
 
@@ -53,5 +53,15 @@ userRouter.post(
   refreshTokenValidator,
   wrapRequestHandler(logoutController)
 )
+
+/**
+ *  Description: Create a new access token
+ *  Path: /refresh_token
+ *  Method: POST
+ *  Body:{
+ *       refresh_token:string
+ *      }
+ */
+userRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshToken))
 
 export default userRouter

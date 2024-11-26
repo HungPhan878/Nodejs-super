@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import userService from '~/services/users.services'
-import { LogoutBodyReq, RegisterBodyReq } from '~/models/requests/User.requests'
+import { LogoutBodyReq, RegisterBodyReq, TokenPayload } from '~/models/requests/User.requests'
 import { ObjectId } from 'mongodb'
 import User from '~/models/schemas/user.schema'
 import MESSAGES_ERROR from '~/constants/messages'
@@ -34,3 +34,12 @@ export const logoutController = async (
   const result = await userService.logout(refresh_token)
   return res.status(200).json({ message: MESSAGES_ERROR.LOGOUT_SUCCESS, result })
 }
+
+export const refreshToken = async (req: Request, res: Response) => {
+  const decoded_refresh_token = req.decoded_refresh_token as TokenPayload
+  const { refresh_token } = req
+  const user_id = decoded_refresh_token.user_id
+  const result = await userService.refreshToken(user_id, refresh_token)
+  return res.status(200).json({ message: MESSAGES_ERROR.REFRESH_TOKEN_SUCCESSFULLY, result })
+}
+      
