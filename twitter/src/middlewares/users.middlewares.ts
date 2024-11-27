@@ -13,7 +13,6 @@ import { verifyToken } from '~/utils/jwt'
 
 // components
 import { validate } from '~/utils/validation'
-import { isTokenBlackList } from '~/utils/storage'
 
 export const loginValidator = validate(
   checkSchema(
@@ -219,16 +218,6 @@ export const refreshTokenValidator = validate(
         custom: {
           options: async (value, { req }) => {
             try {
-              // Check if token is in blacklist
-              const isBlacklisted = await isTokenBlackList(value)
-              console.log(isBlacklisted)
-              if (isBlacklisted) {
-                throw new ErrorWithStatus({
-                  message: MESSAGES_ERROR.REFRESH_TOKEN_USED_OR_NOT_EXIST,
-                  status: HTTP_STATUS.UNAUTHORIZED
-                })
-              }
-
               // When 2 awaits can run together and independent, they should be run together by Promise.all
               const [decoded_refresh_token, refresh_token] = await Promise.all([
                 verifyToken({ token: value as string }),
@@ -243,7 +232,7 @@ export const refreshTokenValidator = validate(
               // why is this cast as Request  here?
               //Because req is not the req from express so we need to cast it as Request to use type defined in type.d.ts
               ;(req as Request).decoded_refresh_token = decoded_refresh_token
-              req.refresh_token = value
+              ;(req as Request).refresh_token = value
             } catch (error) {
               // If the error is verifyToken failed
               if (error instanceof JsonWebTokenError) {
