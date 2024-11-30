@@ -7,6 +7,7 @@ import { signToken } from '~/utils/jwt'
 import { config } from 'dotenv'
 import { RefreshToken } from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
+import MESSAGES_ERROR from '~/constants/messages'
 
 config()
 class UserService {
@@ -108,21 +109,36 @@ class UserService {
   async verifyEmail(user_id: string) {
     const [token] = await Promise.all([
       this.signAccessAndRefreshToken(user_id),
-      dbService.users.updateOne(
-        { _id: new ObjectId(user_id) },
+      dbService.users.updateOne({ _id: new ObjectId(user_id) }, [
         {
           $set: {
             verify: UserVerifyStatus.Verified,
             email_verify_token: '',
-            updated_at: new Date()
+            updated_at: '$$NOW'
           }
         }
-      )
+      ])
     ])
     const [access_token, refresh_token] = token
     return {
       access_token,
       refresh_token
+    }
+  }
+
+  async resendVerifyEmail(user_id: string) {
+    const email_verify_token = await this.emailVerifyToken(user_id)
+    console.log('resend-email-verify-token:', email_verify_token)
+    await dbService.users.updateOne({ _id: new ObjectId(user_id) }, [
+      {
+        $set: {
+          email_verify_token,
+          updated_at: '$$NOW'
+        }
+      }
+    ])
+    return {
+      message: MESSAGES_ERROR.RESEND_VERIFY_EMAIL_SUCCESSFULLY
     }
   }
 }

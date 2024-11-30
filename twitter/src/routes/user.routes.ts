@@ -9,10 +9,11 @@ import {
   registerValidator
 } from '~/middlewares/users.middlewares'
 import {
-  emailVerifyValidator,
+  verifyEmailController,
   loginController,
   logoutController,
-  refreshToken
+  refreshToken,
+  resendVerifyEmailController
 } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -81,7 +82,21 @@ userRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refr
 userRouter.post(
   '/verify-email',
   emailVerifyTokenValidator,
-  wrapRequestHandler(emailVerifyValidator)
+  wrapRequestHandler(verifyEmailController)
+)
+
+/**
+ *  Description: Verify email address
+ *  Path: /verify-email
+ *  Method: POST
+ *  Body:{
+ *      email_verify_token:string
+ *      }
+ */
+userRouter.post(
+  '/resend-verify-email',
+  accessTokenValidator,
+  wrapRequestHandler(resendVerifyEmailController)
 )
 
 export default userRouter

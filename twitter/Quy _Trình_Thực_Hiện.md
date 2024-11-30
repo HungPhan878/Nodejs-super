@@ -39,3 +39,21 @@ Chỉ định nghĩa cho type các thuộc tính trong req.body thôi nha
 
 - Lí do bảo mật
 - Hacker có thể dùng refresh token thay cho access token để truy cập
+
+## Update time thực:
+
+Khi ta update lên trên mongo và tạo time cho trường update_at
+thì có hai trường hợp:
+
+1. Tạo time khi vừa update_at:
+   Dùng new Date()
+
+2. Để mongo tự update time:
+   Dùng $$NOW hay $current_time
+
+## Note:
+
+1. Không cần phải kiểm tra các token gửi lên và lưu trong db có giống nhau hay không vì
+
+- Đã có hàm verifyToken xác thực chính xác
+- Dùng id trong access-token hay ... tìm user ấy rồi

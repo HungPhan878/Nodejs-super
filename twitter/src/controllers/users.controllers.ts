@@ -1,14 +1,24 @@
 import { Request, Response, NextFunction } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import userService from '~/services/users.services'
-import { LogoutBodyReq, RegisterBodyReq, TokenPayload } from '~/models/requests/User.requests'
+import {
+  LoginBodyRed,
+  LogoutBodyReq,
+  RegisterBodyReq,
+  TokenPayload
+} from '~/models/requests/User.requests'
 import { ObjectId } from 'mongodb'
 import User from '~/models/schemas/user.schema'
 import MESSAGES_ERROR from '~/constants/messages'
 import dbService from '~/services/database.services'
 import HTTP_STATUS from '~/constants/httpStatusCode'
+import { UserVerifyStatus } from '~/constants/enums'
 
-export const loginController = async (req: Request, res: Response, next: NextFunction) => {
+export const loginController = async (
+  req: Request<ParamsDictionary, any, LoginBodyRed>,
+  res: Response,
+  next: NextFunction
+) => {
   const user = req.user as User
   const user_id = user._id as ObjectId
   if (user_id) {
@@ -45,7 +55,7 @@ export const refreshToken = async (req: Request, res: Response) => {
   return res.status(200).json({ message: MESSAGES_ERROR.REFRESH_TOKEN_SUCCESSFULLY, result })
 }
 
-export const emailVerifyValidator = async (req: Request, res: Response) => {
+export const verifyEmailController = async (req: Request, res: Response) => {
   const { user_id } = req.decoded_email_verify_token as TokenPayload
   const user = await dbService.users.findOne({ _id: new ObjectId(user_id) })
   if (!user) {
@@ -60,4 +70,24 @@ export const emailVerifyValidator = async (req: Request, res: Response) => {
   // Else verify email
   const result = await userService.verifyEmail(user_id)
   return res.status(200).json({ message: MESSAGES_ERROR.EMAIL_VERIFY_SUCCESSFULLY, result })
+}
+
+export const resendVerifyEmailController = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+
+  const user = await dbService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({ message: MESSAGES_ERROR.USER_NOT_FOUND })
+  }
+
+  // If verified email is response ok
+  if (user.verify === UserVerifyStatus.Verified) {
+    return res.json({
+      message: MESSAGES_ERROR.EMAIL_VERIFY_ALREADY_VERIFIED
+    })
+  }
+
+  // Else resend verify email
+  const result = await userService.resendVerifyEmail(user_id)
+  return res.status(200).json(result)
 }
