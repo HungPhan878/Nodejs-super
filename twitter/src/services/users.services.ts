@@ -2,7 +2,7 @@ import User from '~/models/schemas/user.schema'
 import dbService from '~/services/database.services'
 import { RegisterBodyReq } from '~/models/requests/User.requests'
 import { hashPassword } from '~/utils/crypto'
-import { TokenTypes } from '~/constants/enums'
+import { TokenTypes, UserVerifyStatus } from '~/constants/enums'
 import { signToken } from '~/utils/jwt'
 import { config } from 'dotenv'
 import { RefreshToken } from '~/models/schemas/RefreshToken.schema'
@@ -13,6 +13,7 @@ class UserService {
   private signAccessToken(user_id: string) {
     return signToken({
       payload: { user_id, token_type: TokenTypes.AccessToken },
+      privateKey: process.env.JWT_ACCESS_TOKEN_SECRET as string,
       options: {
         expiresIn: process.env.ACCESS_TOKEN_EXPIRES_IN
       }
@@ -22,8 +23,19 @@ class UserService {
   private signRefreshToken(user_id: string) {
     return signToken({
       payload: { user_id, token_type: TokenTypes.RefreshToken },
+      privateKey: process.env.JWT_REFRESH_TOKEN_SECRET as string,
       options: {
         expiresIn: process.env.REFRESH_TOKEN_EXPIRES_IN
+      }
+    })
+  }
+
+  private emailVerifyToken(user_id: string) {
+    return signToken({
+      payload: { user_id, token_type: TokenTypes.VerifiedEmailToken },
+      privateKey: process.env.JWT_EMAIL_VERIFY_TOKEN_SECRET as string,
+      options: {
+        expiresIn: process.env.EMAIL_VERIFY_TOKEN_EXPIRES_IN
       }
     })
   }
@@ -33,19 +45,23 @@ class UserService {
   }
 
   async createUser(payload: RegisterBodyReq) {
-    const result = await dbService.users.insertOne(
+    const user_id = new ObjectId()
+    const email_verify_token = await this.emailVerifyToken(user_id.toString())
+    await dbService.users.insertOne(
       new User({
         ...payload,
+        _id: user_id,
+        email_verify_token,
         date_of_birth: new Date(payload.date_of_birth),
         password: hashPassword(payload.password)
       })
     )
     // Because insertedId have objectId type so we need to translate it into a string
-    const userId = result.insertedId.toString()
-    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(userId)
+    const [accessToken, refreshToken] = await this.signAccessAndRefreshToken(user_id.toString())
     await dbService.refreshToken.insertOne(
-      new RefreshToken({ user_id: new ObjectId(userId), token: refreshToken })
+      new RefreshToken({ user_id: new ObjectId(user_id), token: refreshToken })
     )
+    console.log('email-verify-token:', email_verify_token)
     return {
       accessToken,
       refreshToken
@@ -86,6 +102,27 @@ class UserService {
     return {
       new_access_token,
       new_refresh_token
+    }
+  }
+
+  async verifyEmail(user_id: string) {
+    const [token] = await Promise.all([
+      this.signAccessAndRefreshToken(user_id),
+      dbService.users.updateOne(
+        { _id: new ObjectId(user_id) },
+        {
+          $set: {
+            verify: UserVerifyStatus.Verified,
+            email_verify_token: '',
+            updated_at: new Date()
+          }
+        }
+      )
+    ])
+    const [access_token, refresh_token] = token
+    return {
+      access_token,
+      refresh_token
     }
   }
 }

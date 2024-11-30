@@ -32,3 +32,10 @@ checkSchema({Các rule}, ['body','headers',...]),
 ```
 
 Chỉ định nghĩa cho type các thuộc tính trong req.body thôi nha
+
+## Jwt Authentication:
+
+1. Không nên dùng chung sêcret key cho ACCESS_TOKEN and REFRESH_TOKEN:
+
+- Lí do bảo mật
+- Hacker có thể dùng refresh token thay cho access token để truy cập

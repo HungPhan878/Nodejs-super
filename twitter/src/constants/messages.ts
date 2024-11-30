@@ -30,7 +30,11 @@ const MESSAGES_ERROR = {
   REFRESH_TOKEN_IS_REQUIRED: 'Refresh token is required',
   REFRESH_TOKEN_USED_OR_NOT_EXIST: 'Refresh token used or not exists',
   REFRESH_TOKEN_IS_INVALID: 'Refresh token is invalid',
-  REFRESH_TOKEN_SUCCESSFULLY: 'Refresh token successfully'
+  REFRESH_TOKEN_SUCCESSFULLY: 'Refresh token successfully',
+  EMAIL_VERIFY_IS_REQUIRED: 'Email verify is required',
+  EMAIL_VERIFY_IS_INVALID: 'Email verify is invalid',
+  EMAIL_VERIFY_ALREADY_VERIFIED: 'Email verify already verified',
+  EMAIL_VERIFY_SUCCESSFULLY: 'Email verify successfully'
 } as const
 
 export default MESSAGES_ERROR

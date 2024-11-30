@@ -10,9 +10,10 @@ import dbService from '~/services/database.services'
 import userService from '~/services/users.services'
 import { hashPassword } from '~/utils/crypto'
 import { verifyToken } from '~/utils/jwt'
-
-// components
 import { validate } from '~/utils/validation'
+import { config } from 'dotenv'
+
+config()
 
 export const loginValidator = validate(
   checkSchema(
@@ -178,12 +179,9 @@ export const accessTokenValidator = validate(
   checkSchema(
     {
       Authorization: {
-        notEmpty: {
-          errorMessage: MESSAGES_ERROR.ACCESS_TOKEN_IS_REQUIRED
-        },
         custom: {
           options: async (value, { req }) => {
-            const access_token = value.split(' ')[1]
+            const access_token = (value || '').split(' ')[1]
             if (!access_token) {
               throw new ErrorWithStatus({
                 message: MESSAGES_ERROR.ACCESS_TOKEN_IS_REQUIRED,
@@ -191,7 +189,10 @@ export const accessTokenValidator = validate(
               })
             }
             try {
-              const decoded_authorization = await verifyToken({ token: access_token })
+              const decoded_authorization = await verifyToken({
+                token: access_token,
+                secretOrPublicKey: process.env.JWT_ACCESS_TOKEN_SECRET as string
+              })
               ;(req as Request).decoded_authorization = decoded_authorization
             } catch (error) {
               throw new ErrorWithStatus({
@@ -212,15 +213,21 @@ export const refreshTokenValidator = validate(
   checkSchema(
     {
       refresh_token: {
-        notEmpty: {
-          errorMessage: MESSAGES_ERROR.REFRESH_TOKEN_IS_REQUIRED
-        },
         custom: {
           options: async (value, { req }) => {
+            if (!value) {
+              throw new ErrorWithStatus({
+                message: MESSAGES_ERROR.REFRESH_TOKEN_IS_REQUIRED,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
             try {
               // When 2 awaits can run together and independent, they should be run together by Promise.all
               const [decoded_refresh_token, refresh_token] = await Promise.all([
-                verifyToken({ token: value as string }),
+                verifyToken({
+                  token: value as string,
+                  secretOrPublicKey: process.env.JWT_REFRESH_TOKEN_SECRET as string
+                }),
                 dbService.refreshToken.findOne({ token: value as string })
               ])
               if (refresh_token === null) {
@@ -243,6 +250,41 @@ export const refreshTokenValidator = validate(
               }
               // if the error is refresh_token === null
               throw error
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
+
+export const emailVerifyTokenValidator = validate(
+  checkSchema(
+    {
+      email_verify_token: {
+        custom: {
+          options: async (value, { req }) => {
+            if (!value) {
+              throw new ErrorWithStatus({
+                message: MESSAGES_ERROR.EMAIL_VERIFY_IS_REQUIRED,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            try {
+              const decoded_email_verify_token = await verifyToken({
+                token: value as string,
+                secretOrPublicKey: process.env.JWT_EMAIL_VERIFY_TOKEN_SECRET as string
+              })
+
+              ;(req as Request).decoded_email_verify_token = decoded_email_verify_token
+            } catch (error) {
+              // If the error is verifyToken failed
+              throw new ErrorWithStatus({
+                message: capitalize((error as JsonWebTokenError).message),
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
             }
             return true
           }

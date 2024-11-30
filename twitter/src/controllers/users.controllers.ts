@@ -5,6 +5,8 @@ import { LogoutBodyReq, RegisterBodyReq, TokenPayload } from '~/models/requests/
 import { ObjectId } from 'mongodb'
 import User from '~/models/schemas/user.schema'
 import MESSAGES_ERROR from '~/constants/messages'
+import dbService from '~/services/database.services'
+import HTTP_STATUS from '~/constants/httpStatusCode'
 
 export const loginController = async (req: Request, res: Response, next: NextFunction) => {
   const user = req.user as User
@@ -41,4 +43,21 @@ export const refreshToken = async (req: Request, res: Response) => {
   const user_id = decoded_refresh_token.user_id
   const result = await userService.refreshToken(user_id, refresh_token as string)
   return res.status(200).json({ message: MESSAGES_ERROR.REFRESH_TOKEN_SUCCESSFULLY, result })
+}
+
+export const emailVerifyValidator = async (req: Request, res: Response) => {
+  const { user_id } = req.decoded_email_verify_token as TokenPayload
+  const user = await dbService.users.findOne({ _id: new ObjectId(user_id) })
+  if (!user) {
+    return res.status(HTTP_STATUS.NOT_FOUND).json({ message: MESSAGES_ERROR.USER_NOT_FOUND })
+  }
+  // If verified email is response ok
+  if (user.email_verify_token === '') {
+    return res
+      .status(HTTP_STATUS.OK)
+      .json({ message: MESSAGES_ERROR.EMAIL_VERIFY_ALREADY_VERIFIED })
+  }
+  // Else verify email
+  const result = await userService.verifyEmail(user_id)
+  return res.status(200).json({ message: MESSAGES_ERROR.EMAIL_VERIFY_SUCCESSFULLY, result })
 }

@@ -3,11 +3,17 @@ import { Router } from 'express'
 // components
 import {
   accessTokenValidator,
+  emailVerifyTokenValidator,
   loginValidator,
   refreshTokenValidator,
   registerValidator
 } from '~/middlewares/users.middlewares'
-import { loginController, logoutController, refreshToken } from '~/controllers/users.controllers'
+import {
+  emailVerifyValidator,
+  loginController,
+  logoutController,
+  refreshToken
+} from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
 
@@ -63,5 +69,19 @@ userRouter.post(
  *      }
  */
 userRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshToken))
+
+/**
+ *  Description: Verify email address
+ *  Path: /verify-email
+ *  Method: POST
+ *  Body:{
+ *      email_verify_token:string
+ *      }
+ */
+userRouter.post(
+  '/verify-email',
+  emailVerifyTokenValidator,
+  wrapRequestHandler(emailVerifyValidator)
+)
 
 export default userRouter
