@@ -35,7 +35,8 @@ const MESSAGES_ERROR = {
   EMAIL_VERIFY_IS_INVALID: 'Email verify is invalid',
   EMAIL_VERIFY_ALREADY_VERIFIED: 'Email verify already verified',
   EMAIL_VERIFY_SUCCESSFULLY: 'Email verify successfully',
-  RESEND_VERIFY_EMAIL_SUCCESSFULLY: ' Resend verify email successfully'
+  RESEND_VERIFY_EMAIL_SUCCESSFULLY: ' Resend verify email successfully',
+  CHECK_EMAIL_SUCCESSFULLY: 'Check email successfully'
 } as const
 
 export default MESSAGES_ERROR
