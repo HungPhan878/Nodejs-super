@@ -36,7 +36,13 @@ const MESSAGES_ERROR = {
   EMAIL_VERIFY_ALREADY_VERIFIED: 'Email verify already verified',
   EMAIL_VERIFY_SUCCESSFULLY: 'Email verify successfully',
   RESEND_VERIFY_EMAIL_SUCCESSFULLY: ' Resend verify email successfully',
-  CHECK_EMAIL_SUCCESSFULLY: 'Check email successfully'
+  CHECK_EMAIL_SUCCESSFULLY: 'Check email successfully',
+  RESET_PASSWORD_SUCCESSFULLY: 'Reset password successfully',
+  FORGOT_PASSWORD_TOKEN_IS_REQUIRED: 'Reset password is required',
+  FORGOT_PASSWORD_IS_INVALID: 'Reset password is invalid',
+  RESET_PASSWORD_SUCCESSFULLY_UPDATED: 'Reset password successfully updated',
+  RESET_PASSWORD_TOKEN_IS_REQUIRED: 'Reset password token is required',
+  VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success'
 } as const
 
 export default MESSAGES_ERROR

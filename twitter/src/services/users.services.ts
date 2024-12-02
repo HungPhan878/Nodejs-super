@@ -154,7 +154,6 @@ class UserService {
 
   async forgotPassword(user_id: string) {
     const forgot_password_token = await this.forgotPasswordToken(user_id)
-    console.log('forgot-password-token:', forgot_password_token)
     await dbService.users.updateOne(
       { _id: new ObjectId(user_id) },
       {
@@ -166,6 +165,8 @@ class UserService {
         }
       }
     )
+    //Send email attachment Link https://twitter.com/forgot-password?token=value  to  client
+    console.log('forgot-password-token:', forgot_password_token)
     return {
       message: MESSAGES_ERROR.CHECK_EMAIL_SUCCESSFULLY
     }

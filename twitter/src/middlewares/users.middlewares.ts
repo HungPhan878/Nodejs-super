@@ -12,6 +12,7 @@ import { hashPassword } from '~/utils/crypto'
 import { verifyToken } from '~/utils/jwt'
 import { validate } from '~/utils/validation'
 import { config } from 'dotenv'
+import { ObjectId } from 'mongodb'
 
 config()
 
@@ -311,6 +312,56 @@ export const forgotPasswordValidator = validate(
             throw new Error(MESSAGES_ERROR.USER_NOT_FOUND)
           }
           ;(req as Request).user = user
+          return true
+        }
+      }
+    }
+  })
+)
+
+export const verifyForgotPasswordTokenValidator = validate(
+  checkSchema({
+    forgot_password_token: {
+      custom: {
+        options: async (value, { req }) => {
+          if (!value) {
+            throw new ErrorWithStatus({
+              message: MESSAGES_ERROR.FORGOT_PASSWORD_TOKEN_IS_REQUIRED,
+              status: HTTP_STATUS.UNAUTHORIZED
+            })
+          }
+          try {
+            // When 2 awaits can run together and independent, they should be run together by Promise.all
+            const decoded_forgot_password_token = await verifyToken({
+              token: value as string,
+              secretOrPublicKey: process.env.JWT_FORGOT_PASSWORD_TOKEN_SECRET as string
+            })
+            const { user_id } = decoded_forgot_password_token
+            const user = await dbService.users.findOne({
+              _id: new ObjectId(user_id)
+            })
+            if (user === null) {
+              throw new ErrorWithStatus({
+                message: MESSAGES_ERROR.USER_NOT_FOUND,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            if (user.forgot_password_token !== value) {
+              throw new ErrorWithStatus({
+                message: MESSAGES_ERROR.FORGOT_PASSWORD_IS_INVALID,
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+          } catch (error) {
+            // If the error is verifyToken failed
+            if (error instanceof JsonWebTokenError) {
+              throw new ErrorWithStatus({
+                message: capitalize((error as JsonWebTokenError).message),
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            throw error
+          }
           return true
         }
       }
