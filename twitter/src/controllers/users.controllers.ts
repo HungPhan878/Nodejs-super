@@ -5,6 +5,7 @@ import {
   LoginBodyRed,
   LogoutBodyReq,
   RegisterBodyReq,
+  ResetPasswordBodyReq,
   TokenPayload
 } from '~/models/requests/User.requests'
 import { ObjectId } from 'mongodb'
@@ -100,4 +101,15 @@ export const forgotPasswordController = async (req: Request, res: Response) => {
 
 export const verifyForgotPasswordTokenController = async (req: Request, res: Response) => {
   return res.status(200).json({ message: MESSAGES_ERROR.VERIFY_FORGOT_PASSWORD_SUCCESS })
+}
+
+export const resetPasswordController = async (
+  req: Request<ParamsDictionary, any, ResetPasswordBodyReq>,
+  res: Response
+) => {
+  const { user_id } = req.decoded_forgot_password_token as TokenPayload
+  const { password } = req.body
+
+  const result = await userService.resetPassword(user_id, password)
+  return res.status(200).json(result)
 }
