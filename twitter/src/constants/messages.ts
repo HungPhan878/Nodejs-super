@@ -42,7 +42,8 @@ const MESSAGES_ERROR = {
   FORGOT_PASSWORD_IS_INVALID: 'Reset password is invalid',
   RESET_PASSWORD_SUCCESSFULLY_UPDATED: 'Reset password successfully updated',
   RESET_PASSWORD_TOKEN_IS_REQUIRED: 'Reset password token is required',
-  VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success'
+  VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success',
+  GET_ME_SUCCESSFULLY: 'Get my profile success'
 } as const
 
 export default MESSAGES_ERROR

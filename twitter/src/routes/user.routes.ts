@@ -19,7 +19,8 @@ import {
   resendVerifyEmailController,
   forgotPasswordController,
   verifyForgotPasswordTokenController,
-  resetPasswordController
+  resetPasswordController,
+  getMeController
 } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -148,5 +149,13 @@ userRouter.post(
   resetPasswordValidator,
   wrapRequestHandler(resetPasswordController)
 )
+
+/**
+ *  Description: Get profile user
+ *  Path: /me
+ *  Method: GET
+ *  headers:{ 'Authorization: Bearer <access_token>'}
+ */
+userRouter.get('/me', accessTokenValidator, wrapRequestHandler(getMeController))
 
 export default userRouter
