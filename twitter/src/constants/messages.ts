@@ -43,7 +43,8 @@ const MESSAGES_ERROR = {
   RESET_PASSWORD_SUCCESSFULLY_UPDATED: 'Reset password successfully updated',
   RESET_PASSWORD_TOKEN_IS_REQUIRED: 'Reset password token is required',
   VERIFY_FORGOT_PASSWORD_SUCCESS: 'Verify forgot password success',
-  GET_ME_SUCCESSFULLY: 'Get my profile success'
+  GET_ME_SUCCESSFULLY: 'Get my profile success',
+  USER_NOT_VERIFIED: 'User not verified'
 } as const
 
 export default MESSAGES_ERROR

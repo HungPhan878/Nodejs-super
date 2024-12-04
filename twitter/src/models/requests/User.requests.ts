@@ -1,5 +1,5 @@
 import { JwtPayload } from 'jsonwebtoken'
-import { TokenTypes } from '~/constants/enums'
+import { TokenTypes, UserVerifyStatus } from '~/constants/enums'
 
 export interface LoginBodyRed {
   email: string
@@ -27,4 +27,5 @@ export interface ResetPasswordBodyReq {
 export interface TokenPayload extends JwtPayload {
   user_id: string
   token_type: TokenTypes
+  verify: UserVerifyStatus
 }
