@@ -6,7 +6,8 @@ import {
   LogoutBodyReq,
   RegisterBodyReq,
   ResetPasswordBodyReq,
-  TokenPayload
+  TokenPayload,
+  UpdateMeBodyReq
 } from '~/models/requests/User.requests'
 import { ObjectId } from 'mongodb'
 import User from '~/models/schemas/user.schema'
@@ -128,6 +129,14 @@ export const getMeController = async (req: Request, res: Response) => {
   })
 }
 
-export const updateMeController = async (req: Request, res: Response) => {
-  return res.json({})
+export const updateMeController = async (
+  req: Request<ParamsDictionary, any, UpdateMeBodyReq>,
+  res: Response
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { body } = req
+
+  const result = await userService.updateMe(user_id, body)
+
+  return res.json({ message: MESSAGES_ERROR.UPDATE_ME_SUCCESS, result })
 }

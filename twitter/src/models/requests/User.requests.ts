@@ -24,6 +24,17 @@ export interface ResetPasswordBodyReq {
   forgot_password_token: string
 }
 
+export interface UpdateMeBodyReq {
+  name?: string
+  date_of_birth?: string
+  bio?: string
+  location?: string
+  website?: string
+  username?: string
+  avatar?: string
+  cover_photo?: string
+}
+
 export interface TokenPayload extends JwtPayload {
   user_id: string
   token_type: TokenTypes

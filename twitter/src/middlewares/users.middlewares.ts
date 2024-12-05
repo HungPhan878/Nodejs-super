@@ -120,6 +120,45 @@ const forgotPasswordTokenSchema: ParamSchema = {
     }
   }
 }
+const nameSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: MESSAGES_ERROR.NAME_IS_REQUIRED
+  },
+  isString: {
+    errorMessage: MESSAGES_ERROR.NAME_MUST_BE_A_STRING
+  },
+  isLength: {
+    options: {
+      min: 1,
+      max: 50
+    },
+    errorMessage: MESSAGES_ERROR.NAME_LENGTH_MUST_BE_FROM_1_TO_100
+  },
+  trim: true
+}
+const dateOfBirthSchema: ParamSchema = {
+  isISO8601: {
+    options: {
+      strict: true,
+      strictSeparator: true
+    },
+    errorMessage: MESSAGES_ERROR.DATE_OF_BIRTH_MUST_BE_ISO8601
+  }
+}
+const imageSchema: ParamSchema = {
+  optional: true,
+  isString: {
+    errorMessage: MESSAGES_ERROR.IMAGE_URL_MUST_BE_STRING
+  },
+  trim: true,
+  isLength: {
+    options: {
+      min: 1,
+      max: 200
+    },
+    errorMessage: MESSAGES_ERROR.IMAGE_URL_LENGTH
+  }
+}
 
 export const loginValidator = validate(
   checkSchema(
@@ -196,22 +235,7 @@ export const registerValidator = validate(
           }
         }
       },
-      name: {
-        notEmpty: {
-          errorMessage: MESSAGES_ERROR.NAME_IS_REQUIRED
-        },
-        isString: {
-          errorMessage: MESSAGES_ERROR.NAME_MUST_BE_A_STRING
-        },
-        isLength: {
-          options: {
-            min: 1,
-            max: 50
-          },
-          errorMessage: MESSAGES_ERROR.NAME_LENGTH_MUST_BE_FROM_1_TO_100
-        },
-        trim: true
-      },
+      name: nameSchema,
       password: {
         notEmpty: { errorMessage: MESSAGES_ERROR.PASSWORD_IS_REQUIRED },
         isString: {
@@ -267,15 +291,7 @@ export const registerValidator = validate(
           errorMessage: MESSAGES_ERROR.CONFIRM_PASSWORD_MUST_BE_THE_SAME_AS_PASSWORD
         }
       },
-      date_of_birth: {
-        isISO8601: {
-          options: {
-            strict: true,
-            strictSeparator: true
-          },
-          errorMessage: MESSAGES_ERROR.DATE_OF_BIRTH_MUST_BE_ISO8601
-        }
-      }
+      date_of_birth: dateOfBirthSchema
     },
     ['body']
   )
@@ -497,3 +513,75 @@ export const verifiedUserValidator = (req: Request, res: Response, next: NextFun
   }
   next()
 }
+
+export const updateMeValidator = validate(
+  checkSchema(
+    {
+      name: {
+        ...nameSchema,
+        optional: true,
+        isEmpty: undefined
+      },
+      date_of_birth: {
+        ...dateOfBirthSchema,
+        optional: true
+      },
+      bio: {
+        optional: true,
+        isString: {
+          errorMessage: MESSAGES_ERROR.BIO_MUST_BE_STRING
+        },
+        trim: true,
+        isLength: {
+          options: { min: 1, max: 200 },
+          errorMessage: MESSAGES_ERROR.BIO_LENGTH
+        }
+      },
+      location: {
+        optional: true,
+        isString: {
+          errorMessage: MESSAGES_ERROR.LOCATION_MUST_BE_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 200
+          },
+          errorMessage: MESSAGES_ERROR.LOCATION_LENGTH
+        }
+      },
+      website: {
+        optional: true,
+        isString: {
+          errorMessage: MESSAGES_ERROR.WEBSITE_MUST_BE_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 200
+          },
+          errorMessage: MESSAGES_ERROR.WEBSITE_LENGTH
+        }
+      },
+      username: {
+        optional: true,
+        isString: {
+          errorMessage: MESSAGES_ERROR.USERNAME_MUST_BE_STRING
+        },
+        trim: true,
+        isLength: {
+          options: {
+            min: 1,
+            max: 50
+          },
+          errorMessage: MESSAGES_ERROR.USERNAME_LENGTH
+        }
+      },
+      avatar: imageSchema,
+      cover_photo: imageSchema
+    },
+    ['body']
+  )
+)
