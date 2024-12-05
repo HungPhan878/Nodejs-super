@@ -62,7 +62,8 @@ thì có hai trường hợp:
 
 1. Đối với forgot password khi bấm vào link xác thực verify forgot password thì không nên xóa forgot password token liền: để user đổi mk rồi hãy xóa vì như vậy sẽ tăng trải nghiêm người dùng tốt hơn khi người dùng click vào link nhưng chưa đổi lần sau click lại đổi vẫn được ok nha.
 2. Đối với dùng các thư viện dư lodash ta có thể test ở ngoài index.ts cũng được cho nhanh đỡ phải test trong middleware và dùng postman gọi
-3. Khi update lên db phải lọc qua các tham số truyền lên để tránh thay đổi các tham số không cần thiết như forgot_password_token ...thì phải lọc qua và chỉ để client truyền lên những tham số cần thiết mà thôi (tránh hacker tấn công)
+3. Khi update lên db phải lọc qua các tham số truyền lên để tránh thay đổi các tham số không cần thiết như forgot_password_token ...thì phải lọc qua và chỉ để client truyền lên những tham số cần thiết mà thôi (tránh hacker tấn công).
+4. Khi get một public profile thì không cần access vì không đăng nhập hay dùng cửa sổ ẩn danh vẫn coi được nha.(chỉ trả về những infor cần thiết thôi).
 
 ## MongoDB schema validation:
 
@@ -73,3 +74,13 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
 1. additionalProperties: false -> giúp ta thêm đúng dư liệu trong properties và không bị thừa data (nhưng bắt buộc phải khai báo trường \_id).
 2. required: giúp ta thêm các properties bắt buộc phải có.
 3. kiểu enum thì khai báo số là được và thêm key 'enum': [1,2,3, ...] chỉ các số quy đinh trong trường enum là có thôi.
+
+## Vấn đề phát sinh:
+
+1. Đối với verifyValidator(lấy từ decoded):
+
+- Khi register khi user nhấn vào link verify và xác thực rồi thì khi đó user vẫn ở trạng thái chưa verify vì verify lấy ở decode token nên chỉ khi refresh token trả về access token mới hay login lại thì mới được.
+
+- Cách giải quyết :
+  c1: mỗi lần verify thì đi vào db tìm verify rồi xác thực nhưng như vậy sẽ ghi chậm vì tốn thời gian vào db tìm data
+  c2: dùng websocket thông báo cho user hay client lấy access token lại là ok => tối ưu nhất nhưng dùng khéo léo thì được

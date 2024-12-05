@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Request, Response, NextFunction, RequestHandler } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import userService from '~/services/users.services'
 import {
@@ -25,7 +25,7 @@ export const loginController = async (
   const user_id = user._id as ObjectId
   if (user_id) {
     const result = await userService.login({ user_id: user_id.toString(), verify: user.verify })
-    return res.status(200).json({ message: MESSAGES_ERROR.LOGIN_SUCCESS, result })
+    res.status(200).json({ message: MESSAGES_ERROR.LOGIN_SUCCESS, result })
   }
 }
 
@@ -36,7 +36,7 @@ export const registerController = async (
 ): Promise<any> => {
   // Should use try catch in  outermost function
   const result = await userService.createUser(req.body)
-  return res.status(200).json({ message: MESSAGES_ERROR.REGISTER_SUCCESS, result })
+  res.status(200).json({ message: MESSAGES_ERROR.REGISTER_SUCCESS, result })
 }
 
 export const logoutController = async (
@@ -46,7 +46,7 @@ export const logoutController = async (
 ) => {
   const { refresh_token } = req.body
   const result = await userService.logout(refresh_token)
-  return res.status(200).json({ message: MESSAGES_ERROR.LOGOUT_SUCCESS, result })
+  res.status(200).json({ message: MESSAGES_ERROR.LOGOUT_SUCCESS, result })
 }
 
 export const refreshToken = async (req: Request, res: Response) => {
@@ -58,10 +58,13 @@ export const refreshToken = async (req: Request, res: Response) => {
     refresh_token: refresh_token as string,
     verify
   })
-  return res.status(200).json({ message: MESSAGES_ERROR.REFRESH_TOKEN_SUCCESSFULLY, result })
+  res.status(200).json({ message: MESSAGES_ERROR.REFRESH_TOKEN_SUCCESSFULLY, result })
 }
 
-export const verifyEmailController = async (req: Request, res: Response) => {
+export const verifyEmailController = async (
+  req: Request,
+  res: Response
+): Promise<Response | any> => {
   const { user_id } = req.decoded_email_verify_token as TokenPayload
   const user = await dbService.users.findOne({ _id: new ObjectId(user_id) })
   if (!user) {
@@ -75,10 +78,13 @@ export const verifyEmailController = async (req: Request, res: Response) => {
   }
   // Else verify email
   const result = await userService.verifyEmail(user_id)
-  return res.status(200).json({ message: MESSAGES_ERROR.EMAIL_VERIFY_SUCCESSFULLY, result })
+  res.status(200).json({ message: MESSAGES_ERROR.EMAIL_VERIFY_SUCCESSFULLY, result })
 }
 
-export const resendVerifyEmailController = async (req: Request, res: Response) => {
+export const resendVerifyEmailController = async (
+  req: Request,
+  res: Response
+): Promise<Response | any> => {
   const { user_id } = req.decoded_authorization as TokenPayload
 
   const user = await dbService.users.findOne({ _id: new ObjectId(user_id) })
@@ -101,11 +107,11 @@ export const resendVerifyEmailController = async (req: Request, res: Response) =
 export const forgotPasswordController = async (req: Request, res: Response) => {
   const { _id, verify } = req.user as User
   const result = await userService.forgotPassword({ user_id: (_id as ObjectId).toString(), verify })
-  return res.status(200).json(result)
+  res.status(200).json(result)
 }
 
 export const verifyForgotPasswordTokenController = async (req: Request, res: Response) => {
-  return res.status(200).json({ message: MESSAGES_ERROR.VERIFY_FORGOT_PASSWORD_SUCCESS })
+  res.status(200).json({ message: MESSAGES_ERROR.VERIFY_FORGOT_PASSWORD_SUCCESS })
 }
 
 export const resetPasswordController = async (
@@ -116,14 +122,14 @@ export const resetPasswordController = async (
   const { password } = req.body
 
   const result = await userService.resetPassword(user_id, password)
-  return res.status(200).json(result)
+  res.status(200).json(result)
 }
 
 export const getMeController = async (req: Request, res: Response) => {
   const { user_id } = req.decoded_authorization as TokenPayload
 
   const result = await userService.getMe(user_id)
-  return res.status(200).json({
+  res.status(200).json({
     message: MESSAGES_ERROR.GET_ME_SUCCESSFULLY,
     result
   })
@@ -139,5 +145,5 @@ export const updateMeController = async (
 
   const result = await userService.updateMe(user_id, body)
 
-  return res.json({ message: MESSAGES_ERROR.UPDATE_ME_SUCCESS, result })
+  res.json({ message: MESSAGES_ERROR.UPDATE_ME_SUCCESS, result })
 }
