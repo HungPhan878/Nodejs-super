@@ -2,6 +2,7 @@ import { Request, Response, NextFunction, RequestHandler } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import userService from '~/services/users.services'
 import {
+  getProfileUserBodyReq,
   LoginBodyRed,
   LogoutBodyReq,
   RegisterBodyReq,
@@ -15,6 +16,7 @@ import MESSAGES_ERROR from '~/constants/messages'
 import dbService from '~/services/database.services'
 import HTTP_STATUS from '~/constants/httpStatusCode'
 import { UserVerifyStatus } from '~/constants/enums'
+import { ErrorWithStatus } from '~/models/Errors'
 
 export const loginController = async (
   req: Request<ParamsDictionary, any, LoginBodyRed>,
@@ -146,4 +148,24 @@ export const updateMeController = async (
   const result = await userService.updateMe(user_id, body)
 
   res.json({ message: MESSAGES_ERROR.UPDATE_ME_SUCCESS, result })
+}
+
+export const getProfileUserController = async (
+  req: Request<getProfileUserBodyReq>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { username } = req.params
+
+  const result = await userService.getProfileUser(username)
+
+  if (result === null) {
+    return next(
+      new ErrorWithStatus({
+        message: MESSAGES_ERROR.USER_NOT_FOUND,
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    )
+  }
+  res.status(200).json({ message: MESSAGES_ERROR.GET_PROFILE_SUCCESS, result })
 }

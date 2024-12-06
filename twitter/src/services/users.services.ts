@@ -80,6 +80,7 @@ class UserService {
       new User({
         ...payload,
         _id: user_id,
+        username: `user${user_id.toString()}`,
         email_verify_token,
         date_of_birth: new Date(payload.date_of_birth),
         password: hashPassword(payload.password)
@@ -254,6 +255,23 @@ class UserService {
           password: 0,
           email_verify_token: 0,
           forgot_password_token: 0
+        }
+      }
+    )
+    return user
+  }
+
+  async getProfileUser(username: string) {
+    const user = await dbService.users.findOne(
+      { username },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0,
+          verify: 0,
+          created_at: 0,
+          updated_at: 0
         }
       }
     )

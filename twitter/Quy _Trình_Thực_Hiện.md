@@ -58,6 +58,8 @@ thì có hai trường hợp:
 - Đã có hàm verifyToken xác thực chính xác
 - Dùng id trong access-token hay ... tìm user ấy rồi
 
+2. Khi làm dự án hãy phân tích rõ ràng cụ thể theo một khoảng time nào đó rồi bắt đầu thực hiện hay làm dự án liền nha.
+
 ## Lưu ý:
 
 1. Đối với forgot password khi bấm vào link xác thực verify forgot password thì không nên xóa forgot password token liền: để user đổi mk rồi hãy xóa vì như vậy sẽ tăng trải nghiêm người dùng tốt hơn khi người dùng click vào link nhưng chưa đổi lần sau click lại đổi vẫn được ok nha.
