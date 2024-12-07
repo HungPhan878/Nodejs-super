@@ -4,6 +4,7 @@ import { Router } from 'express'
 import {
   accessTokenValidator,
   emailVerifyTokenValidator,
+  followerValidator,
   forgotPasswordValidator,
   loginValidator,
   refreshTokenValidator,
@@ -24,7 +25,8 @@ import {
   resetPasswordController,
   getMeController,
   updateMeController,
-  getProfileUserController
+  getProfileUserController,
+  followController
 } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -195,5 +197,22 @@ userRouter.patch(
  *  Method: GET
  */
 userRouter.get('/:username', wrapRequestHandler(getProfileUserController))
+
+/**
+ *  Description: follow someone
+ *  Path: /follow
+ *  Method: POST
+ * headers: { 'Authorization: Bearer <access_token>'}
+ * body: {
+ * followed_user_id: string
+ * }
+ */
+userRouter.post(
+  '/follow',
+  accessTokenValidator,
+  verifiedUserValidator,
+  followerValidator,
+  wrapRequestHandler(followController)
+)
 
 export default userRouter

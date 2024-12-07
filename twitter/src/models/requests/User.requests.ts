@@ -39,6 +39,10 @@ export interface getProfileUserBodyReq {
   username: string
 }
 
+export interface followUserBodyReq {
+  followed_user_id: string
+}
+
 export interface TokenPayload extends JwtPayload {
   user_id: string
   token_type: TokenTypes

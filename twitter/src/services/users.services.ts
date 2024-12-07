@@ -277,6 +277,21 @@ class UserService {
     )
     return user
   }
+
+  async followUser(user_id: string, followed_user_id: string) {
+    const follower = await dbService.followers.findOne({
+      followed_user_id: new ObjectId(followed_user_id),
+      user_id: new ObjectId(user_id)
+    })
+    if (follower === null) {
+      await dbService.followers.insertOne({
+        user_id: new ObjectId(user_id),
+        followed_user_id: new ObjectId(followed_user_id)
+      })
+      return { message: MESSAGES_ERROR.FOLLOW_SUCCESS }
+    }
+    return { message: MESSAGES_ERROR.FOLLOWED }
+  }
 }
 
 const userService = new UserService()
