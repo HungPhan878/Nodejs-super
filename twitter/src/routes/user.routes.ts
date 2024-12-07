@@ -10,6 +10,7 @@ import {
   refreshTokenValidator,
   registerValidator,
   resetPasswordValidator,
+  unFollowValidator,
   updateMeValidator,
   verifiedUserValidator,
   verifyForgotPasswordTokenValidator
@@ -26,7 +27,8 @@ import {
   getMeController,
   updateMeController,
   getProfileUserController,
-  followController
+  followController,
+  unFollowController
 } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -213,6 +215,20 @@ userRouter.post(
   verifiedUserValidator,
   followerValidator,
   wrapRequestHandler(followController)
+)
+
+/**
+ *  Description: unFollow someone
+ *  Path: /follow/:user_id
+ *  Method: DELETE
+ * headers: { 'Authorization: Bearer <access_token>'}
+ */
+userRouter.delete(
+  '/follow/:user_id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  unFollowValidator,
+  wrapRequestHandler(unFollowController)
 )
 
 export default userRouter

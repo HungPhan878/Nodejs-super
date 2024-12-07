@@ -58,8 +58,10 @@ const MESSAGES_ERROR = {
   UPDATE_ME_SUCCESS: 'Update my profile success',
   GET_PROFILE_SUCCESS: 'Get profile success',
   FOLLOW_SUCCESS: 'Follow success',
-  INVALID_FOLLOWED_USER_ID: 'Invalid followed user id',
-  FOLLOWED: 'Followed'
+  INVALID_USER_ID: 'Invalid followed user id',
+  FOLLOWED: 'Followed',
+  ALREADY_UNFOLLOWED: 'Already unfollowed',
+  UNFOLLOW_SUCCESS: 'Unfollow success'
 } as const
 
 export default MESSAGES_ERROR

@@ -292,6 +292,23 @@ class UserService {
     }
     return { message: MESSAGES_ERROR.FOLLOWED }
   }
+
+  async unFollowUser(user_id: string, followed_user_id: string) {
+    const follower = await dbService.followers.findOne({
+      followed_user_id: new ObjectId(followed_user_id),
+      user_id: new ObjectId(user_id)
+    })
+    //Not found user is throwing an nofitication unfollow or already unfollow
+    if (follower === null) {
+      return { message: MESSAGES_ERROR.ALREADY_UNFOLLOWED }
+    }
+    //Else delete the follower
+    await dbService.followers.deleteOne({
+      followed_user_id: new ObjectId(followed_user_id),
+      user_id: new ObjectId(user_id)
+    })
+    return { message: MESSAGES_ERROR.UNFOLLOW_SUCCESS }
+  }
 }
 
 const userService = new UserService()

@@ -2,13 +2,14 @@ import { Request, Response, NextFunction, RequestHandler } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
 import userService from '~/services/users.services'
 import {
-  followUserBodyReq,
-  getProfileUserBodyReq,
+  FollowUserBodyReq,
+  GetProfileUserBodyReq,
   LoginBodyRed,
   LogoutBodyReq,
   RegisterBodyReq,
   ResetPasswordBodyReq,
   TokenPayload,
+  UnFollowUserBodyReq,
   UpdateMeBodyReq
 } from '~/models/requests/User.requests'
 import { ObjectId } from 'mongodb'
@@ -152,7 +153,7 @@ export const updateMeController = async (
 }
 
 export const getProfileUserController = async (
-  req: Request<getProfileUserBodyReq>,
+  req: Request<GetProfileUserBodyReq>,
   res: Response,
   next: NextFunction
 ) => {
@@ -172,7 +173,7 @@ export const getProfileUserController = async (
 }
 
 export const followController = async (
-  req: Request<ParamsDictionary, any, followUserBodyReq>,
+  req: Request<ParamsDictionary, any, FollowUserBodyReq>,
   res: Response,
   next: NextFunction
 ) => {
@@ -180,6 +181,19 @@ export const followController = async (
   const { followed_user_id } = req.body
 
   const result = await userService.followUser(user_id, followed_user_id)
+
+  res.json(result)
+}
+
+export const unFollowController = async (
+  req: Request<UnFollowUserBodyReq>,
+  res: Response,
+  next: NextFunction
+) => {
+  const { user_id } = req.decoded_authorization as TokenPayload
+  const { user_id: followed_user_id } = req.params
+
+  const result = await userService.unFollowUser(user_id, followed_user_id)
 
   res.json(result)
 }
