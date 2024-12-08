@@ -48,6 +48,12 @@ export interface UnFollowUserBodyReq extends ParamsDictionary {
   user_id: string
 }
 
+export interface ChangePasswordReqBody {
+  old_password: string
+  password: string
+  confirm_password: string
+}
+
 export interface TokenPayload extends JwtPayload {
   user_id: string
   token_type: TokenTypes

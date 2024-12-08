@@ -3,6 +3,7 @@ import { Router } from 'express'
 // components
 import {
   accessTokenValidator,
+  changePasswordValidator,
   emailVerifyTokenValidator,
   followerValidator,
   forgotPasswordValidator,
@@ -28,7 +29,8 @@ import {
   updateMeController,
   getProfileUserController,
   followController,
-  unFollowController
+  unFollowController,
+  changePasswordController
 } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -229,6 +231,25 @@ userRouter.delete(
   verifiedUserValidator,
   unFollowValidator,
   wrapRequestHandler(unFollowController)
+)
+
+/**
+ *  Description: Change password
+ *  Path: /change-password
+ *  Method: PUT
+ * headers: { 'Authorization: Bearer <access_token>'}
+ * body: {
+ * old_password:string,
+ * password:string,
+ * confirm_password:string
+ * }
+ */
+userRouter.put(
+  '/change-password',
+  accessTokenValidator,
+  verifiedUserValidator,
+  changePasswordValidator,
+  wrapRequestHandler(changePasswordController)
 )
 
 export default userRouter

@@ -30,7 +30,7 @@ const passwordSchema: ParamSchema = {
       min: 8,
       max: 50
     },
-    errorMessage: MESSAGES_ERROR.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
+    errorMessage: MESSAGES_ERROR.PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
   },
   isStrongPassword: {
     options: {
@@ -56,7 +56,7 @@ const confirmPasswordSchema: ParamSchema = {
       min: 8,
       max: 50
     },
-    errorMessage: MESSAGES_ERROR.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
+    errorMessage: MESSAGES_ERROR.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
   },
   trim: true,
   isStrongPassword: {
@@ -217,7 +217,7 @@ export const loginValidator = validate(
             min: 8,
             max: 50
           },
-          errorMessage: MESSAGES_ERROR.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
+          errorMessage: MESSAGES_ERROR.PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
         },
         trim: true,
         isStrongPassword: {
@@ -268,7 +268,7 @@ export const registerValidator = validate(
             min: 8,
             max: 50
           },
-          errorMessage: MESSAGES_ERROR.PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
+          errorMessage: MESSAGES_ERROR.PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
         },
         trim: true,
         isStrongPassword: {
@@ -294,7 +294,7 @@ export const registerValidator = validate(
             min: 8,
             max: 50
           },
-          errorMessage: MESSAGES_ERROR.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_6_TO_50
+          errorMessage: MESSAGES_ERROR.CONFIRM_PASSWORD_LENGTH_MUST_BE_FROM_8_TO_50
         },
         trim: true,
         isStrongPassword: {
@@ -633,5 +633,35 @@ export const unFollowValidator = validate(
       user_id: userIdSchema
     },
     ['params']
+  )
+)
+
+export const changePasswordValidator = validate(
+  checkSchema(
+    {
+      old_password: {
+        ...passwordSchema,
+        custom: {
+          options: async (value, { req }) => {
+            const { user_id } = req.decoded_authorization as TokenPayload
+            const user = await dbService.users.findOne({ _id: new ObjectId(user_id) })
+            if (!user) {
+              throw new ErrorWithStatus({
+                message: MESSAGES_ERROR.USER_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            const isMatch = hashPassword(value) === user.password
+            if (!isMatch) {
+              throw new Error(MESSAGES_ERROR.OLD_PASSWORD_NOT_MATCH)
+            }
+            return true
+          }
+        }
+      },
+      password: passwordSchema,
+      confirm_password: confirmPasswordSchema
+    },
+    ['body']
   )
 )
