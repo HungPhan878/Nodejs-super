@@ -15,6 +15,7 @@ import { config } from 'dotenv'
 import { ObjectId } from 'mongodb'
 import { TokenPayload } from '~/models/requests/User.requests'
 import { UserVerifyStatus } from '~/constants/enums'
+import { REGEX_USERNAME } from '~/constants/regexes'
 
 config()
 
@@ -592,12 +593,22 @@ export const updateMeValidator = validate(
           errorMessage: MESSAGES_ERROR.USERNAME_MUST_BE_STRING
         },
         trim: true,
-        isLength: {
-          options: {
-            min: 1,
-            max: 50
-          },
-          errorMessage: MESSAGES_ERROR.USERNAME_LENGTH
+        custom: {
+          options: async (value, { req }) => {
+            //If the value invalid is into here
+            if (!REGEX_USERNAME.test(value)) {
+              throw new Error(MESSAGES_ERROR.USERNAME_INVALID)
+            }
+
+            const user = await dbService.users.findOne({
+              username: value
+            })
+            //if username already exists is into here
+            if (user) {
+              throw new Error(MESSAGES_ERROR.USERNAME_EXISTED)
+            }
+            return true
+          }
         }
       },
       avatar: imageSchema,
