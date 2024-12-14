@@ -5,7 +5,7 @@ import Login from '../pages/Login'
 export default function useRouterElements() {
   const routeElements = useRoutes([
     { path: '/', element: <Home /> },
-    { path: '/login', element: <Login /> }
+    { path: '/login/oauth', element: <Login /> }
   ])
 
   return routeElements

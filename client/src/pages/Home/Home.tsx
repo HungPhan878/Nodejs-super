@@ -1,6 +1,9 @@
 import reactLogo from '~/assets/react.svg'
 import viteLogo from '/vite.svg'
 import { Link } from 'react-router-dom'
+import { useContext } from 'react'
+import { AppContext } from '../../contexts/app.context'
+import { removeTokenFromLS } from '../../utils/auth'
 const getOauthGoogleUrl = () => {
   const { VITE_GOOGLE_CLIENT_ID, VITE_GOOGLE_AUTHORIZED_REDIRECT_URI } = import.meta.env
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -19,6 +22,12 @@ const getOauthGoogleUrl = () => {
 }
 const urlOauthGoogle = getOauthGoogleUrl()
 export default function Home() {
+  const { isAuthenticated, setAuthenticated } = useContext(AppContext)
+  // function handler
+  const logoutHandler = () => {
+    setAuthenticated(false)
+    removeTokenFromLS()
+  }
   return (
     <div className='w-full h-screen'>
       <div className='h-full flex flex-col items-center justify-center gap-10'>
@@ -31,10 +40,18 @@ export default function Home() {
           </a>
         </div>
         <h1>Oauth Google</h1>
-        <Link to={urlOauthGoogle} className='p-4 rounded-md bg-green-500'>
-          Login with oauth google
-        </Link>
-        <p className='read-the-docs'>Click on the Vite and React logos to learn more</p>
+        {isAuthenticated ? (
+          <>
+            <>Welcome to my app</>
+            <button className='bg-blue-500 p-3 rounded-md' onClick={logoutHandler}>
+              Logout
+            </button>
+          </>
+        ) : (
+          <Link to={urlOauthGoogle} className='p-4 rounded-md bg-green-500'>
+            Login with oauth google
+          </Link>
+        )}
       </div>
     </div>
   )

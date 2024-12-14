@@ -5,7 +5,7 @@ import userRouter from './routes/user.routes'
 import defaultErrorHandler from './middlewares/error.middlewares'
 
 const app = express()
-const port = 3000
+const port = 4000
 
 dbService.connect()
 

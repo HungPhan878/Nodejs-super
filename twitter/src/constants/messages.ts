@@ -65,7 +65,8 @@ const MESSAGES_ERROR = {
   INVALID_USER_ID: 'Invalid followed user id',
   FOLLOWED: 'Followed',
   ALREADY_UNFOLLOWED: 'Already unfollowed',
-  UNFOLLOW_SUCCESS: 'Unfollow success'
+  UNFOLLOW_SUCCESS: 'Unfollow success',
+  GMAIL_NOT_VERIFIED: 'Gmail not verified'
 } as const
 
 export default MESSAGES_ERROR

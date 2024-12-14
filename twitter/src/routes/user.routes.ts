@@ -30,7 +30,8 @@ import {
   getProfileUserController,
   followController,
   unFollowController,
-  changePasswordController
+  changePasswordController,
+  oauthController
 } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -49,6 +50,15 @@ const userRouter = Router()
  *      }
  * */
 userRouter.post('/login', loginValidator, wrapRequestHandler(loginController))
+
+/**
+ * Description: Login a user by oauth google account
+ * Path: /oauth/google
+ * Method: GET
+ * query : {
+ * code: string}
+ * */
+userRouter.get('/oauth/google', wrapRequestHandler(oauthController))
 
 /**
  * Description: Register a new user
