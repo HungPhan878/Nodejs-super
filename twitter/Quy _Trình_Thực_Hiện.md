@@ -86,3 +86,11 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
 - Cách giải quyết :
   c1: mỗi lần verify thì đi vào db tìm verify rồi xác thực nhưng như vậy sẽ ghi chậm vì tốn thời gian vào db tìm data
   c2: dùng websocket thông báo cho user hay client lấy access token lại là ok => tối ưu nhất nhưng dùng khéo léo thì được
+
+## Formidable:
+
+### Upload a image file:
+
+- Dung maxFiles : 1. Để chỉ upload một file ảnh
+- Ở node phiên bản trước dùng commonJs thì formdable v3 dùng esmodule sẽ bị lỗi nên chỉ cần await import().default được
+- Nhớ rằng khi dùng form.parse return về json thì không nên return ở ngoài nữa sẽ bị lỗi vì trong khi khi form parse chạy thì đoạn return cuối cùng đã res về rồi nên app sẽ báo lỗi nếu form.parse chạy xong và trả về res lần nữa.

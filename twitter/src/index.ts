@@ -1,8 +1,9 @@
 // index.js hoặc app.js
 import express from 'express'
 import dbService from './services/database.services'
-import userRouter from './routes/user.routes'
 import defaultErrorHandler from './middlewares/error.middlewares'
+import userRouter from './routes/user.routes'
+import mediaRouter from './routes/medias.routes'
 
 const app = express()
 const port = 4000
@@ -13,6 +14,8 @@ dbService.connect()
 app.use(express.json())
 // Gắn router user vào đường dẫn /users
 app.use('/users', userRouter)
+// Gắn router media vào đường dẫn /medias
+app.use('/medias', mediaRouter)
 // error handler
 app.use(defaultErrorHandler)
 app.listen(port, () => {
