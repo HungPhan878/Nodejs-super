@@ -4,11 +4,15 @@ import dbService from './services/database.services'
 import defaultErrorHandler from './middlewares/error.middlewares'
 import userRouter from './routes/user.routes'
 import mediaRouter from './routes/medias.routes'
+import { initFolder } from './utils/file'
 
 const app = express()
 const port = 4000
 
 dbService.connect()
+
+// Create a uploads folder
+initFolder()
 
 // add middleware handlers for json
 app.use(express.json())
