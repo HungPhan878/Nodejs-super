@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { uploadSingleImageController } from '~/controllers/medias.controllers'
+import { uploadImageController } from '~/controllers/medias.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
 
 const mediaRouter = Router()
@@ -10,6 +10,6 @@ const mediaRouter = Router()
  * Method: POST
  * Body: {}
  */
-mediaRouter.post('/upload-image', wrapRequestHandler(uploadSingleImageController))
+mediaRouter.post('/upload-image', wrapRequestHandler(uploadImageController))
 
 export default mediaRouter

@@ -6,7 +6,7 @@ import userRouter from './routes/user.routes'
 import mediaRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
 import { config } from 'dotenv'
-import { UPLOAD_DIR } from './constants/dir'
+import staticRouter from './routes/static.routes'
 
 config()
 
@@ -24,7 +24,7 @@ app.use('/users', userRouter)
 // Gắn router media vào đường dẫn /medias
 app.use('/medias', mediaRouter)
 // Serving static files
-app.use('/static', express.static(UPLOAD_DIR))
+app.use('/static', staticRouter)
 // error handler
 app.use(defaultErrorHandler)
 app.listen(port, () => {

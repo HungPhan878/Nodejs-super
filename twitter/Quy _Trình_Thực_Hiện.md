@@ -107,3 +107,37 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
 
 1. folder `uploads` nên bỏ vào `.gitignore` vì đẩy lên git sẽ khá nặng.
 2. Để folder `uploads` trong máy tính local sẽ không thể share file với mọi người trong team được. => Giải pháp là upload lên 1 nền tảng như S3, hoặc upload lên server của chúng ta
+
+## Cách hay:
+
+1. Dùng promise với một mảng promise: Khi ta lặp một mảng bằng map và hàm xử lý lên từng phân tử của mảng có dùng await vì trong có promise thì ta nên dùng promise.all sẽ nhanh hơn
+
+ex:
+
+```js
+const generatePromise = (delay: number) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('ok')
+    }, delay)
+  })
+}
+async function main() {
+  // console.time dùng để tính time cho lần thực hiện các promise này
+  console.time('await từng cái')
+  await generatePromise(3000)
+  await generatePromise(3000)
+  await generatePromise(3000)
+  console.timeEnd('await từng cái')
+}
+main()
+console.time('Promise.all')
+Promise.all(
+  [1, 2, 3].map(async (_) => {
+    const result = await generatePromise(3000)
+    return result
+  })
+).then((res) => {
+  console.timeEnd('Promise.all')
+})
+```
