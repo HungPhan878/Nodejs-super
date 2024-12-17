@@ -1,13 +1,12 @@
 import fs from 'fs'
-import path from 'path'
-import { Request, Response } from 'express'
-import formidable from 'formidable'
+import { Request } from 'express'
+import formidable, { File } from 'formidable'
+import { UPLOAD_DIR_TEMP } from '~/constants/dir'
 
 export const initFolder = () => {
   // fs is module in Node.js to do work with file system and folder, check paths exist or CRUD files
-  const uploadFilePath = path.resolve('uploads')
-  if (!fs.existsSync(uploadFilePath)) {
-    fs.mkdirSync(uploadFilePath, {
+  if (!fs.existsSync(UPLOAD_DIR_TEMP)) {
+    fs.mkdirSync(UPLOAD_DIR_TEMP, {
       recursive: true // have nested files
     })
   }
@@ -16,7 +15,7 @@ export const initFolder = () => {
 export const handleUploadSingleImage = async (req: Request) => {
   // const formidable = (await import('formidable')).default
   const form = formidable({
-    uploadDir: path.resolve('uploads'),
+    uploadDir: UPLOAD_DIR_TEMP,
     keepExtensions: true,
     maxFiles: 1,
     maxFileSize: 300 * 1024, //300kb
@@ -29,7 +28,7 @@ export const handleUploadSingleImage = async (req: Request) => {
       return valid
     }
   })
-  return new Promise((resolve, reject) => {
+  return new Promise<File>((resolve, reject) => {
     form.parse(req, async (err, fields, files) => {
       if (err) {
         return reject(err)
@@ -39,7 +38,13 @@ export const handleUploadSingleImage = async (req: Request) => {
       if (!Boolean(files.image)) {
         return reject(new Error('No image file found'))
       }
-      resolve(files)
+      resolve((files.image as File[])[0])
     })
   })
+}
+
+export const getNameToUrlName = (fullname: string) => {
+  const nameArr = fullname.split('.')
+  nameArr.pop()
+  return nameArr.join('')
 }
