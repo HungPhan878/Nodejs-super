@@ -103,6 +103,10 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
 - lấy các metadata không cần thiết ra máy tính.
 - khi gặp lỗi operation not permitte thì thêm câu lệnh sharp.cache(false) là được
 
+1. Dùng upload video:
+
+- Một vấn đề là khi dùng keepExtension với một file video có nhiều kí tự khác nhau thì sẽ bị lỗi file vì tự thay đổi đuôi file->vì vậy ta không dùng keep cho video nữa mà tự custom đuôi luôn
+
 ### Note:
 
 1. folder `uploads` nên bỏ vào `.gitignore` vì đẩy lên git sẽ khá nặng.

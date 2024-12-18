@@ -68,7 +68,9 @@ const MESSAGES_ERROR = {
   UNFOLLOW_SUCCESS: 'Unfollow success',
   GMAIL_NOT_VERIFIED: 'Gmail not verified',
   IMAGE_UPLOADED_SUCCESSFULLY: 'Image uploaded successfully',
-  IMAGE_NOT_FOUND: 'Image not found'
+  VIDEO_UPLOADED_SUCCESSFULLY: 'Video uploaded successfully',
+  IMAGE_NOT_FOUND: 'Image not found',
+  VIDEO_NOT_FOUND: 'Video not found'
 } as const
 
 export default MESSAGES_ERROR

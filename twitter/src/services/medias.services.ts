@@ -7,7 +7,7 @@ import { isProduction } from '~/constants/config'
 import { UPLOAD_DIR } from '~/constants/dir'
 import { MediaType } from '~/constants/enums'
 import { Media } from '~/models/Orther'
-import { getNameToUrlName, handleUploadImage } from '~/utils/file'
+import { getNameToUrlName, handleUploadImage, handleUploadVideo } from '~/utils/file'
 
 config()
 class MediaService {
@@ -30,6 +30,19 @@ class MediaService {
       })
     )
 
+    return result
+  }
+
+  async uploadVideo(req: Request) {
+    const files = await handleUploadVideo(req)
+    const result: Media[] = files.map((file) => {
+      return {
+        url: isProduction
+          ? `${process.env.HOST}/static/video/${file.newFilename}`
+          : `http://localhost:${process.env.PORT}/static/video/${file.newFilename}`,
+        type: MediaType.Video
+      }
+    })
     return result
   }
 }
