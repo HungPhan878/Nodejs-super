@@ -7,6 +7,7 @@ import mediaRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
 import { config } from 'dotenv'
 import staticRouter from './routes/static.routes'
+import { UPLOAD_DIR_VIDEO } from './constants/dir'
 
 config()
 
@@ -25,6 +26,7 @@ app.use('/users', userRouter)
 app.use('/medias', mediaRouter)
 // Serving static files
 app.use('/static', staticRouter)
+app.use('/static/video', express.static(UPLOAD_DIR_VIDEO))
 // error handler
 app.use(defaultErrorHandler)
 app.listen(port, () => {

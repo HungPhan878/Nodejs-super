@@ -1,12 +1,19 @@
-## Logic đã có ở trên figma
+# Logic đã có ở trên figma
 
-## Description thêm các bước thêm một chức năng hay collection:
+## Logic khi làm forgot password token:
+
+1. Đối với forgot password khi bấm vào link xác thực verify forgot password thì không nên xóa forgot password token liền: để user đổi mk rồi hãy xóa vì như vậy sẽ tăng trải nghiêm người dùng tốt hơn khi người dùng click vào link nhưng chưa đổi lần sau click lại đổi vẫn được ok nha.
+2. Đối với dùng các thư viện dư lodash ta có thể test ở ngoài index.ts cũng được cho nhanh đỡ phải test trong middleware và dùng postman gọi
+3. Khi update lên db phải lọc qua các tham số truyền lên để tránh thay đổi các tham số không cần thiết như forgot_password_token ...thì phải lọc qua và chỉ để client truyền lên những tham số cần thiết mà thôi (tránh hacker tấn công).
+4. Khi get một public profile thì không cần access vì không đăng nhập hay dùng cửa sổ ẩn danh vẫn coi được nha.(chỉ trả về những infor cần thiết thôi).
+
+# Description thêm các bước thêm một chức năng hay collection:
 
 1. thêm schema(interface, class) cho collector đó.
 2. Vào db.ts kết nối với collection đó.
 3. sử dụng collection vừa kết nối cho đúng như thêm vào bên user.services hay bên controller
 
-## Cấu trúc checkSchema:
+# Cấu trúc checkSchema:
 
 1. Gồm hai đối số truyền vào:
 
@@ -20,7 +27,7 @@ checkSchema({Các rule}, ['body','headers',...]),
 - tham số thứ nhất là các rules quy định nên check fields nào.
 - Tham số thứ hai là nên check các request nào như check ở body hay headers nếu không truyền sẽ check tất cả
 
-## TypeScript:
+# TypeScript:
 
 1. Đây là đn type cho mỗi trường khác nhau:
 
@@ -33,12 +40,14 @@ checkSchema({Các rule}, ['body','headers',...]),
 
 Chỉ định nghĩa cho type các thuộc tính trong req.body thôi nha
 
-## Jwt Authentication:
+# Jwt Authentication:
 
 1. Không nên dùng chung sêcret key cho ACCESS_TOKEN and REFRESH_TOKEN:
 
 - Lí do bảo mật
 - Hacker có thể dùng refresh token thay cho access token để truy cập
+
+# MongoDB:
 
 ## Update time thực:
 
@@ -60,13 +69,6 @@ thì có hai trường hợp:
 
 2. Khi làm dự án hãy phân tích rõ ràng cụ thể theo một khoảng time nào đó rồi bắt đầu thực hiện hay làm dự án liền nha.
 
-## Lưu ý:
-
-1. Đối với forgot password khi bấm vào link xác thực verify forgot password thì không nên xóa forgot password token liền: để user đổi mk rồi hãy xóa vì như vậy sẽ tăng trải nghiêm người dùng tốt hơn khi người dùng click vào link nhưng chưa đổi lần sau click lại đổi vẫn được ok nha.
-2. Đối với dùng các thư viện dư lodash ta có thể test ở ngoài index.ts cũng được cho nhanh đỡ phải test trong middleware và dùng postman gọi
-3. Khi update lên db phải lọc qua các tham số truyền lên để tránh thay đổi các tham số không cần thiết như forgot_password_token ...thì phải lọc qua và chỉ để client truyền lên những tham số cần thiết mà thôi (tránh hacker tấn công).
-4. Khi get một public profile thì không cần access vì không đăng nhập hay dùng cửa sổ ẩn danh vẫn coi được nha.(chỉ trả về những infor cần thiết thôi).
-
 ## MongoDB schema validation:
 
 Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào mongodb vì middleware là validate tại tầng app mà thôi điều này sẽ tránh việc dư thừa dữ liệu và không thiếu những trường bắt buộc. Nếu lỗi sẽ trả về 500 và message lỗi (hãy tập đọc lỗi điềm tĩnh hơn nha)
@@ -87,9 +89,9 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
   c1: mỗi lần verify thì đi vào db tìm verify rồi xác thực nhưng như vậy sẽ ghi chậm vì tốn thời gian vào db tìm data
   c2: dùng websocket thông báo cho user hay client lấy access token lại là ok => tối ưu nhất nhưng dùng khéo léo thì được
 
-### Chương media:
+# Chương media:
 
-### Formidable:
+## Formidable:
 
 1. Upload a image file:
 
@@ -103,9 +105,27 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
 - lấy các metadata không cần thiết ra máy tính.
 - khi gặp lỗi operation not permitte thì thêm câu lệnh sharp.cache(false) là được
 
-1. Dùng upload video:
+3. Dùng upload video:
 
 - Một vấn đề là khi dùng keepExtension với một file video có nhiều kí tự khác nhau thì sẽ bị lỗi file vì tự thay đổi đuôi file->vì vậy ta không dùng keep cho video nữa mà tự custom đuôi luôn
+
+- Những lưu ý khi lam stream video:
+  - Format của header Content-Range: bytes <start>-<end>/<videoSize>
+  - Ví dụ: Content-Range: bytes 1048576-3145727/3145728
+  - Yêu cầu là `end` phải luôn luôn nhỏ hơn `videoSize`
+  - ❌ 'Content-Range': 'bytes 0-100/100'
+  - ✅ 'Content-Range': 'bytes 0-99/100'
+  -
+  - Còn Content-Length sẽ là end - start + 1. Đại diện cho khoản cách.
+  - Để dễ hình dung, mọi người tưởng tượng từ số 0 đến số 10 thì ta có 11 số.
+  - byte cũng tương tự, nếu start = 0, end = 10 thì ta có 11 byte.
+  - Công thức là end - start + 1
+  -
+  - ChunkSize = 50
+  - videoSize = 100
+  - |0----------------50|51----------------99|100 (end)
+  - stream 1: start = 0, end = 50, contentLength = 51
+  - stream 2: start = 51, end = 99, contentLength = 49
 
 ### Note:
 
@@ -116,7 +136,7 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
 
 1. Dùng promise với một mảng promise: Khi ta lặp một mảng bằng map và hàm xử lý lên từng phân tử của mảng có dùng await vì trong có promise thì ta nên dùng promise.all sẽ nhanh hơn
 
-ex:
+- ex:
 
 ```js
 const generatePromise = (delay: number) => {

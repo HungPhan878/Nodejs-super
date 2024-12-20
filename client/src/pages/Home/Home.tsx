@@ -46,6 +46,9 @@ export default function Home() {
             <button className='bg-blue-500 p-3 rounded-md' onClick={logoutHandler}>
               Logout
             </button>
+            <video controls width={500}>
+              <source src='http://localhost:4000/static/stream-video/e67a4d92aa1e5d69ce325e500.mp4' type='video/mp4' />
+            </video>
           </>
         ) : (
           <Link to={urlOauthGoogle} className='p-4 rounded-md bg-green-500'>
