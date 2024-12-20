@@ -20,7 +20,7 @@ import {
   verifyEmailController,
   loginController,
   logoutController,
-  refreshToken,
+  refreshTokenController,
   resendVerifyEmailController,
   forgotPasswordController,
   verifyForgotPasswordTokenController,
@@ -98,7 +98,7 @@ userRouter.post(
  *       refresh_token:string
  *      }
  */
-userRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshToken))
+userRouter.post('/refresh-token', refreshTokenValidator, wrapRequestHandler(refreshTokenController))
 
 /**
  *  Description: Verify email address
