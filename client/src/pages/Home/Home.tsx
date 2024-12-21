@@ -4,6 +4,12 @@ import { Link } from 'react-router-dom'
 import { useContext } from 'react'
 import { AppContext } from '../../contexts/app.context'
 import { removeTokenFromLS } from '../../utils/auth'
+import '@vidstack/react/player/styles/default/theme.css'
+import '@vidstack/react/player/styles/default/layouts/video.css'
+import { MediaPlayer, MediaProvider } from '@vidstack/react'
+import { Poster } from '@vidstack/react'
+import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default'
+
 const getOauthGoogleUrl = () => {
   const { VITE_GOOGLE_CLIENT_ID, VITE_GOOGLE_AUTHORIZED_REDIRECT_URI } = import.meta.env
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
@@ -43,12 +49,24 @@ export default function Home() {
         {isAuthenticated ? (
           <>
             <>Welcome to my app</>
-            <button className='bg-blue-500 p-3 rounded-md' onClick={logoutHandler}>
+            <button className='bg-red-500 p-3 rounded-md' onClick={logoutHandler}>
               Logout
             </button>
-            <video controls width={500}>
-              <source src='http://localhost:4000/static/stream-video/e67a4d92aa1e5d69ce325e500.mp4' type='video/mp4' />
-            </video>
+            <h2>Video HLS</h2>
+            <div className='w-96 h-96'>
+              <MediaPlayer title='Sprite Fight' src='https://files.vidstack.io/sprite-fight/hls/stream.m3u8'>
+                <Poster
+                  className='vds-poster'
+                  src='https://files.vidstack.io/sprite-fight/poster.webp'
+                  alt='Girl walks into campfire with gnomes surrounding her friend ready for their next meal!'
+                />
+                <MediaProvider />
+                <DefaultVideoLayout
+                  thumbnails='https://files.vidstack.io/sprite-fight/thumbnails.vtt'
+                  icons={defaultLayoutIcons}
+                />
+              </MediaPlayer>
+            </div>
           </>
         ) : (
           <Link to={urlOauthGoogle} className='p-4 rounded-md bg-green-500'>
