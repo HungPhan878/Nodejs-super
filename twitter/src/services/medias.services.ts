@@ -1,7 +1,6 @@
 import { config } from 'dotenv'
 import { Request } from 'express'
 import fs from 'fs'
-import fsPromise from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
 import { isProduction } from '~/constants/config'
@@ -9,7 +8,7 @@ import { UPLOAD_DIR } from '~/constants/dir'
 import { MediaType } from '~/constants/enums'
 import { Media } from '~/models/Orther'
 import { getNameToUrlName, handleUploadImage, handleUploadVideo } from '~/utils/file'
-import { encodeHLSWithMultipleVideoStreams } from '~/utils/video'
+import queue from '~/utils/queue'
 
 config()
 class MediaService {
@@ -53,9 +52,9 @@ class MediaService {
     const files = await handleUploadVideo(req)
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
-        await encodeHLSWithMultipleVideoStreams(file.filepath)
         const newName = getNameToUrlName(file.newFilename)
-        await fsPromise.unlink(file.filepath)
+        // Add video into the queue to perform encode in order
+        queue.enQueue(file.filepath)
         return {
           url: isProduction
             ? `${process.env.HOST}/static/video-hls/${newName}/master.m3u4`
