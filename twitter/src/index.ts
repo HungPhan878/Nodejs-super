@@ -8,6 +8,7 @@ import { initFolder } from './utils/file'
 import { config } from 'dotenv'
 import staticRouter from './routes/static.routes'
 import { UPLOAD_DIR_VIDEO } from './constants/dir'
+import cors from 'cors'
 
 config()
 
@@ -18,6 +19,8 @@ dbService.connect()
 // Create a uploads folder
 initFolder()
 
+//Allow everything api access to the server
+app.use(cors())
 // add middleware handlers for json
 app.use(express.json())
 // Gắn router user vào đường dẫn /users

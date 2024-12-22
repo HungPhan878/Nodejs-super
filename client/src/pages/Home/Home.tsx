@@ -54,7 +54,10 @@ export default function Home() {
             </button>
             <h2>Video HLS</h2>
             <div className='w-96 h-96'>
-              <MediaPlayer title='Sprite Fight' src='https://files.vidstack.io/sprite-fight/hls/stream.m3u8'>
+              <MediaPlayer
+                title='Sprite Fight'
+                src='http://localhost:4000/static/video-hls/98wwYdOvJCpbDQQCKI8T2/master.m3u8'
+              >
                 <Poster
                   className='vds-poster'
                   src='https://files.vidstack.io/sprite-fight/poster.webp'

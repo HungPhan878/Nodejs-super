@@ -186,3 +186,5 @@ Promise.all(
 
 - Cách 1: Tạo unique id cho video ngay từ đầu (nhanh hơn vì tạo ra folder ngay từ đầu, dùng package: nanoId(nhẹ hơn các package khác),...) thì sẽ tối ưu hiệu suất hơn
 - Cách 2: Đợi video upload xong rồi tạo folder, move video vào (lâu hơn vì tốn thời gian)
+
+3. Khi upload video trên pexels với hls thì lúc encode thì bị lỗi version.(tìm hiểu vấn đề này sao).
