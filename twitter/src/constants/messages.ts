@@ -70,7 +70,8 @@ const MESSAGES_ERROR = {
   IMAGE_UPLOADED_SUCCESSFULLY: 'Image uploaded successfully',
   VIDEO_UPLOADED_SUCCESSFULLY: 'Video uploaded successfully',
   IMAGE_NOT_FOUND: 'Image not found',
-  VIDEO_NOT_FOUND: 'Video not found'
+  VIDEO_NOT_FOUND: 'Video not found',
+  GET_STATUS_VIDEO_SUCCESSFULLY: 'Get status video successfully'
 } as const
 
 export default MESSAGES_ERROR

@@ -2,7 +2,8 @@ import { Router } from 'express'
 import {
   uploadImageController,
   uploadVideoController,
-  uploadVideoHlsController
+  uploadVideoHlsController,
+  videoStatusController
 } from '~/controllers/medias.controllers'
 import {
   accessTokenValidator,
@@ -50,6 +51,19 @@ mediaRouter.post(
   accessTokenValidator,
   verifiedUserValidator,
   wrapRequestHandler(uploadVideoHlsController)
+)
+
+/**
+ * Description: Get status of video
+ * Path: /video-status/:id
+ * Method: GET
+ * headers: { 'Authorization: Bearer <access_token>'}
+ */
+mediaRouter.get(
+  '/video-status/:id',
+  accessTokenValidator,
+  verifiedUserValidator,
+  wrapRequestHandler(videoStatusController)
 )
 
 export default mediaRouter

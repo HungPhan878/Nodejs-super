@@ -58,6 +58,7 @@ export const handleUploadVideo = async (req: Request) => {
     maxFiles: 1,
     maxFileSize: 50 * 1024 * 1024, //50MB
     filter: function ({ name, originalFilename, mimetype }) {
+      // Remember write logic here
       return true
     },
     filename() {

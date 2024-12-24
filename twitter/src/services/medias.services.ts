@@ -9,6 +9,7 @@ import { MediaType } from '~/constants/enums'
 import { Media } from '~/models/Orther'
 import { getNameToUrlName, handleUploadImage, handleUploadVideo } from '~/utils/file'
 import queue from '~/utils/queue'
+import dbService from './database.services'
 
 config()
 class MediaService {
@@ -64,6 +65,11 @@ class MediaService {
       })
     )
     return result
+  }
+
+  async getVideoStatus(id: string) {
+    const data = await dbService.videoStatus.findOne({ name: id })
+    return data
   }
 }
 

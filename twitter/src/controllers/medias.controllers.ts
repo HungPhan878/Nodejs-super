@@ -80,3 +80,9 @@ export const serveSegmentController = async (req: Request, res: Response) => {
     }
   })
 }
+
+export const videoStatusController = async (req: Request, res: Response) => {
+  const { id } = req.params
+  const result = await mediaService.getVideoStatus(id as string)
+  res.status(200).json({ message: MESSAGES_ERROR.GET_STATUS_VIDEO_SUCCESSFULLY, result })
+}
