@@ -58,8 +58,13 @@ export const handleUploadVideo = async (req: Request) => {
     maxFiles: 1,
     maxFileSize: 50 * 1024 * 1024, //50MB
     filter: function ({ name, originalFilename, mimetype }) {
-      // Remember write logic here
-      return true
+      const valid =
+        name === 'video' && Boolean(mimetype?.includes('mp4') || mimetype?.includes('quicktime'))
+      if (!valid) {
+        //Only use form.emit is res err
+        form.emit('error' as any, new Error('file type is not valid') as any)
+      }
+      return valid
     },
     filename() {
       return name
