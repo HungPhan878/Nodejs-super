@@ -15,7 +15,9 @@ config()
 const app = express()
 const port = process.env.PORT || 4000
 
-dbService.connect()
+dbService.connect().then(() => {
+  dbService.indexUsers()
+})
 // Create a uploads folder
 initFolder()
 

@@ -18,6 +18,13 @@ class DatabaseService {
     this.client = new MongoClient(uri)
     this.db = this.client.db(process.env.DB_NAME)
   }
+
+  indexUsers() {
+    this.users.createIndex({ email: 1 }, { unique: true })
+    this.users.createIndex({ username: 1 }, { unique: true })
+    this.users.createIndex({ email: 1, password: 1 })
+  }
+
   async connect() {
     try {
       // Send a ping to confirm a successful connection
