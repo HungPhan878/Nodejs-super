@@ -188,3 +188,27 @@ Promise.all(
 - Cách 2: Đợi video upload xong rồi tạo folder, move video vào (lâu hơn vì tốn thời gian)
 
 3. Khi upload video trên pexels với hls thì lúc encode thì bị lỗi version.(tìm hiểu vấn đề này sao).
+
+# Chương hiệu suất mongodb:
+
+## Index: giúp cho mgdb tìm tới tài nguyên nhanh hơn tối ưu hiệu suất hơn nhưng bù lại tốn bộ nhớ
+
+## Index Compound:
+
+1. Định nghĩa và công dụng: hợp nhất các chỉ số hay các field trong doc giúp cho mgdb lọc ra các doc phù hợp nhất và nhanh hơn.
+2. Cách dùng: vào indexes -> nhấn vào create index -> thêm 1 field + asc -> nhấn + thêm field khác cần lọc -> nhấn ok .
+3. Note:
+
+- khi đã dùng index compound trên nhiù field thì khi chỉ search một field thì nên đánh index cho field đó luôn nha
+
+## Index sort of Asc and desc:
+
+1. Định nghĩa và công dụng: Nếu bạn index field age và cho asc trả về kết quả age tăng dần rồi muốn ngược lại thêm sort thì như vậy sẽ tốn thời gian so với dùng câu lệnh đúng ngay từ đầu, tùy yêu câu việc ở client muốn trả về giảm dần thì ở indexes ta cho field đó là desc là được khỏi phải sort desc
+
+## Text search:
+
+1. ĐN và Công dụng: khi để user tự mình search hay làm search bar thì dùng và hoa thường vẫn hiển thị .
+2. Cách dùng: câu lệnh $text: $search:{'text'} và đánh chỉ mục các trường hay có chủ đề đó hay từ đó thì chỉ cần một từ chính xác nó sẽ trả về kết quả.
+3. Note:
+
+- Mỗi collection chỉ có dùng được 64 indexes thôi và chỉ có one index text (nên muốn dùng cho nhìu field thì dùng Compoud Index).
