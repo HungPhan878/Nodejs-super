@@ -197,7 +197,22 @@ Promise.all(
 
 # Chương hiệu suất mongodb:
 
-## Index: giúp cho mgdb tìm tới tài nguyên nhanh hơn tối ưu hiệu suất hơn nhưng bù lại tốn bộ nhớ
+## Index:
+
+1. Định nghĩa: giúp cho mgdb tìm tới tài nguyên nhanh hơn tối ưu hiệu suất hơn nhưng bù lại tốn bộ nhớ
+
+2. Note:
+
+- mongodb có hỗ trợ ta xóa các db không cần thiết hay không cần dùng đến nữa và đây gọi là ttl (Time to live)
+  - 2 cách dùng chính:
+    c1: expire = 0 thì sẽ dựa vào exp đã hết hay chưa hay cũ hay so với hiện tại nếu doc nào có exp cũ sẽ bị xóa
+    ```javascript
+    this.refreshToken.createIndex({ exp: 1 }, { expireAfterSeconds: 0 })
+    ```
+    c2: dựa vào thời gian bắt đầu create_At sau bao nhiêu giây expire( = 10s) kết thúc thì sẽ xóa db
+    ```javascript
+    this.refreshToken.createIndex({ created_At: 1 }, { expireAfterSeconds: 10 })
+    ```
 
 ## Index Compound:
 

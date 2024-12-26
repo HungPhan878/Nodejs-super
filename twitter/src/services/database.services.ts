@@ -25,6 +25,19 @@ class DatabaseService {
     this.users.createIndex({ email: 1, password: 1 })
   }
 
+  indexRefreshToken() {
+    this.refreshToken.createIndex({ token: 1 })
+    this.refreshToken.createIndex({ exp: 1 }, { expireAfterSeconds: 0 })
+  }
+
+  indexFollowers() {
+    this.followers.createIndex({ user_id: 1, followed_user_id: 1 })
+  }
+
+  indexVideoStatus() {
+    this.videoStatus.createIndex({ name: 1 })
+  }
+
   async connect() {
     try {
       // Send a ping to confirm a successful connection

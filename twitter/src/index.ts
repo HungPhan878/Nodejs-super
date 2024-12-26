@@ -17,6 +17,9 @@ const port = process.env.PORT || 4000
 
 dbService.connect().then(() => {
   dbService.indexUsers()
+  dbService.indexRefreshToken()
+  dbService.indexFollowers()
+  dbService.indexVideoStatus()
 })
 // Create a uploads folder
 initFolder()
