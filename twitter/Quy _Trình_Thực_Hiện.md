@@ -7,6 +7,12 @@
 3. Khi update lên db phải lọc qua các tham số truyền lên để tránh thay đổi các tham số không cần thiết như forgot_password_token ...thì phải lọc qua và chỉ để client truyền lên những tham số cần thiết mà thôi (tránh hacker tấn công).
 4. Khi get một public profile thì không cần access vì không đăng nhập hay dùng cửa sổ ẩn danh vẫn coi được nha.(chỉ trả về những infor cần thiết thôi).
 
+## Note:
+
+1. khi làm chức năng refresh token thì exp mới khi tạo lại refresh token phải = exp refresh token cũ nha
+
+2. Trong token: iat, exp theo dang epochTime
+
 # Description thêm các bước thêm một chức năng hay collection:
 
 1. thêm schema(interface, class) cho collector đó.

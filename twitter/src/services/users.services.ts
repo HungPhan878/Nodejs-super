@@ -3,7 +3,7 @@ import dbService from '~/services/database.services'
 import { RegisterBodyReq, UpdateMeBodyReq } from '~/models/requests/User.requests'
 import { hashPassword } from '~/utils/crypto'
 import { TokenTypes, UserVerifyStatus } from '~/constants/enums'
-import { signToken } from '~/utils/jwt'
+import { signToken, verifyToken } from '~/utils/jwt'
 import { config } from 'dotenv'
 import { RefreshToken } from '~/models/schemas/RefreshToken.schema'
 import { ObjectId } from 'mongodb'
@@ -24,7 +24,21 @@ class UserService {
     })
   }
 
-  private signRefreshToken({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+  private signRefreshToken({
+    user_id,
+    verify,
+    exp
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    exp?: number
+  }) {
+    if (exp) {
+      return signToken({
+        payload: { user_id, token_type: TokenTypes.RefreshToken, verify, exp },
+        privateKey: process.env.JWT_REFRESH_TOKEN_SECRET as string
+      })
+    }
     return signToken({
       payload: { user_id, token_type: TokenTypes.RefreshToken, verify },
       privateKey: process.env.JWT_REFRESH_TOKEN_SECRET as string,
@@ -73,6 +87,13 @@ class UserService {
     ])
   }
 
+  private decodeRefreshToken(refresh_token: string) {
+    return verifyToken({
+      token: refresh_token,
+      secretOrPublicKey: process.env.JWT_REFRESH_TOKEN_SECRET as string
+    })
+  }
+
   async createUser(payload: RegisterBodyReq) {
     const user_id = new ObjectId()
     const email_verify_token = await this.signEmailVerifyToken({
@@ -94,8 +115,16 @@ class UserService {
       user_id: user_id.toString(),
       verify: UserVerifyStatus.Unverified
     })
+    // decode the refresh token
+    const decodedRefreshToken = await this.decodeRefreshToken(refreshToken)
+    // save refresh token to database
     await dbService.refreshToken.insertOne(
-      new RefreshToken({ user_id: new ObjectId(user_id), token: refreshToken })
+      new RefreshToken({
+        user_id: new ObjectId(user_id),
+        token: refreshToken,
+        exp: decodedRefreshToken.exp,
+        iat: decodedRefreshToken.iat
+      })
     )
     console.log('email-verify-token:', email_verify_token)
     return {
@@ -112,8 +141,15 @@ class UserService {
 
   async login({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
     const [accessToken, refreshToken] = await this.signAccessAndRefreshToken({ user_id, verify })
+    // decode the refresh token
+    const decodedRefreshToken = await this.decodeRefreshToken(refreshToken)
     await dbService.refreshToken.insertOne(
-      new RefreshToken({ user_id: new ObjectId(user_id), token: refreshToken })
+      new RefreshToken({
+        user_id: new ObjectId(user_id),
+        token: refreshToken,
+        exp: decodedRefreshToken.exp,
+        iat: decodedRefreshToken.iat
+      })
     )
     return {
       accessToken,
@@ -209,19 +245,28 @@ class UserService {
   async refreshToken({
     user_id,
     refresh_token,
-    verify
+    verify,
+    exp
   }: {
     user_id: string
     refresh_token: string
     verify: UserVerifyStatus
+    exp: number
   }) {
     const [new_access_token, new_refresh_token] = await Promise.all([
       this.signAccessToken({ user_id, verify }),
-      this.signRefreshToken({ user_id, verify }),
+      this.signRefreshToken({ user_id, verify, exp }),
       dbService.refreshToken.deleteOne({ token: refresh_token })
     ])
+    // decode the refresh token
+    const decodedRefreshToken = await this.decodeRefreshToken(new_refresh_token)
     await dbService.refreshToken.insertOne(
-      new RefreshToken({ user_id: new ObjectId(user_id), token: new_refresh_token })
+      new RefreshToken({
+        user_id: new ObjectId(user_id),
+        token: new_refresh_token,
+        exp,
+        iat: decodedRefreshToken.iat
+      })
     )
     return {
       new_access_token,
@@ -243,8 +288,15 @@ class UserService {
       ])
     ])
     const [access_token, refresh_token] = token
+    // decode the refresh token
+    const decodedRefreshToken = await this.decodeRefreshToken(refresh_token)
     await dbService.refreshToken.insertOne(
-      new RefreshToken({ user_id: new ObjectId(user_id), token: refresh_token })
+      new RefreshToken({
+        user_id: new ObjectId(user_id),
+        token: refresh_token,
+        exp: decodedRefreshToken.exp,
+        iat: decodedRefreshToken.iat
+      })
     )
     return {
       access_token,
