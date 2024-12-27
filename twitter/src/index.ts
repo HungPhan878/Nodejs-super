@@ -9,6 +9,7 @@ import { config } from 'dotenv'
 import staticRouter from './routes/static.routes'
 import { UPLOAD_DIR_VIDEO } from './constants/dir'
 import cors from 'cors'
+import tweetRouter from './routes/tweet.routes'
 
 config()
 
@@ -32,6 +33,8 @@ app.use(express.json())
 app.use('/users', userRouter)
 // Gắn router media vào đường dẫn /medias
 app.use('/medias', mediaRouter)
+// router tweet into url /tweets
+app.use('/tweets', tweetRouter)
 // Serving static files
 app.use('/static', staticRouter)
 app.use('/static/video', express.static(UPLOAD_DIR_VIDEO))
