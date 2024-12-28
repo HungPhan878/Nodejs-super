@@ -233,3 +233,10 @@ Promise.all(
 3. Note:
 
 - Mỗi collection chỉ có dùng được 64 indexes thôi và chỉ có one index text (nên muốn dùng cho nhìu field thì dùng Compoud Index).
+
+# Validator:
+
+## Note:
+
+- Với câu lệnh dk thì return về gì thì ta làm đk hợp lệ với return đó:
+  ex: return err thì đk hợp lệ để return về lỗi
