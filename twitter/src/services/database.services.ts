@@ -4,6 +4,7 @@ import User from '~/models/schemas/user.schema'
 import { RefreshToken } from '~/models/schemas/RefreshToken.schema'
 import { Follower } from '~/models/schemas/Follower.schema'
 import VideoStatus from '~/models/schemas/VideoStatus.schema'
+import { Tweet } from '~/models/schemas/Tweet.schema'
 
 // help me use file .env
 config()
@@ -81,6 +82,9 @@ class DatabaseService {
 
   get videoStatus(): Collection<VideoStatus> {
     return this.db.collection(process.env.DB_VIDEO_STATUS_COLLECTION as string)
+  }
+  get tweets(): Collection<Tweet> {
+    return this.db.collection(process.env.DB_TWEETS_COLLECTION as string)
   }
 }
 
