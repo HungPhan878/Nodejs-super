@@ -1,6 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { TweetAudience, TweetTypes } from '~/constants/enums'
-import { Media } from '../Orther'
+import { Media } from '../Other'
 
 interface TweetType {
   _id?: ObjectId
@@ -42,7 +42,7 @@ export class Tweet {
     this.content = data.content
     this.parent_id = data.parent_id ? new ObjectId(data.parent_id) : null
     this.hashtags = data.hashtags
-    this.mentions = data.hashtags.map((item) => new ObjectId(item))
+    this.mentions = data.mentions.map((item) => new ObjectId(item))
     this.medias = data.medias
     this.guest_views = data.guest_views || 0
     this.user_views = data.user_views || 0
