@@ -10,6 +10,7 @@ import staticRouter from './routes/static.routes'
 import { UPLOAD_DIR_VIDEO } from './constants/dir'
 import cors from 'cors'
 import tweetRouter from './routes/tweet.routes'
+import bookmarkRouter from './routes/bookmark.routes'
 
 config()
 
@@ -35,6 +36,8 @@ app.use('/users', userRouter)
 app.use('/medias', mediaRouter)
 // router tweet into url /tweets
 app.use('/tweets', tweetRouter)
+// router bookmarks into url /bookmarks
+app.use('/bookmarks', bookmarkRouter)
 // Serving static files
 app.use('/static', staticRouter)
 app.use('/static/video', express.static(UPLOAD_DIR_VIDEO))

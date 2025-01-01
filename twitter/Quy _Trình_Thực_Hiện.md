@@ -46,6 +46,8 @@ checkSchema({Các rule}, ['body','headers',...]),
 
 Chỉ định nghĩa cho type các thuộc tính trong req.body thôi nha
 
+2. Khi một thuộc tính ta chắc chắn nó sẽ có thuộc tình đó khi hover vào và không undefined hay null thì ta cho nó as thuộc tính đó luôn khỏi ? cũng được.
+
 # Jwt Authentication:
 
 1. Không nên dùng chung sêcret key cho ACCESS_TOKEN and REFRESH_TOKEN:
