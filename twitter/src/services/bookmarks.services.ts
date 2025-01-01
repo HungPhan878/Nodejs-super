@@ -1,13 +1,13 @@
 import Bookmark from '~/models/schemas/Bookmark.schema'
 import dbService from './database.services'
-import { WithId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
 
 class BookmarkService {
   async bookmarkTweet(tweet_id: string, user_id: string) {
     const result = await dbService.bookmarks.findOneAndUpdate(
       {
-        tweet_id: new Object(tweet_id),
-        user_id: new Object(user_id)
+        user_id: new ObjectId(user_id),
+        tweet_id: new ObjectId(tweet_id)
       },
       {
         $setOnInsert: new Bookmark({
@@ -23,6 +23,14 @@ class BookmarkService {
     return {
       _id: (result as WithId<Bookmark>)._id
     }
+  }
+
+  async unBookmarkTweet(tweet_id: string, user_id: string) {
+    const result = await dbService.bookmarks.findOneAndDelete({
+      user_id: new ObjectId(user_id),
+      tweet_id: new ObjectId(tweet_id)
+    })
+    return result
   }
 }
 

@@ -242,3 +242,12 @@ Promise.all(
 
 - Với câu lệnh dk thì return về gì thì ta làm đk hợp lệ với return đó:
   ex: return err thì đk hợp lệ để return về lỗi
+
+# Chương tweet:
+
+## Bookmark:
+
+1. Ta có thêm làm thêm endpoint api bookmarks/:bookmark_id
+   để ở phía client thêm tính năng get tweet detail có bookmark_id trong đó trả về để làm icon bookmark sáng lên thông báo đã bm rồi thì client sẽ lấy đó gửi lên là ok
+
+2. Đối với method delete thì không truyền body được nha chỉ truyền qua url và phải rõ nghĩa ví dụ tweet/123123 là tweet_id còn bookmarks/:tweet_id thì không thân thiện api phải bookmarks/tweet/123123 ổn

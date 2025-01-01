@@ -90,7 +90,8 @@ export const TWEET_MESSAGES = {
 export const BOOKMARK_MESSAGES = {
   BOOKMARK_ALREADY_EXISTS: 'Bookmark already exists',
   BOOKMARK_NOT_FOUND: 'Bookmark not found',
-  BOOKMARK_SUCCESSFULLY: 'Bookmark successfully'
+  BOOKMARK_SUCCESSFULLY: 'Bookmark successfully',
+  DELETE_BOOKMARK_SUCCESSFULLY: 'Delete bookmark successfully'
 } as const
 
 export default MESSAGES_ERROR
