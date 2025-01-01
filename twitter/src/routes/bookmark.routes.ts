@@ -3,6 +3,7 @@ import {
   bookmarkTweetController,
   unBookmarkTweetController
 } from '~/controllers/bookmarks.controllers'
+import { tweetIdValidator } from '~/middlewares/tweet.middlewares'
 
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -20,6 +21,7 @@ bookmarkRouter.post(
   '/',
   accessTokenValidator,
   verifiedUserValidator,
+  tweetIdValidator,
   wrapRequestHandler(bookmarkTweetController)
 )
 
@@ -33,6 +35,7 @@ bookmarkRouter.delete(
   '/tweet/:tweet_id',
   accessTokenValidator,
   verifiedUserValidator,
+  tweetIdValidator,
   wrapRequestHandler(unBookmarkTweetController)
 )
 

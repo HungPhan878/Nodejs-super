@@ -2,7 +2,10 @@ import { checkSchema } from 'express-validator'
 import { isEmpty } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { MediaType, TweetAudience, TweetTypes } from '~/constants/enums'
+import HTTP_STATUS from '~/constants/httpStatusCode'
 import { TWEET_MESSAGES } from '~/constants/messages'
+import { ErrorWithStatus } from '~/models/Errors'
+import dbService from '~/services/database.services'
 import { numberEnumToArray } from '~/utils/common'
 import { validate } from '~/utils/validation'
 
@@ -112,5 +115,36 @@ export const createTweetValidator = validate(
       }
     },
     ['body']
+  )
+)
+
+export const tweetIdValidator = validate(
+  checkSchema(
+    {
+      tweet_id: {
+        custom: {
+          options: async (value, { req }) => {
+            // In checkSchema have isMongoId can check objectId but not give status other than 422 so we need to check objectId in custom.
+            if (!ObjectId.isValid(value)) {
+              throw new ErrorWithStatus({
+                message: TWEET_MESSAGES.INVALID_TWEET_ID,
+                status: HTTP_STATUS.BAD_REQUEST
+              })
+            }
+            const tweet = await dbService.tweets.findOne({
+              _id: new ObjectId(value)
+            })
+            if (!tweet) {
+              throw new ErrorWithStatus({
+                message: TWEET_MESSAGES.TWEET_NOT_FOUND,
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            return true
+          }
+        }
+      }
+    },
+    ['params', 'body']
   )
 )

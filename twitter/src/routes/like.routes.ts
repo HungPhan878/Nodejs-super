@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import { likeTweetController, unlikeTweetController } from '~/controllers/likes.controllers'
+import { tweetIdValidator } from '~/middlewares/tweet.middlewares'
 
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -17,6 +18,7 @@ likeRouter.post(
   '/',
   accessTokenValidator,
   verifiedUserValidator,
+  tweetIdValidator,
   wrapRequestHandler(likeTweetController)
 )
 
@@ -30,6 +32,7 @@ likeRouter.delete(
   '/tweet/:tweet_id',
   accessTokenValidator,
   verifiedUserValidator,
+  tweetIdValidator, // Create a tweetIdValidator to use routes
   wrapRequestHandler(unlikeTweetController)
 )
 
