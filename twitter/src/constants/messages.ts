@@ -94,4 +94,11 @@ export const BOOKMARK_MESSAGES = {
   DELETE_BOOKMARK_SUCCESSFULLY: 'Delete bookmark successfully'
 } as const
 
+export const LIKE_MESSAGES = {
+  LIKE_ALREADY_EXISTS: 'Like already exists',
+  LIKE_NOT_FOUND: 'Like not found',
+  LIKE_SUCCESSFULLY: 'Like successfully',
+  DELETE_LIKE_SUCCESSFULLY: 'Delete like successfully'
+} as const
+
 export default MESSAGES_ERROR
