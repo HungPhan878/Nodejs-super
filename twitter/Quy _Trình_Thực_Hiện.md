@@ -243,6 +243,11 @@ Promise.all(
 - Với câu lệnh dk thì return về gì thì ta làm đk hợp lệ với return đó:
   ex: return err thì đk hợp lệ để return về lỗi
 
+## Sự khác nhau của req.headers và req.header
+
+1. req.headers: là của expressjs hay js nó có phân biệt hoa thường req.headers.authorization = ta gửi Authorization từ client to server (nếu req.headers.Authorization sẽ ra undefined)
+2. req.header: là be nói chúng là một function nhận đối số hoa thường gì cũng được, ta gửi Authorization = thì nhận req.header('Authorization') hay req.header('authorization') đều được.
+
 # Chương tweet:
 
 ## Bookmark:
