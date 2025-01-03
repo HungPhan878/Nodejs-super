@@ -1,6 +1,6 @@
 import { Router } from 'express'
 import { createTweetController, getTweetController } from '~/controllers/tweets.controllers'
-import { createTweetValidator, tweetIdValidator } from '~/middlewares/tweet.middlewares'
+import { audienceValidator, createTweetValidator, tweetIdValidator } from '~/middlewares/tweet.middlewares'
 import {
   accessTokenValidator,
   isUserLoggedInValidator,
@@ -35,6 +35,7 @@ tweetRouter.get(
   tweetIdValidator,
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
+  wrapRequestHandler(audienceValidator), // audience validator is async so should try catch or method wrapRequestHandler
   wrapRequestHandler(getTweetController)
 )
 
