@@ -177,6 +177,7 @@ export const audienceValidator = async (req: Request, res: Response, next: NextF
       (user_circle_id) => user_circle_id.equals(user_id) // method equals of ObjectId use to check a ObjectId and a string (ObjectId) have equal or not
     )
     // Check viewer has permission to view Twitter Circle tweet or is author
+    // my tweet is i always get it success every time.
     if (!tweet.user_id?.equals(user_id) && !isInTweetCircle) {
       throw new ErrorWithStatus({
         message: TWEET_MESSAGES.TWEET_IS_NOT_PUBLIC,

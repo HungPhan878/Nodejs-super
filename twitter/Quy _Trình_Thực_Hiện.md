@@ -256,3 +256,33 @@ Promise.all(
    để ở phía client thêm tính năng get tweet detail có bookmark_id trong đó trả về để làm icon bookmark sáng lên thông báo đã bm rồi thì client sẽ lấy đó gửi lên là ok
 
 2. Đối với method delete thì không truyền body được nha chỉ truyền qua url và phải rõ nghĩa ví dụ tweet/123123 là tweet_id còn bookmarks/:tweet_id thì không thân thiện api phải bookmarks/tweet/123123 ổn
+
+## Aggregation Pipelines:
+
+### Định nghĩa :
+
+là đường ống tổng hợp hay liên kết các collection lại với nhau.
+
+### Cách dùng:
+
+#### Cách 1: Dùng ui trực tiếp
+
+1. Vào collection gốc hay local mà muốn liên kết đến các collection khác
+2. nhấn qua Aggregations
+3. Create stage và trạng thái $match trước tiên
+   4, sau đó lookup và điền vào form để thay đổi các field cụ thể
+   ex:
+
+- from: The target collection.
+- localField: The local join field.
+- foreignField: The target join field.
+- as: The name for the results.
+- pipeline: Optional pipeline to run on the foreign collection.
+- let: Optional variables to use in the pipeline field stages.
+
+  {
+  from: "hashtags",
+  localField: "hashtags",
+  foreignField: "\_id",
+  as: "hashtags"
+  }
