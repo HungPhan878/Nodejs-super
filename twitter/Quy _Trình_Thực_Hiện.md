@@ -294,6 +294,12 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 - Và để tạo lại tweet mang nghĩa retweet thì khi dùng mongo chỉ cần
   lockup lại colletion tweet thôi
 
+### Phân trang và kĩ thuật ìninite scrolling:
+
+- Ta dùng đến aggregation có 2 stage chính là $skip và $limit
+- $skip phải dùng trước $limit
+- và từ client gửi limit,page and tweet_type thì ở dạng query params thì gửi lên sẽ có dạng string{}
+
 ## Notes:
 
 - Tránh gọi query hai lần nếu có thể thì sẽ tốt hơn tối ưu hiệu suất và tốc độ truy cập.

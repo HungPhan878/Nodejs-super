@@ -1,5 +1,9 @@
 import { Router } from 'express'
-import { createTweetController, getTweetController } from '~/controllers/tweets.controllers'
+import {
+  createTweetController,
+  getTweetChildrenController,
+  getTweetController
+} from '~/controllers/tweets.controllers'
 import {
   audienceValidator,
   createTweetValidator,
@@ -33,6 +37,7 @@ tweetRouter.post(
  * Description: Get a tweet detail
  * Path: /:tweet_id
  * Method: Get
+ * Headers: {Authorization: "Bearer <access_token>"}
  * */
 tweetRouter.get(
   '/:tweet_id',
@@ -44,17 +49,23 @@ tweetRouter.get(
 )
 
 /**
- * Description: Get a tweet detail
- * Path: /:tweet_id
+ * Description: Get tweet children
+ * Path: /:tweet_id/children
  * Method: Get
+ * Headers: {Authorization: "Bearer <access_token>"}
+ * Query Parameters:{
+ * page: number,
+ * limit: number,
+ * tweet_type: TweetType
+ * }
  * */
 tweetRouter.get(
-  '/:tweet_id',
+  '/:tweet_id/children',
   tweetIdValidator,
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
   wrapRequestHandler(audienceValidator), // audience validator is async so should try catch or method wrapRequestHandler
-  wrapRequestHandler(getTweetController)
+  wrapRequestHandler(getTweetChildrenController)
 )
 
 export default tweetRouter
