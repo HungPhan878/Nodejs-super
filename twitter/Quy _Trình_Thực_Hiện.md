@@ -286,3 +286,14 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
   foreignField: "\_id",
   as: "hashtags"
   }
+
+### Retweet, comment or quote of Tweet:
+
+- Để đếm các có bao nhiêu user khác retweet(chia sẻ lại), comment tweett của ta thì ta dùng $filter và $eq(giá trị này phải = ...)
+
+- Và để tạo lại tweet mang nghĩa retweet thì khi dùng mongo chỉ cần
+  lockup lại colletion tweet thôi
+
+## Notes:
+
+- Tránh gọi query hai lần nếu có thể thì sẽ tốt hơn tối ưu hiệu suất và tốc độ truy cập.
