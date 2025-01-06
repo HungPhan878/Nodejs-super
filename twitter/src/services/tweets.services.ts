@@ -2,7 +2,7 @@ import { TweetReqBody } from '~/models/requests/Tweet.request'
 import dbService from './database.services'
 import { Tweet } from '~/models/schemas/Tweet.schema'
 import Hashtag from '~/models/schemas/Hashtag.schema'
-import { WithId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
 
 class TweetService {
   async checkAndCreateHashtag(hashtags: string[]) {
@@ -38,6 +38,26 @@ class TweetService {
     const tweet = await dbService.tweets.findOne({ _id: result.insertedId })
 
     return tweet
+  }
+
+  async increaseView(tweet_id: string, user_id?: string) {
+    const inc = user_id ? { user_views: 1 } : { guest_views: 1 }
+    const result = await dbService.tweets.findOneAndUpdate(
+      { _id: new ObjectId(tweet_id) },
+      {
+        $inc: inc,
+        $currentDate: { updated_at: true }
+      },
+      {
+        returnDocument: 'after',
+        projection: { guest_views: 1, user_views: 1 }
+      }
+    )
+    console.log(result)
+    return result as WithId<{
+      guest_views: number
+      user_views: number
+    }>
   }
 }
 

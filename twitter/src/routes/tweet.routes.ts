@@ -43,4 +43,18 @@ tweetRouter.get(
   wrapRequestHandler(getTweetController)
 )
 
+/**
+ * Description: Get a tweet detail
+ * Path: /:tweet_id
+ * Method: Get
+ * */
+tweetRouter.get(
+  '/:tweet_id',
+  tweetIdValidator,
+  isUserLoggedInValidator(accessTokenValidator),
+  isUserLoggedInValidator(verifiedUserValidator),
+  wrapRequestHandler(audienceValidator), // audience validator is async so should try catch or method wrapRequestHandler
+  wrapRequestHandler(getTweetController)
+)
+
 export default tweetRouter

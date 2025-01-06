@@ -11,7 +11,6 @@ import { validate } from '~/utils/validation'
 import { NextFunction, Request, Response } from 'express'
 import { Tweet } from '~/models/schemas/Tweet.schema'
 import { TokenPayload } from '~/models/requests/User.requests'
-import User from '~/models/schemas/user.schema'
 
 const tweetTypes = numberEnumToArray(TweetTypes)
 const audienceTypes = numberEnumToArray(TweetAudience)
@@ -138,7 +137,7 @@ export const tweetIdValidator = validate(
             // We only need to get tweet from here and check if the tweet is right then response for client
             // Don't need to query time two
             const [tweet] = await dbService.tweets
-              .aggregate<Tweet>([
+              .aggregate<Tweet & { views: number }>([
                 {
                   $match: {
                     _id: new ObjectId('67738c7fc72cdd632393aeee')

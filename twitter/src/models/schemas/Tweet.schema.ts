@@ -32,7 +32,6 @@ export class Tweet {
   user_views: number
   created_at?: Date
   updated_at?: Date
-
   constructor(data: TweetType) {
     const date = new Date()
     this._id = data._id
