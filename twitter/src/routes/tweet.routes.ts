@@ -7,6 +7,7 @@ import {
 import {
   audienceValidator,
   createTweetValidator,
+  getTweetChildrenValidator,
   tweetIdValidator
 } from '~/middlewares/tweet.middlewares'
 import {
@@ -62,6 +63,7 @@ tweetRouter.get(
 tweetRouter.get(
   '/:tweet_id/children',
   tweetIdValidator,
+  getTweetChildrenValidator,
   isUserLoggedInValidator(accessTokenValidator),
   isUserLoggedInValidator(verifiedUserValidator),
   wrapRequestHandler(audienceValidator), // audience validator is async so should try catch or method wrapRequestHandler
