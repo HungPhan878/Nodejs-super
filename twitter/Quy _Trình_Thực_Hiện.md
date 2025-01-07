@@ -97,6 +97,13 @@ Là giúp ta validate tại tầng mongodb khi chúng ta đưa dữ liệu vào 
   c1: mỗi lần verify thì đi vào db tìm verify rồi xác thực nhưng như vậy sẽ ghi chậm vì tốn thời gian vào db tìm data
   c2: dùng websocket thông báo cho user hay client lấy access token lại là ok => tối ưu nhất nhưng dùng khéo léo thì được
 
+## Các hàm trong mongodb:
+
+1. updateMany:
+
+- Không trả về kết quả khi gọi nên để tránh query nhiều lần ta dùng js thay đổi tweets mà thôi
+- không auto update_at nên ta phải dùng Date và Date được chạy khi hàm js đó chạy, còn current time in mongodb được khởi chạy khi hàm updateMany thực thi
+
 # Chương media:
 
 ## Formidable:

@@ -23,6 +23,7 @@ export const getTweetController = async (req: Request, res: Response) => {
     ...req.tweet,
     guest_views: result.guest_views,
     user_views: result.user_views,
+    updated_at: result.updated_at,
     views: (req.tweet as Tweet & { views: number }).views + 1
   }
   res.status(200).json({ message: TWEET_MESSAGES.GET_TWEET_SUCCESSFULLY, result: tweet })
@@ -32,8 +33,9 @@ export const getTweetChildrenController = async (req: Request, res: Response) =>
   const tweet_type = Number(req.query.tweet_type as string) as TweetTypes
   const limit = Number(req.query.limit as string)
   const page = Number(req.query.page as string)
-  const { tweets, total_page } = await tweetService.getTweetChildren({
+  const { tweets, total } = await tweetService.getTweetChildren({
     tweet_id: req.params.tweet_id,
+    user_id: req.decoded_authorization?.user_id,
     tweet_type,
     limit,
     page
@@ -45,7 +47,7 @@ export const getTweetChildrenController = async (req: Request, res: Response) =>
       page,
       limit,
       tweet_type,
-      total_page: Math.ceil(total_page / limit)
+      total_page: Math.ceil(total / limit)
     }
   })
 }
