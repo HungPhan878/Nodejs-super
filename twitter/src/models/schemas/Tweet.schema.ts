@@ -4,7 +4,7 @@ import { Media } from '../Other'
 
 interface TweetType {
   _id?: ObjectId
-  user_id: string
+  user_id: string | ObjectId
   type: TweetTypes
   audience: TweetAudience
   content: string

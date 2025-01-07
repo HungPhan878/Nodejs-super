@@ -1,4 +1,4 @@
-import { checkSchema, ParamSchema } from 'express-validator'
+import { checkSchema } from 'express-validator'
 import { isEmpty } from 'lodash'
 import { ObjectId } from 'mongodb'
 import { MediaType, TweetAudience, TweetTypes, UserVerifyStatus } from '~/constants/enums'
