@@ -307,6 +307,10 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 - $skip phải dùng trước $limit
 - và từ client gửi limit,page and tweet_type thì ở dạng query params thì gửi lên sẽ có dạng string{}
 
+#### Note của phân trang:
+
+- khi dùng skip và limit đừng dùng ở cuối khi stage lookup hay hợp doc lại với nhau rui mới dùng, để tối ưu hơn performent ta nên dùng nó ở sau stage match cuối cùng thì hợp lí hơn (chứ không phải nằm cuối nha).
+
 ### $UNWIND:
 
 - là một stage trong aggregation giúp ta chuyển một field dạng object[] to object vì [] chỉ cần một item mà thôi.
