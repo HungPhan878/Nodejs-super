@@ -91,7 +91,8 @@ export const TWEET_MESSAGES = {
   TWEET_NOT_FOUND: 'Tweet not found',
   TWEET_IS_NOT_PUBLIC: 'Tweet is not public',
   LIMIT_MUST_BE_BETWEEN_1_AND_100: 'Limit must be between 1 and 100',
-  PAGE_MUST_BE_POSITIVE_INTEGER: 'Page must be positive integer'
+  PAGE_MUST_BE_POSITIVE_INTEGER: 'Page must be positive integer',
+  GET_NEW_FEEDS_SUCCESSFULLY: 'Get new feeds successfully'
 } as const
 
 export const BOOKMARK_MESSAGES = {

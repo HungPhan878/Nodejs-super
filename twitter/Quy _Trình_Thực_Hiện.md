@@ -307,6 +307,18 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 - $skip phải dùng trước $limit
 - và từ client gửi limit,page and tweet_type thì ở dạng query params thì gửi lên sẽ có dạng string{}
 
+### $UNWIND:
+
+- là một stage trong aggregation giúp ta chuyển một field dạng object[] to object vì [] chỉ cần một item mà thôi.
+
+### Get new feeds:
+
+- đã có trên mongodb cứ xem theo logic mà thôi.
+
+### Notes:
+
+-Khi thao tác với aggregation = ui mongodb thì mỗi lần code xong stage đảm bảo mình đã nhấn save nha.
+
 ## Notes:
 
 - Tránh gọi query hai lần nếu có thể thì sẽ tốt hơn tối ưu hiệu suất và tốc độ truy cập.

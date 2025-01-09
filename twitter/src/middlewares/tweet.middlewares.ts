@@ -295,33 +295,44 @@ export const audienceValidator = async (req: Request, res: Response, next: NextF
 }
 
 export const getTweetChildrenValidator = validate(
-  checkSchema({
-    tweet_type: {
-      isIn: isInSchema
+  checkSchema(
+    {
+      tweet_type: {
+        isIn: isInSchema
+      }
     },
-    limit: {
-      isNumeric: true,
-      custom: {
-        options: (value, { req }) => {
-          const limit = Number(value)
-          if (limit <= 0 || limit > 100) {
-            throw new Error(TWEET_MESSAGES.LIMIT_MUST_BE_BETWEEN_1_AND_100)
+    ['query']
+  )
+)
+
+export const paginationValidator = validate(
+  checkSchema(
+    {
+      limit: {
+        isNumeric: true,
+        custom: {
+          options: (value, { req }) => {
+            const limit = Number(value)
+            if (limit <= 0 || limit > 100) {
+              throw new Error(TWEET_MESSAGES.LIMIT_MUST_BE_BETWEEN_1_AND_100)
+            }
+            return true
           }
-          return true
+        }
+      },
+      page: {
+        isNumeric: true,
+        custom: {
+          options: (value, { req }) => {
+            const page = Number(value)
+            if (page < 1) {
+              throw new Error(TWEET_MESSAGES.PAGE_MUST_BE_POSITIVE_INTEGER)
+            }
+            return true
+          }
         }
       }
     },
-    page: {
-      isNumeric: true,
-      custom: {
-        options: (value, { req }) => {
-          const page = Number(value)
-          if (page < 1) {
-            throw new Error(TWEET_MESSAGES.PAGE_MUST_BE_POSITIVE_INTEGER)
-          }
-          return true
-        }
-      }
-    }
-  })
+    ['query'] 
+  )
 )
