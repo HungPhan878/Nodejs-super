@@ -12,6 +12,7 @@ import cors from 'cors'
 import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmark.routes'
 import likeRouter from './routes/like.routes'
+import searchRouter from './routes/Search.routes'
 
 config()
 
@@ -41,6 +42,8 @@ app.use('/tweets', tweetRouter)
 app.use('/bookmarks', bookmarkRouter)
 // router likes into url /likes
 app.use('/likes', likeRouter)
+// router search into url /search
+app.use('/search', searchRouter)
 // Serving static files
 app.use('/static', staticRouter)
 app.use('/static/video', express.static(UPLOAD_DIR_VIDEO))

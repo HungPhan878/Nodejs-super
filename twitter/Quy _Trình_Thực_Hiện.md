@@ -182,6 +182,8 @@ Promise.all(
 })
 ```
 
+-> Nhưng nhớ là promise.all cho 2 aggrigation sẽ mang lại hiệu suất tốt hơn query bt như update, ... miễn là 2 aggrigation không phụ thuộc lẫn nhau.
+
 ## Stream video:
 
 ### FFMPEG:
@@ -326,3 +328,9 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 ## Notes:
 
 - Tránh gọi query hai lần nếu có thể thì sẽ tốt hơn tối ưu hiệu suất và tốc độ truy cập.
+
+# Chương Search:
+
+## Note:
+
+-Khi search field nào phải đánh index field đó là trước nha và search text thì index là search text thôi và xem them các thuộc tính trên mongodb text searc.

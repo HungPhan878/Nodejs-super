@@ -109,4 +109,7 @@ export const LIKE_MESSAGES = {
   DELETE_LIKE_SUCCESSFULLY: 'Delete like successfully'
 } as const
 
+export const SEARCH_MESSAGES = {
+  SEARCH_SUCCESSFULLY: 'Search successfully'
+}
 export default MESSAGES_ERROR
