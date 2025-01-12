@@ -312,6 +312,7 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 #### Note của phân trang:
 
 - khi dùng skip và limit đừng dùng ở cuối khi stage lookup hay hợp doc lại với nhau rui mới dùng, để tối ưu hơn performent ta nên dùng nó ở sau stage match cuối cùng thì hợp lí hơn (chứ không phải nằm cuối nha).
+  -Khi phân trang phải trả về cho client ba giá trị limit, page and total_page
 
 ### $UNWIND:
 
@@ -334,3 +335,5 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 ## Note:
 
 -Khi search field nào phải đánh index field đó là trước nha và search text thì index là search text thôi và xem them các thuộc tính trên mongodb text searc.
+
+- Ngoài aggregation vẫn có thể dùng find để search và method find có cả phân trang (limit and skip).
