@@ -436,7 +436,7 @@ class UserService {
       followed_user_id: new ObjectId(followed_user_id),
       user_id: new ObjectId(user_id)
     })
-    //Not found user is throwing an nofitication unfollow or already unfollow
+    //Not found user is throwing an notification unfollow or already unfollow
     if (follower === null) {
       return { message: MESSAGES_ERROR.ALREADY_UNFOLLOWED }
     }

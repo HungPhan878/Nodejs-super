@@ -8,14 +8,17 @@ class SearchService {
     page,
     content,
     media_type,
+    people_followed,
     user_id
   }: {
     limit: number
     page: number
     content: string
-    media_type: MediaQueryType
+    people_followed?: string
+    media_type?: MediaQueryType
     user_id: string
   }) {
+    const user_id_obj = new ObjectId(user_id)
     const $match: {
       $text: {
         $search: string
@@ -26,6 +29,7 @@ class SearchService {
         $search: content
       }
     }
+    //If have media type
     if (media_type) {
       if (media_type === MediaQueryType.Image) {
         $match['medias.type'] = MediaType.Image
@@ -34,7 +38,24 @@ class SearchService {
         $match['medias.type'] = { $in: [MediaType.Video, MediaType.HLS] }
       }
     }
-    const user_id_obj = new ObjectId(user_id)
+    //If have people followed === '1'
+    if (people_followed && people_followed === '1') {
+      const followed_user_ids = await dbService.followers
+        .find(
+          { user_id: user_id_obj },
+          {
+            projection: {
+              followed_user_id: 1,
+              _id: 0
+            }
+          }
+        )
+        .toArray() // Because return results so toArray to return a object[]
+      const ids = followed_user_ids.map((item) => item.followed_user_id)
+      // Add id of user that into array
+      ids.push(user_id_obj)
+      $match['user_id'] = { $in: followed_user_ids }
+    }
     const [tweets, total] = await Promise.all([
       dbService.tweets
         .aggregate([
@@ -260,7 +281,7 @@ class SearchService {
 
     return {
       tweets,
-      total: total[0].total
+      total: total[0]?.total || 0
     }
   }
 }

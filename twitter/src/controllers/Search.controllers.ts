@@ -12,12 +12,14 @@ export const searchController = async (
   const page = Number(req.query.page)
   const media_type = req.query.media_type
   const content = req.query.content as string
+  const people_followed = req.query.people_followed as string
   const user_id = req.decoded_authorization?.user_id as string
   const { tweets, total } = await searchService.search({
     limit,
     page,
     content,
     media_type,
+    people_followed,
     user_id
   })
   res.json({

@@ -470,7 +470,7 @@ class TweetService {
 
     return {
       tweets,
-      total: total[0].total
+      total: total[0]?.total || 0 // if total is not then total[0] will throw error so this how
     }
   }
 }
