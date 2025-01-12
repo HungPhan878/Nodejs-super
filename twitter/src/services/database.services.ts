@@ -23,6 +23,13 @@ class DatabaseService {
     this.db = this.client.db(process.env.DB_NAME)
   }
 
+  async indexTweets() {
+    const exists = await this.tweets.indexExists(['content_text'])
+    if (!exists) {
+      this.tweets.createIndex({ content: 'text' }, { default_language: 'none' })
+    }
+  }
+
   async indexUsers() {
     const exists = await this.users.indexExists(['email_1', 'email_1_password_1', 'username_1'])
     if (!exists) {

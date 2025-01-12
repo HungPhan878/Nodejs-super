@@ -24,6 +24,7 @@ dbService.connect().then(() => {
   dbService.indexRefreshToken()
   dbService.indexFollowers()
   dbService.indexVideoStatus()
+  dbService.indexTweets()
 })
 // Create a uploads folder
 initFolder()
