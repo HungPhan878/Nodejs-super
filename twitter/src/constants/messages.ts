@@ -71,7 +71,10 @@ const MESSAGES_ERROR = {
   VIDEO_UPLOADED_SUCCESSFULLY: 'Video uploaded successfully',
   IMAGE_NOT_FOUND: 'Image not found',
   VIDEO_NOT_FOUND: 'Video not found',
-  GET_STATUS_VIDEO_SUCCESSFULLY: 'Get status video successfully'
+  GET_STATUS_VIDEO_SUCCESSFULLY: 'Get status video successfully',
+  CONTENT_MUST_BE_A_STRING: 'Content must be a string.',
+  MEDIA_TYPE_IS_INVALID: 'Media type must be one of image, video',
+  PEOPLE_FOLLOWED_IS_INVALID: 'People follow must be 0 or 1'
 } as const
 
 export const TWEET_MESSAGES = {

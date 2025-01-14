@@ -1,4 +1,4 @@
-import { MediaQueryType, MediaType, TweetTypes } from '~/constants/enums'
+import { MediaQueryType, MediaType, PeopleFollowedType, TweetTypes } from '~/constants/enums'
 import dbService from './database.services'
 import { ObjectId } from 'mongodb'
 
@@ -14,7 +14,7 @@ class SearchService {
     limit: number
     page: number
     content: string
-    people_followed?: string
+    people_followed?: PeopleFollowedType
     media_type?: MediaQueryType
     user_id: string
   }) {
@@ -39,7 +39,7 @@ class SearchService {
       }
     }
     //If have people followed === '1'
-    if (people_followed && people_followed === '1') {
+    if (people_followed && people_followed === PeopleFollowedType.Followings) {
       const followed_user_ids = await dbService.followers
         .find(
           { user_id: user_id_obj },
@@ -54,7 +54,7 @@ class SearchService {
       const ids = followed_user_ids.map((item) => item.followed_user_id)
       // Add id of user that into array
       ids.push(user_id_obj)
-      $match['user_id'] = { $in: followed_user_ids }
+      $match['user_id'] = { $in: ids }
     }
     const [tweets, total] = await Promise.all([
       dbService.tweets

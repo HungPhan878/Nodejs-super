@@ -39,3 +39,8 @@ export enum TweetTypes {
   Comment,
   QuoteTweet
 }
+
+export enum PeopleFollowedType {
+  Anyone = '0',
+  Followings = '1'
+}

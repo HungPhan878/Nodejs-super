@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { ParamsDictionary } from 'express-serve-static-core'
+import { PeopleFollowedType } from '~/constants/enums'
 import { SEARCH_MESSAGES } from '~/constants/messages'
 import { SearchQuery } from '~/models/requests/Search.request'
 import searchService from '~/services/search.services'
@@ -12,7 +13,7 @@ export const searchController = async (
   const page = Number(req.query.page)
   const media_type = req.query.media_type
   const content = req.query.content as string
-  const people_followed = req.query.people_followed as string
+  const people_followed = req.query.people_followed as PeopleFollowedType
   const user_id = req.decoded_authorization?.user_id as string
   const { tweets, total } = await searchService.search({
     limit,
