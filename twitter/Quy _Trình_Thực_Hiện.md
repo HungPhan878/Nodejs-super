@@ -337,3 +337,13 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 -Khi search field nào phải đánh index field đó là trước nha và search text thì index là search text thôi và xem them các thuộc tính trên mongodb text searc.
 
 - Ngoài aggregation vẫn có thể dùng find để search và method find có cả phân trang (limit and skip).
+
+# Chương AWS:
+
+## Tips hay:
+
+- Khi muốn đk nhìu tài khoản và xác thực chỉ với một email ta dùng +
+  ex:
+  - hung8@gmail.com sẽ gửi về email hung8@gmail.com
+  - hung8+7@gmail.com cũng sẽ gửi về email hang8@gmail.com
+    => vì sau mỗi + được tính là ms email khác nhau thôi vẫn là tên email đó trước dấu +

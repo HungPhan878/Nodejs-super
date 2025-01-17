@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 import { SendEmailCommand, SESClient } from '@aws-sdk/client-ses'
 import { config } from 'dotenv'
+import fs from 'fs'
+import path from 'path'
 
 config()
 // Create SES service object.
@@ -12,6 +14,8 @@ const sesClient = new SESClient({
   }
 })
 
+// Read file html
+const verifyEmailTemplate = fs.readFileSync(path.resolve('src/templates/verify-email.html'), 'utf8')
 const createSendEmailCommand = ({
   fromAddress,
   toAddresses,
@@ -52,7 +56,7 @@ const createSendEmailCommand = ({
   })
 }
 
-export const sendVerifyEmail = async (toAddress: string, subject: string, body: string) => {
+const sendVerifyEmail = async (toAddress: string, subject: string, body: string) => {
   const sendEmailCommand = createSendEmailCommand({
     fromAddress: process.env.SES_FROM_ADDRESS as string,
     toAddresses: toAddress,
@@ -63,4 +67,40 @@ export const sendVerifyEmail = async (toAddress: string, subject: string, body: 
   return sesClient.send(sendEmailCommand)
 }
 
-sendVerifyEmail('richgrimes452@gmail.com', 'Tiêu đề email', '<h1>Nội dung email</h1>')
+export const sendVerifyRegisterEmail = (
+  toAddress: string,
+  email_verify_token: string,
+  template: string = verifyEmailTemplate
+) => {
+  return sendVerifyEmail(
+    toAddress,
+    'verify your email',
+    template
+      .replace('{{title}}', 'Please verify your email')
+      .replace('{{content}}', 'Please click the button below to verify your email')
+      .replace('{{titleLink}}', 'Verify')
+      .replace('{{link}}', `${process.env.CLIENT_URL}/verify-email?token=${email_verify_token}`)
+  )
+}
+
+export const sendForgotPasswordEmail = (
+  toAddress: string,
+  forgot_password_token: string,
+  template: string = verifyEmailTemplate
+) => {
+  return sendVerifyEmail(
+    toAddress,
+    'Forgot Password',
+    template
+      .replace(
+        '{{title}}',
+        'You are receiving this email because you requested to reset your password'
+      )
+      .replace('{{content}}', 'Please click the button below to reset your password')
+      .replace('{{titleLink}}', 'Reset your password')
+      .replace(
+        '{{link}}',
+        `${process.env.CLIENT_URL}/reset-password?token=${forgot_password_token}`
+      )
+  )
+}

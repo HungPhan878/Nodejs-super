@@ -15,7 +15,6 @@ import likeRouter from './routes/like.routes'
 import searchRouter from './routes/Search.routes'
 
 config()
-
 const app = express()
 const port = process.env.PORT || 4000
 

@@ -11,7 +11,7 @@ import MESSAGES_ERROR from '~/constants/messages'
 import axios from 'axios'
 import { ErrorWithStatus } from '~/models/Errors'
 import HTTP_STATUS from '~/constants/httpStatusCode'
-import { sendVerifyEmail } from '~/utils/email'
+import { sendForgotPasswordEmail, sendVerifyRegisterEmail } from '~/utils/email'
 
 config()
 class UserService {
@@ -133,13 +133,7 @@ class UserService {
     // 3. Client send request to server with email_verify_token
     // 4. Server verify email_verify_token
     // 5. Client receive access_token and refresh_token
-    await sendVerifyEmail(
-      payload.email,
-      'Verify your email',
-      `
-      <h1>Verify your email</h1>
-      <p>Click <a href="${process.env.CLIENT_URL}/verify-email?token=${email_verify_token}">here</a> to verify your email</p>`
-    )
+    await sendVerifyRegisterEmail(payload.email, email_verify_token)
     return {
       accessToken,
       refreshToken
@@ -317,11 +311,12 @@ class UserService {
     }
   }
 
-  async resendVerifyEmail(user_id: string) {
+  async resendVerifyEmail(user_id: string, email: string) {
     const email_verify_token = await this.signEmailVerifyToken({
       user_id: user_id,
       verify: UserVerifyStatus.Unverified
     })
+    await sendVerifyRegisterEmail(email, email_verify_token)
     console.log('resend-email-verify-token:', email_verify_token)
     await dbService.users.updateOne({ _id: new ObjectId(user_id) }, [
       {
@@ -336,7 +331,15 @@ class UserService {
     }
   }
 
-  async forgotPassword({ user_id, verify }: { user_id: string; verify: UserVerifyStatus }) {
+  async forgotPassword({
+    user_id,
+    verify,
+    email
+  }: {
+    user_id: string
+    verify: UserVerifyStatus
+    email: string
+  }) {
     const forgot_password_token = await this.signForgotPasswordToken({ user_id, verify })
     await dbService.users.updateOne(
       { _id: new ObjectId(user_id) },
@@ -350,7 +353,7 @@ class UserService {
       }
     )
     //Send email attachment Link https://twitter.com/forgot-password?token=value  to  client
-    console.log('forgot-password-token:', forgot_password_token)
+    await sendForgotPasswordEmail(email, forgot_password_token)
     return {
       message: MESSAGES_ERROR.CHECK_EMAIL_SUCCESSFULLY
     }
