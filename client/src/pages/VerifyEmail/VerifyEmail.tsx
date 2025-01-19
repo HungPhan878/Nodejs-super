@@ -1,13 +1,13 @@
 import { useMutation } from '@tanstack/react-query'
-import useQueryParams from '../hooks/useQueryParams'
-import { verifyEmail } from '../apis/auth.api'
 import { useContext, useEffect, useState } from 'react'
-import { AppContext } from '../contexts/app.context'
-import { setAccessTokenToLS, setRefreshTokenToLS } from './auth'
+import useQueryParams from '../../hooks/useQueryParams'
+import { AppContext } from '../../contexts/app.context'
+import { verifyEmail } from '../../apis/auth.api'
+import { setAccessTokenToLS, setRefreshTokenToLS } from '../../utils/auth'
 
 export default function VerifyEmail() {
   const { token } = useQueryParams()
-  const [message, setMessage] = useState()
+  const [message, setMessage] = useState('')
   const { setAuthenticated } = useContext(AppContext)
 
   // Url: '/verify-email'
