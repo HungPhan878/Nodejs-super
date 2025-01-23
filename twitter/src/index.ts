@@ -13,7 +13,6 @@ import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmark.routes'
 import likeRouter from './routes/like.routes'
 import searchRouter from './routes/Search.routes'
-import '~/utils/s3'
 
 config()
 const app = express()

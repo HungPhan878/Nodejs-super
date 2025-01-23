@@ -1,6 +1,7 @@
 import { config } from 'dotenv'
 import { Request } from 'express'
 import fs from 'fs'
+import fsPromise from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
 import { isProduction } from '~/constants/config'
@@ -10,25 +11,38 @@ import { Media } from '~/models/Other'
 import { getNameToUrlName, handleUploadImage, handleUploadVideo } from '~/utils/file'
 import queue from '~/utils/queue'
 import dbService from './database.services'
+import { uploadFileToS3 } from '~/utils/s3'
+import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
 
 config()
 class MediaService {
   async handleUploadImage(req: Request) {
+    const mime = (await import('mime')).default
     const files = await handleUploadImage(req)
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
         const newName = getNameToUrlName(file.newFilename)
-        const newPath = path.resolve(UPLOAD_DIR, `${newName}.jpg`)
+        const fileFullName = `${newName}.jpg`
+        const newPath = path.resolve(UPLOAD_DIR, fileFullName)
         sharp.cache(false)
         await sharp(file.filepath).jpeg().toFile(newPath)
-        // Delete the file upload after has been changed file.jpg
-        fs.unlinkSync(file.filepath)
+        const s3Result = await uploadFileToS3({
+          fileName: fileFullName,
+          filePath: newPath,
+          contentType: mime.getType(newPath) as string
+        })
+        //Delete the file upload after has been changed file.jpeg
+        await Promise.all([fsPromise.unlink(file.filepath), fsPromise.unlink(newPath)])
         return {
-          url: isProduction
-            ? `${process.env.HOST}/static/image/${newName}.jpg`
-            : `http://localhost:${process.env.PORT}/static/image/${newName}.jpg`,
+          url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string,
           type: MediaType.Image
         }
+        // return {
+        //   url: isProduction
+        //     ? `${process.env.HOST}/static/image/${newName}.jpg`
+        //     : `http://localhost:${process.env.PORT}/static/image/${newName}.jpg`,
+        //   type: MediaType.Image
+        // }
       })
     )
 
