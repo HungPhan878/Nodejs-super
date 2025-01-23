@@ -27,7 +27,7 @@ class MediaService {
         sharp.cache(false)
         await sharp(file.filepath).jpeg().toFile(newPath)
         const s3Result = await uploadFileToS3({
-          fileName: fileFullName,
+          fileName: 'images/' + fileFullName,
           filePath: newPath,
           contentType: mime.getType(newPath) as string
         })
@@ -50,16 +50,29 @@ class MediaService {
   }
 
   async uploadVideo(req: Request) {
+    const mime = (await import('mime')).default
     const files = await handleUploadVideo(req)
-    const result: Media[] = files.map((file) => {
-      const newName = getNameToUrlName(file.newFilename)
-      return {
-        url: isProduction
-          ? `${process.env.HOST}/static/video/${newName}`
-          : `http://localhost:${process.env.PORT}/static/video/${newName}`,
-        type: MediaType.Video
-      }
-    })
+    const result: Media[] = await Promise.all(
+      files.map(async (file) => {
+        // const newName = getNameToUrlName(file.newFilename)
+        const s3Result = await uploadFileToS3({
+          fileName: 'videos/' + file.newFilename,
+          filePath: file.filepath,
+          contentType: mime.getType(file.filepath) as string
+        })
+
+        return {
+          url: (s3Result as CompleteMultipartUploadCommandOutput).Location as string,
+          type: MediaType.Video
+        }
+        // return {
+        //   url: isProduction
+        //     ? `${process.env.HOST}/static/video/${newName}`
+        //     : `http://localhost:${process.env.PORT}/static/video/${newName}`,
+        //   type: MediaType.Video
+        // }
+      })
+    )
     return result
   }
 

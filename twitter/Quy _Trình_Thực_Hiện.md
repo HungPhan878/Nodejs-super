@@ -347,3 +347,10 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
   - hung8@gmail.com sẽ gửi về email hung8@gmail.com
   - hung8+7@gmail.com cũng sẽ gửi về email hang8@gmail.com
     => vì sau mỗi + được tính là ms email khác nhau thôi vẫn là tên email đó trước dấu +
+
+## Upload image and video to S3:
+
+### Images:
+
+- Remember add fs.readFileSync(filePath) when up to S3.
+- Because s3 return a promise so we have to use await and use map() then we can use promise.all to optimize performance
