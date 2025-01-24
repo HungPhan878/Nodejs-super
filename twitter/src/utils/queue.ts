@@ -1,9 +1,13 @@
 import dbService from '~/services/database.services'
 import { encodeHLSWithMultipleVideoStreams } from './video'
+import { rimrafSync } from 'rimraf'
 import fsPromise from 'fs/promises'
-import { getNameToUrlName } from './file'
+import { getFiles, getNameToUrlName } from './file'
 import VideoStatus from '~/models/schemas/VideoStatus.schema'
 import { EncodingStatus } from '~/constants/enums'
+import { UPLOAD_DIR_VIDEO } from '~/constants/dir'
+import path from 'path'
+import { uploadFileToS3 } from './s3'
 
 class Queue {
   items: string[]
@@ -26,6 +30,7 @@ class Queue {
     this.processEncode()
   }
   async processEncode() {
+    const mime = (await import('mime')).default
     if (this.encoding) return
     if (this.items.length > 0) {
       this.encoding = true
@@ -44,8 +49,22 @@ class Queue {
       )
       try {
         await encodeHLSWithMultipleVideoStreams(videoPath)
-        await fsPromise.unlink(videoPath)
         this.items.shift()
+        await fsPromise.unlink(videoPath)
+        const files = getFiles(path.resolve(UPLOAD_DIR_VIDEO, idName))
+        await Promise.all(
+          files.map((filePath) => {
+            const fileName =
+              'video-hls' + filePath.replace(path.resolve(UPLOAD_DIR_VIDEO), '').replace('\\', '/')
+            return uploadFileToS3({
+              fileName,
+              filePath: filePath,
+              contentType: mime.getType(filePath) as string
+            })
+          })
+        )
+        // rimraf use delete folder instead fs.unlink
+        rimrafSync(path.resolve(UPLOAD_DIR_VIDEO, idName))
         await dbService.videoStatus.updateOne(
           { name: idName },
           {

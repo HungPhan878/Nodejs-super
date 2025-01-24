@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { S3 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
 import { config } from 'dotenv'
 import fs from 'fs'
-
-import path from 'path'
+import { Response } from 'express'
+import HTTP_STATUS from '~/constants/httpStatusCode'
+import MESSAGES_ERROR from '~/constants/messages'
 
 config()
 
@@ -30,7 +32,7 @@ export const uploadFileToS3 = ({
   const parallelUploads3 = new Upload({
     client: s3,
     params: {
-      Bucket: 'twitter-clone-2025-ap-southeast-1',
+      Bucket: process.env.S3_BUCKET_NAME as string,
       Key: fileName, // Change name to 'anh.jpg when uploaded
       Body: fs.readFileSync(filePath),
       ContentType: contentType // Use to show image on website instead download
@@ -43,6 +45,18 @@ export const uploadFileToS3 = ({
     leavePartsOnError: false // optional manually handle dropped parts
   })
   return parallelUploads3.done()
+}
+
+export const sendFileFromS3 = async (res: Response, filePath: string) => {
+  try {
+    const data = await s3.getObject({
+      Bucket: process.env.S3_BUCKET_NAME as string,
+      Key: filePath // path to the bucket at S3 bucket
+    })
+    ;(data.Body as any).pipe(res)
+  } catch (error) {
+    res.status(HTTP_STATUS.NOT_FOUND).send(MESSAGES_ERROR.VIDEO_NOT_FOUND)
+  }
 }
 
 // parallelUploads3.on('httpUploadProgress', (progress) => {

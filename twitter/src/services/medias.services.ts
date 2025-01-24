@@ -85,8 +85,8 @@ class MediaService {
         queue.enQueue(file.filepath)
         return {
           url: isProduction
-            ? `${process.env.HOST}/static/video-hls/${newName}/master.m3u4`
-            : `http://localhost:${process.env.PORT}/static/video-hls/${newName}/master.m3u4`,
+            ? `${process.env.HOST}/static/video-hls/${newName}/master.m3u8`
+            : `http://localhost:${process.env.PORT}/static/video-hls/${newName}/master.m3u8`,
           type: MediaType.HLS
         }
       })

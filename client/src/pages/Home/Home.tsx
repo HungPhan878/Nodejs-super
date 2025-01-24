@@ -8,18 +8,23 @@ import '@vidstack/react/player/styles/default/theme.css'
 import '@vidstack/react/player/styles/default/layouts/video.css'
 import { MediaPlayer, MediaProvider } from '@vidstack/react'
 import { Poster } from '@vidstack/react'
-import { defaultLayoutIcons, DefaultVideoLayout } from '@vidstack/react/player/layouts/default'
+import {
+  defaultLayoutIcons,
+  DefaultVideoLayout
+} from '@vidstack/react/player/layouts/default'
 
 const getOauthGoogleUrl = () => {
-  const { VITE_GOOGLE_CLIENT_ID, VITE_GOOGLE_AUTHORIZED_REDIRECT_URI } = import.meta.env
+  const { VITE_GOOGLE_CLIENT_ID, VITE_GOOGLE_AUTHORIZED_REDIRECT_URI } =
+    import.meta.env
   const rootUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
   const query = {
     client_id: VITE_GOOGLE_CLIENT_ID,
     redirect_uri: VITE_GOOGLE_AUTHORIZED_REDIRECT_URI,
     response_type: 'code',
-    scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'].join(
-      ' '
-    ),
+    scope: [
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'https://www.googleapis.com/auth/userinfo.email'
+    ].join(' '),
     access_type: 'offline',
     prompt: 'consent'
   }
@@ -49,14 +54,17 @@ export default function Home() {
         {isAuthenticated ? (
           <>
             <>Welcome to my app</>
-            <button className='bg-red-500 p-3 rounded-md' onClick={logoutHandler}>
+            <button
+              className='bg-red-500 p-3 rounded-md'
+              onClick={logoutHandler}
+            >
               Logout
             </button>
             <h2>Video HLS</h2>
             <div className='w-96 h-96'>
               <MediaPlayer
                 title='Sprite Fight'
-                src='http://localhost:4000/static/video-hls/98wwYdOvJCpbDQQCKI8T2/master.m3u8'
+                src='http://localhost:4000/static/video-hls/2cB43yMhGA4eQcHRKH1GQ/master.m3u8'
               >
                 <Poster
                   className='vds-poster'
