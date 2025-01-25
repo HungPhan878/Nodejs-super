@@ -354,3 +354,27 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 
 - Remember add fs.readFileSync(filePath) when up to S3.
 - Because s3 return a promise so we have to use await and use map() then we can use promise.all to optimize performance
+
+### Chat ai:
+
+1. Cách đặt câu hỏi "
+
+- hỏi về vấn đề cụ thể + công cụ ta sử dụng.
+  ex: vấn đề in nodejs
+- Lấy err ra và hỏi ai không ra thì hãy hỏi câu hỏi bao quát các câu hỏi trọng tâm để tìm ra câu trả lời trên gg.
+  ex: err permission denide nên đặt câu hỏi phổ biến và triọng tâm như thế nào để search thấy trên gg
+- Dùng này chat không hiểu quả, qua copilot and gg
+
+# Ôn tập kiến thức cũ:
+
+## Promise:
+
+- Chỉ nên dùng trong callback hay useEffect và asynchronously and await cũng vậy dùng cho call sự kiện hay gì đó ... và dùng khi cái dưới phụ thuộc kết quả cái trên(thuộc dạng async) trả về.
+
+# Websocket:
+
+- Giao tiếp thời gian thực giữa server and browser
+
+## Socket.io:
+
+1. Định nghĩa: là một thư viện của js, giúp đơn giản việc sử dụng Websocket and hỗ trợ tính năng cho các browser trên thiết bị cũ không có websocket luôn và vẫn dùng được web socket.

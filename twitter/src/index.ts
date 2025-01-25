@@ -13,10 +13,19 @@ import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmark.routes'
 import likeRouter from './routes/like.routes'
 import searchRouter from './routes/Search.routes'
+import { createServer } from 'http'
+import { Server } from 'socket.io'
 
 config()
 const app = express()
 const port = process.env.PORT || 4000
+const httpServer = createServer(app)
+const io = new Server(httpServer, {
+  /* Grant permission for localhost:3000 access */
+  cors: {
+    origin: 'http://localhost:3000'
+  }
+})
 
 dbService.connect().then(() => {
   dbService.indexUsers()
@@ -49,6 +58,14 @@ app.use('/static', staticRouter)
 app.use('/static/video', express.static(UPLOAD_DIR_VIDEO))
 // error handler
 app.use(defaultErrorHandler)
-app.listen(port, () => {
+// Socket io
+io.on('connection', (socket) => {
+  console.log(`User ${socket.id} connected`)
+  socket.on('disconnect', () => {
+    console.log(`User ${socket.id} disconnected`)
+  })
+})
+
+httpServer.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`)
 })
