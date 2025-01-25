@@ -33,7 +33,7 @@ const getOauthGoogleUrl = () => {
 }
 const urlOauthGoogle = getOauthGoogleUrl()
 export default function Home() {
-  const { isAuthenticated, setAuthenticated } = useContext(AppContext)
+  const { isAuthenticated, setAuthenticated, profile } = useContext(AppContext)
   // function handler
   const logoutHandler = () => {
     setAuthenticated(false)
@@ -53,7 +53,7 @@ export default function Home() {
         <h1>Oauth Google</h1>
         {isAuthenticated ? (
           <>
-            <>Welcome to my app</>
+            <>Welcome {profile?.email} to my app</>
             <button
               className='bg-red-500 p-3 rounded-md'
               onClick={logoutHandler}
