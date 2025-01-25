@@ -6,6 +6,11 @@ export default function Chat() {
     const socket = io(import.meta.env.VITE_URL_API)
     socket.on('connect', () => {
       console.log(`${socket.id} is connected`)
+
+      // receive message from server
+      socket.on('hello', (arg) => {
+        console.log('Received message:', arg)
+      })
     })
 
     socket.on('disconnect', () => {

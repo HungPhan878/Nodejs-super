@@ -378,3 +378,9 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 ## Socket.io:
 
 1. Định nghĩa: là một thư viện của js, giúp đơn giản việc sử dụng Websocket and hỗ trợ tính năng cho các browser trên thiết bị cũ không có websocket luôn và vẫn dùng được web socket.
+
+2. Emitting events:
+
+- Phát ra sự kiện emit và một bên lắng nghe cũng như thực thi on
+- Nên dùng khi đã connect trong on('connect')
+- Emit: phát e và on lắng nghe e
