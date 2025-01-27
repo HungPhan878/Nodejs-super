@@ -59,12 +59,36 @@ app.use('/static/video', express.static(UPLOAD_DIR_VIDEO))
 // error handler
 app.use(defaultErrorHandler)
 // Socket io
+const users: {
+  [key: string]: {
+    socket_id: string
+  }
+} = {}
 io.on('connection', (socket) => {
   console.log(`User ${socket.id} connected`)
-  socket.on('disconnect', () => {
-    console.log(`User ${socket.id} disconnected`)
+  const user_id = socket.handshake.auth._id
+  // B1: Save user_id in object easy to manage
+  users[user_id] = {
+    socket_id: socket.id
+  }
+  console.log({ users })
+  //B2: receive message from client 1 and send client 2
+  socket.on('private message', (data) => {
+    const receiver_socket_id = users[data.to].socket_id
+    if (receiver_socket_id) {
+      socket.to(receiver_socket_id).emit('receive private message', {
+        content: data.content,
+        from: user_id
+      })
+      console.log({ receiver_socket_id, content: data.content })
+    }
   })
-  socket.emit('hello', `User ${socket.id} is connected successfully`)
+  socket.on('disconnect', () => {
+    //B1: Remove users when user has disconnected
+    delete users[user_id]
+    console.log(`User ${socket.id} disconnected`)
+    console.log({ users })
+  })
 })
 
 httpServer.listen(port, () => {

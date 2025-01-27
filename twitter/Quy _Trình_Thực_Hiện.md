@@ -384,3 +384,6 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 - Phát ra sự kiện emit và một bên lắng nghe cũng như thực thi on
 - Nên dùng khi đã connect trong on('connect')
 - Emit: phát e và on lắng nghe e
+
+3. Flow io:
+   đã có ở bài 199
