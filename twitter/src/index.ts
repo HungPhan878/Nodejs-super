@@ -15,6 +15,7 @@ import likeRouter from './routes/like.routes'
 import searchRouter from './routes/Search.routes'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
+import Conversation from './models/schemas/Conversation.schema'
 
 config()
 const app = express()
@@ -72,11 +73,19 @@ io.on('connection', (socket) => {
     socket_id: socket.id
   }
   console.log({ users })
+
   //B2: receive message from client 1 and send client 2
-  socket.on('private message', (data) => {
+  socket.on('private message', async (data) => {
     const receiver_socket_id = users[data.to]?.socket_id
     if (!receiver_socket_id) return
-
+    //Save message to database
+    await dbService.conversations.insertOne(
+      new Conversation({
+        sender_id: data.from, // socket translated from id to object id
+        receiver_id: data.to,
+        content: data.content
+      })
+    )
     socket.to(receiver_socket_id).emit('receive private message', {
       content: data.content,
       from: user_id

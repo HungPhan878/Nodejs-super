@@ -52,7 +52,8 @@ export default function Chat() {
     setValue('')
     socket.emit('private message', {
       content: value,
-      to: receiver // user_id of Client 2 or receiver
+      to: receiver, // user_id of Client 2 or receiver,
+      from: profile._id // user_id of sender
     })
     setMessages((messages) => [
       ...messages,
