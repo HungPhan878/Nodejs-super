@@ -74,14 +74,13 @@ io.on('connection', (socket) => {
   console.log({ users })
   //B2: receive message from client 1 and send client 2
   socket.on('private message', (data) => {
-    const receiver_socket_id = users[data.to].socket_id
-    if (receiver_socket_id) {
-      socket.to(receiver_socket_id).emit('receive private message', {
-        content: data.content,
-        from: user_id
-      })
-      console.log({ receiver_socket_id, content: data.content })
-    }
+    const receiver_socket_id = users[data.to]?.socket_id
+    if (!receiver_socket_id) return
+
+    socket.to(receiver_socket_id).emit('receive private message', {
+      content: data.content,
+      from: user_id
+    })
   })
   socket.on('disconnect', () => {
     //B1: Remove users when user has disconnected
