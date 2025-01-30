@@ -16,6 +16,7 @@ import searchRouter from './routes/Search.routes'
 import { createServer } from 'http'
 import { Server } from 'socket.io'
 import Conversation from './models/schemas/Conversation.schema'
+import conversationRouter from './routes/conversation.routes'
 
 config()
 const app = express()
@@ -54,6 +55,8 @@ app.use('/bookmarks', bookmarkRouter)
 app.use('/likes', likeRouter)
 // router search into url /search
 app.use('/search', searchRouter)
+// router conversations into url /conversations
+app.use('/conversations', conversationRouter)
 // Serving static files
 app.use('/static', staticRouter)
 app.use('/static/video', express.static(UPLOAD_DIR_VIDEO))
