@@ -13,22 +13,21 @@ export class ConversationService {
     limit: number
     page: number
   }) {
-    const conversations = await dbService.conversations
-      .find({
-        $or: [
-          { sender_id: new ObjectId(sender_id), receiver_id: new ObjectId(receiver_id) },
-          { sender_id: new ObjectId(receiver_id), receiver_id: new ObjectId(sender_id) }
-        ]
-      })
-      .skip(limit * (page - 1))
-      .limit(limit)
-      .toArray()
-    const total = await dbService.conversations.countDocuments({
+    const match = {
       $or: [
         { sender_id: new ObjectId(sender_id), receiver_id: new ObjectId(receiver_id) },
         { sender_id: new ObjectId(receiver_id), receiver_id: new ObjectId(sender_id) }
       ]
-    })
+    }
+    const [conversations, total] = await Promise.all([
+      dbService.conversations
+        .find(match)
+        .skip(limit * (page - 1))
+        .limit(limit)
+        .toArray(),
+      dbService.conversations.countDocuments(match)
+    ])
+
     // Optimize performance
     return { conversations, total }
   }
