@@ -1,7 +1,11 @@
 import { useContext, useEffect, useState } from 'react'
 import socket from '../../utils/socket'
 import { AppContext } from '../../contexts/app.context'
+import { useQuery } from '@tanstack/react-query'
+import { getConversation } from '../../apis/conversation.api'
 
+const LIMIT = 10
+const PAGE = 1
 const usernames = [
   {
     _id: '678928a313683d4090dbbd75',
@@ -15,10 +19,19 @@ const usernames = [
 export default function Chat() {
   const { profile } = useContext(AppContext)
   const [value, setValue] = useState<string>('')
-  const [messages, setMessages] = useState<
-    { content: string; isSend: boolean }[]
+  const [conversations, setConversations] = useState<
+    {
+      content: string
+      sender_id: string
+      receiver_id: string
+      _id: string | number
+    }[]
   >([])
   const [receiver, setReceiver] = useState<string>('')
+  const params = {
+    limit: LIMIT,
+    page: PAGE
+  }
 
   useEffect(() => {
     // B1: Authenticate user id and connect to socket of server
@@ -26,15 +39,9 @@ export default function Chat() {
       _id: profile._id
     }
     socket.connect()
-    socket.on('receive private message', (data) => {
-      const content = data.content as string
-      setMessages((messages) => [
-        ...messages,
-        {
-          content,
-          isSend: false
-        }
-      ])
+    socket.on('receive_message', (data) => {
+      const { payload } = data
+      setConversations((conversations) => [...conversations, payload])
     })
 
     socket.on('disconnect', () => {
@@ -46,20 +53,37 @@ export default function Chat() {
     }
   }, [])
 
+  // Get conversation query
+  const getConversationsQuery = useQuery({
+    queryKey: ['conversations', receiver, params],
+    queryFn: () => getConversation(receiver as string, params),
+    enabled: Boolean(receiver)
+  })
+  const conversationsData = getConversationsQuery.data?.data.result
+  console.log(conversationsData)
+  useEffect(() => {
+    if (conversationsData) {
+      setConversations(conversationsData.conversations)
+    }
+  }, [conversationsData])
+
   // Handler function
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setValue('')
-    socket.emit('private message', {
+    const conversation = {
       content: value,
-      to: receiver, // user_id of Client 2 or receiver,
-      from: profile._id // user_id of sender
+      sender_id: profile._id,
+      receiver_id: receiver
+    }
+    socket.emit('send_message', {
+      payload: conversation
     })
-    setMessages((messages) => [
-      ...messages,
+    setConversations((conversations) => [
+      ...conversations,
       {
-        content: value,
-        isSend: true
+        ...conversation,
+        _id: new Date().getTime()
       }
     ])
   }
@@ -84,16 +108,16 @@ export default function Chat() {
 
       {/* Messages Section */}
       <div className='flex-1 overflow-y-auto p-4 space-y-3'>
-        {messages.map((message, index) => (
+        {(conversations ?? []).map((conversation, index) => (
           <div
             key={index}
             className={`max-w-[70%] w-fit p-3 rounded-2xl  leading-normal shadow-md break-words ${
-              message.isSend
+              conversation?.sender_id && conversation.sender_id === profile._id
                 ? 'bg-blue-500 text-white ml-auto' // send
                 : 'bg-gray-700 text-white mr-auto' // receive
             }`}
           >
-            <p>{message.content}</p>
+            <p>{conversation?.content}</p>
           </div>
         ))}
       </div>

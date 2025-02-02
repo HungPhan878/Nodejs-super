@@ -78,20 +78,22 @@ io.on('connection', (socket) => {
   console.log({ users })
 
   //B2: receive message from client 1 and send client 2
-  socket.on('private message', async (data) => {
-    const receiver_socket_id = users[data.to]?.socket_id
+  socket.on('send_message', async (data) => {
+    const { receiver_id, sender_id, content } = data.payload
+    const receiver_socket_id = users[receiver_id]?.socket_id
+    console.log({ receiver_id, receiver_socket_id })
     if (!receiver_socket_id) return
     //Save message to database
-    await dbService.conversations.insertOne(
-      new Conversation({
-        sender_id: data.from, // socket translated from id to object id
-        receiver_id: data.to,
-        content: data.content
-      })
-    )
-    socket.to(receiver_socket_id).emit('receive private message', {
-      content: data.content,
-      from: user_id
+    const conversation = new Conversation({
+      sender_id, // socket translated from id to object id
+      receiver_id,
+      content
+    })
+    const result = await dbService.conversations.insertOne(conversation)
+    conversation._id = result.insertedId
+    console.log({ result, conversation })
+    socket.to(receiver_socket_id).emit('receive_message', {
+      payload: conversation
     })
   })
   socket.on('disconnect', () => {
