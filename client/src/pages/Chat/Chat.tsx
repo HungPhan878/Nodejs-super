@@ -1,7 +1,8 @@
 import { useContext, useEffect, useState } from 'react'
 import socket from '../../utils/socket'
 import { AppContext } from '../../contexts/app.context'
-import { useQuery } from '@tanstack/react-query'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getConversation } from '../../apis/conversation.api'
 
 const LIMIT = 10
@@ -19,6 +20,7 @@ const usernames = [
 export default function Chat() {
   const { profile } = useContext(AppContext)
   const [value, setValue] = useState<string>('')
+  const queryClient = useQueryClient()
   const [conversations, setConversations] = useState<
     {
       content: string
@@ -28,6 +30,13 @@ export default function Chat() {
     }[]
   >([])
   const [receiver, setReceiver] = useState<string>('')
+  const [pagination, setPagination] = useState<{
+    page: number
+    total_page: number
+  }>({
+    page: PAGE,
+    total_page: 0
+  }) // use hide and show loading
   const params = {
     limit: LIMIT,
     page: PAGE
@@ -41,7 +50,7 @@ export default function Chat() {
     socket.connect()
     socket.on('receive_message', (data) => {
       const { payload } = data
-      setConversations((conversations) => [...conversations, payload])
+      setConversations((conversations) => [payload, ...conversations])
     })
 
     socket.on('disconnect', () => {
@@ -60,10 +69,14 @@ export default function Chat() {
     enabled: Boolean(receiver)
   })
   const conversationsData = getConversationsQuery.data?.data.result
-  console.log(conversationsData)
   useEffect(() => {
     if (conversationsData) {
-      setConversations(conversationsData.conversations)
+      const { conversations, total_page, page } = conversationsData
+      setConversations(conversations)
+      setPagination({
+        page,
+        total_page
+      })
     }
   }, [conversationsData])
 
@@ -80,14 +93,36 @@ export default function Chat() {
       payload: conversation
     })
     setConversations((conversations) => [
-      ...conversations,
       {
         ...conversation,
         _id: new Date().getTime()
-      }
+      },
+      ...conversations
     ])
   }
 
+  const fetchConversationsMore = async () => {
+    if (receiver && pagination.page < pagination.total_page) {
+      const params = {
+        limit: LIMIT,
+        page: pagination.page + 1
+      }
+      try {
+        const { data } = await queryClient.fetchQuery({
+          queryKey: ['conversations', receiver, params],
+          queryFn: () => getConversation(receiver as string, params)
+        })
+        const { conversations, total_page, page } = data.result
+        setConversations((prev) => [...prev, ...conversations])
+        setPagination({
+          page,
+          total_page
+        })
+      } catch (error) {
+        console.error('Lỗi khi fetch thêm dữ liệu:', error)
+      }
+    }
+  }
   return (
     <div className='h-screen bg-gray-900 flex flex-col text-white'>
       {/* Header */}
@@ -107,7 +142,35 @@ export default function Chat() {
       ))}
 
       {/* Messages Section */}
-      <div className='flex-1 overflow-y-auto p-4 space-y-3'>
+      <div
+        id='scrollableDiv'
+        className='h-80 overflow-y-auto p-4 flex flex-col-reverse gap-3'
+      >
+        <InfiniteScroll
+          dataLength={conversations.length}
+          next={fetchConversationsMore}
+          className='flex flex-col-reverse gap-3' // Tránh thêm overflow không cần thiết // Giữ tin nhắn mới ở dưới và khoảng cách đều nhau
+          hasMore={true}
+          loader={false}
+          inverse={pagination.page < pagination.total_page}
+          scrollableTarget='scrollableDiv'
+        >
+          {(conversations ?? []).map((conversation) => (
+            <div
+              key={conversation._id}
+              className={`max-w-[70%] w-fit p-3 rounded-2xl leading-normal shadow-md break-words ${
+                conversation.sender_id === profile._id
+                  ? 'bg-blue-500 text-white ml-auto' // Send
+                  : 'bg-gray-700 text-white mr-auto' // Receive
+              }`}
+            >
+              <p>{conversation.content}</p>
+            </div>
+          ))}
+        </InfiniteScroll>
+      </div>
+
+      {/* <div className='flex-1 overflow-y-auto p-4 space-y-3'>
         {(conversations ?? []).map((conversation, index) => (
           <div
             key={index}
@@ -120,7 +183,7 @@ export default function Chat() {
             <p>{conversation?.content}</p>
           </div>
         ))}
-      </div>
+      </div> */}
 
       {/* Form Section */}
       <form
