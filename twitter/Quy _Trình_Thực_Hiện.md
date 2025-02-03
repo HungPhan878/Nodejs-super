@@ -388,6 +388,11 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 3. Flow io:
    đã có ở bài 199
 
-4. note:
+## Middleware Socket io:
 
--
+1. Định nghĩa:
+   tương tự như validator bên expressjs, middleware này sẽ chạy trước khi connect thành công để có thể biết và báo lỗi về cho client qua on('connect_error').
+2. Các sử dụng:
+
+- io.use middlewares bên server-side
+- io.on('connect_error',(err)=>{}) bên client-side

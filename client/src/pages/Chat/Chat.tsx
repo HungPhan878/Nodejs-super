@@ -4,6 +4,7 @@ import { AppContext } from '../../contexts/app.context'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { getConversation } from '../../apis/conversation.api'
+import { getAccessTokenFromLS } from '../../utils/auth'
 
 const LIMIT = 10
 const PAGE = 1
@@ -45,14 +46,18 @@ export default function Chat() {
   useEffect(() => {
     // B1: Authenticate user id and connect to socket of server
     socket.auth = {
-      _id: profile._id
+      Authorization: `Bearer ${getAccessTokenFromLS()}`
     }
     socket.connect()
     socket.on('receive_message', (data) => {
       const { payload } = data
       setConversations((conversations) => [payload, ...conversations])
     })
-
+    socket.on('connect_error', (err) => {
+      console.log(err) // true
+      console.log(err.message) // not authorized
+      // console.log(err.data) // { content: "Please retry later" }
+    })
     socket.on('disconnect', () => {
       console.log(`${socket.id} is disconnected`)
     })
