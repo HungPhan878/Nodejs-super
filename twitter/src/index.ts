@@ -76,6 +76,7 @@ const users: {
 } = {}
 // Middleware socket io
 io.use(async (socket, next) => {
+  console.log(socket.id, socket.handshake.auth)
   const { Authorization } = socket.handshake.auth
   const accessToken = Authorization?.split(' ')[1]
   try {
@@ -89,6 +90,7 @@ io.use(async (socket, next) => {
     }
     //Transmit decoded authorization for other middlewares
     socket.handshake.auth.decoded_authorization = decoded_authorization
+    socket.handshake.auth.access_token = accessToken
     next() // next when not error
   } catch (error) {
     next({
@@ -106,6 +108,23 @@ io.on('connection', (socket) => {
     socket_id: socket.id
   }
   console.log({ users })
+
+  // Middleware for socket run every time send message
+  socket.use(async (packet, next) => {
+    const { access_token } = socket.handshake.auth
+    try {
+      await verifyAccessToken(access_token)
+      next()
+    } catch (error) {
+      next(new Error('Unauthorized'))
+    }
+  })
+  // Listening error
+  socket.on('error', (error) => {
+    if (error.message === 'Unauthorized') {
+      socket.disconnect()
+    }
+  })
 
   //B2: receive message from client 1 and send client 2
   socket.on('send_message', async (data) => {

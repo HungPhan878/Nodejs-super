@@ -388,6 +388,11 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 3. Flow io:
    đã có ở bài 199
 
+4. Note:
+
+- Khi có logic chưa hợp lý thì phân tích lại logic(use ai) để phân tích lại logic để đưa ra pp tốt nhất nha.
+- .env luôn trả về string cho dù ta nhập số. ex: HAY=30 => '30'
+
 ## Middleware Socket io:
 
 1. Định nghĩa:

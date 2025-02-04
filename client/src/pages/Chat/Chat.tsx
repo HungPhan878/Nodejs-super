@@ -58,6 +58,9 @@ export default function Chat() {
       console.log(err.message) // not authorized
       // console.log(err.data) // { content: "Please retry later" }
     })
+    socket.on('disconnect', (reason) => {
+      console.log(`${socket.id} is disconnected with reason: ${reason}`)
+    })
     socket.on('disconnect', () => {
       console.log(`${socket.id} is disconnected`)
     })
