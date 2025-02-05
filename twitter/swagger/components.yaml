@@ -1,0 +1,81 @@
+components:
+  schemas:
+    LoginBody:
+      type: object
+      properties:
+        email:
+          type: string
+          example: 'richgrimes452+1@gmail.com'
+        password:
+          type: string
+          example: 'Hung789789!'
+    SuccessAuthentication:
+      type: object
+      properties:
+        access_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjRiZTBhZDJlNDNkMjQ2NDM5NGZlZWRiIiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE2OTEzODMyMjYsImV4cCI6MTY5MTQ2OTYyNn0.HTLX20cB7_z0c9c8FDg3MIx6RJEELHHlmJNZa94ku-o
+        refresh_token:
+          type: string
+          example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjc4OTI4YTMxMzY4M2Q0MDkwZGJiZDc1IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE3Mzg3NTQ0MTYsImV4cCI6MTc0NzM5NDQxNn0.Mq8AyBQI8uN7hfP6FIT9Wg-S_KY69GlPpzFziKNSRNY.bFnaBfxWl-Q48HCwAeMpNzZwTO9LEjcBd7Zyipjqr64
+    UserProfile:
+      type: object
+      properties:
+        _id:
+          type: string
+          format: MongoId
+          example: '678928a313683d4090dbbd75'
+        name:
+          type: string
+          example: 'RIch'
+        email:
+          type: string
+          format: email
+          example: 'richgrimes452@gmail.com'
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: '2024-11-15T03:38:33.033Z'
+        created_at:
+          type: string
+          format: ISO8601
+          example: '2025-01-16T15:41:23.453Z'
+        updated_at:
+          type: string
+          format: ISO8601
+          example: '2025-02-05T11:13:48.717Z'
+        verify:
+          $ref: '#/components/schemas/UserVerifyStatus'
+        twitter_circle:
+          type: array
+          items:
+            type: string
+            format: MongoId
+          example: ['678928a313683d4090dbbdbe', '677928a314753d4090dbbd79']
+        bio:
+          type: string
+          example: 'Just a tech enthusiast.'
+        location:
+          type: string
+          example: 'New York, USA'
+        website:
+          type: string
+          example: 'https://hungphan.dev'
+        username:
+          type: string
+          example: 'user678928a313683d4090dbbd75'
+        avatar:
+          type: string
+          example: 'http://localhost:4000/images/avatar.jpg'
+        cover_photo:
+          type: string
+          example: 'https://localhost:4000/images/cover.jpg'
+    UserVerifyStatus:
+      type: number
+      enum: ['Unverified', 'Verified', 'Banned']
+      example: 1
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
