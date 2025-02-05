@@ -401,3 +401,11 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 
 - io.use middlewares bên server-side
 - io.on('connect_error',(err)=>{}) bên client-side
+
+# Swagger API và OpenAPI:
+
+## Định nghĩa:
+
+1. Swagger api: là một bộ công cụ giúp ta xây dựng hay tạo nhanh một website về diễn đạt api của ta và làm việc với api dễ dàng hơn.
+
+2. OpenAPI: là được dưới dưới cú pháp yaml và là một chuẩn mô tả api restful cho phép đn api một cách rõ ràng ai cũng có thể đọc được con người và cả máy móc.
