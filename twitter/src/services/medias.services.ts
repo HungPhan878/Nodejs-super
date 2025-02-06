@@ -1,10 +1,9 @@
-import { config } from 'dotenv'
 import { Request } from 'express'
-import fs from 'fs'
+// import fs from 'fs'
 import fsPromise from 'fs/promises'
 import path from 'path'
 import sharp from 'sharp'
-import { isProduction } from '~/constants/config'
+import { envConfig, isProduction } from '~/constants/config'
 import { UPLOAD_DIR } from '~/constants/dir'
 import { MediaType } from '~/constants/enums'
 import { Media } from '~/models/Other'
@@ -14,7 +13,6 @@ import dbService from './database.services'
 import { uploadFileToS3 } from '~/utils/s3'
 import { CompleteMultipartUploadCommandOutput } from '@aws-sdk/client-s3'
 
-config()
 class MediaService {
   async handleUploadImage(req: Request) {
     const mime = (await import('mime')).default
@@ -85,8 +83,8 @@ class MediaService {
         queue.enQueue(file.filepath)
         return {
           url: isProduction
-            ? `${process.env.HOST}/static/video-hls/${newName}/master.m3u8`
-            : `http://localhost:${process.env.PORT}/static/video-hls/${newName}/master.m3u8`,
+            ? `${envConfig.host}/static/video-hls/${newName}/master.m3u8`
+            : `http://localhost:${envConfig.port}/static/video-hls/${newName}/master.m3u8`,
           type: MediaType.HLS
         }
       })

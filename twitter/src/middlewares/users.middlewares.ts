@@ -17,8 +17,8 @@ import { TokenPayload } from '~/models/requests/User.requests'
 import { UserVerifyStatus } from '~/constants/enums'
 import { REGEX_USERNAME } from '~/constants/regexes'
 import { verifyAccessToken } from '~/utils/common'
+import { envConfig } from '~/constants/config'
 
-config()
 
 //Create constants for reuse
 const passwordSchema: ParamSchema = {
@@ -89,7 +89,7 @@ const forgotPasswordTokenSchema: ParamSchema = {
         // When 2 awaits can run together and independent, they should be run together by Promise.all
         const decoded_forgot_password_token = await verifyToken({
           token: value as string,
-          secretOrPublicKey: process.env.JWT_FORGOT_PASSWORD_TOKEN_SECRET as string
+          secretOrPublicKey: envConfig.jwtSecretForgotPasswordToken as string
         })
         const { user_id } = decoded_forgot_password_token
         const user = await dbService.users.findOne({
@@ -354,7 +354,7 @@ export const refreshTokenValidator = validate(
               const [decoded_refresh_token, refresh_token] = await Promise.all([
                 verifyToken({
                   token: value as string,
-                  secretOrPublicKey: process.env.JWT_REFRESH_TOKEN_SECRET as string
+                  secretOrPublicKey: envConfig.jwtSecretRefreshToken as string
                 }),
                 dbService.refreshToken.findOne({ token: value as string })
               ])
@@ -403,7 +403,7 @@ export const emailVerifyTokenValidator = validate(
             try {
               const decoded_email_verify_token = await verifyToken({
                 token: value as string,
-                secretOrPublicKey: process.env.JWT_EMAIL_VERIFY_TOKEN_SECRET as string
+                secretOrPublicKey: envConfig.jwtSecretEmailVerifyToken as string
               })
 
               ;(req as Request).decoded_email_verify_token = decoded_email_verify_token
@@ -461,7 +461,7 @@ export const verifyForgotPasswordTokenValidator = validate(
             // When 2 awaits can run together and independent, they should be run together by Promise.all
             const decoded_forgot_password_token = await verifyToken({
               token: value as string,
-              secretOrPublicKey: process.env.JWT_FORGOT_PASSWORD_TOKEN_SECRET as string
+              secretOrPublicKey: envConfig.jwtSecretForgotPasswordToken as string
             })
             const { user_id } = decoded_forgot_password_token
             const user = await dbService.users.findOne({

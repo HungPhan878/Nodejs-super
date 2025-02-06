@@ -21,10 +21,10 @@ import swaggerUi from 'swagger-ui-express'
 // import fs from 'fs'
 // import path from 'path'
 import swaggerJsdoc from 'swagger-jsdoc'
+import { envConfig } from './constants/config'
 
-config()
 const app = express()
-const port = process.env.PORT || 4000
+const port = envConfig.port 
 const httpServer = createServer(app)
 
 // Swagger ui

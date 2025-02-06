@@ -21,6 +21,7 @@ import dbService from '~/services/database.services'
 import HTTP_STATUS from '~/constants/httpStatusCode'
 import { UserVerifyStatus } from '~/constants/enums'
 import { ErrorWithStatus } from '~/models/Errors'
+import { envConfig } from '~/constants/config'
 
 export const loginController = async (
   req: Request<ParamsDictionary, any, LoginBodyRed>,
@@ -42,7 +43,7 @@ export const oauthController = async (
 ) => {
   const { code } = req.query
   const result = await userService.oauth(code as string)
-  const urlRedirect = `${process.env.CLIENT_REDIRECT_URI_CALLBACK}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&verify=${result.verify}&new_user=${result.new_user}`
+  const urlRedirect = `${envConfig.clientRedirectCallback}?access_token=${result.access_token}&refresh_token=${result.refresh_token}&verify=${result.verify}&new_user=${result.new_user}`
   return res.redirect(urlRedirect)
 }
 
