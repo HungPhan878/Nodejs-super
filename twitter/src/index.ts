@@ -5,10 +5,9 @@ import defaultErrorHandler from './middlewares/error.middlewares'
 import userRouter from './routes/user.routes'
 import mediaRouter from './routes/medias.routes'
 import { initFolder } from './utils/file'
-import { config } from 'dotenv'
 import staticRouter from './routes/static.routes'
 import { UPLOAD_DIR_VIDEO } from './constants/dir'
-import cors from 'cors'
+import cors, { CorsOptions } from 'cors'
 import tweetRouter from './routes/tweet.routes'
 import bookmarkRouter from './routes/bookmark.routes'
 import likeRouter from './routes/like.routes'
@@ -21,11 +20,15 @@ import swaggerUi from 'swagger-ui-express'
 // import fs from 'fs'
 // import path from 'path'
 import swaggerJsdoc from 'swagger-jsdoc'
-import { envConfig } from './constants/config'
+import { envConfig, isProduction } from './constants/config'
+import helmet from 'helmet'
 
 const app = express()
-const port = envConfig.port 
+const port = envConfig.port
 const httpServer = createServer(app)
+const corsOptions: CorsOptions = {
+  origin: isProduction ? envConfig.clientUrl : '*'
+}
 
 // Swagger ui
 //C1: YAML + swagger jsdoc + swagger ui
@@ -39,7 +42,6 @@ const options = {
   },
   apis: ['./swagger/*.yaml'] // files containing annotations as above
 }
-
 const openapiSpecification = swaggerJsdoc(options)
 //C2:
 // const file = fs.readFileSync(path.resolve('twitter-swagger.yaml'), 'utf8')
@@ -55,10 +57,12 @@ dbService.connect().then(() => {
 // Create a uploads folder
 initFolder()
 
+//helmet
+app.use(helmet())
 // Doc file yaml
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification))
 //Allow everything api access to the server
-app.use(cors())
+app.use(cors(corsOptions))
 // add middleware handlers for json
 app.use(express.json())
 // Gắn router user vào đường dẫn /users

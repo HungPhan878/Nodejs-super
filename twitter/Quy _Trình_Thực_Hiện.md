@@ -409,3 +409,10 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 1. Swagger api: là một bộ công cụ giúp ta xây dựng hay tạo nhanh một website về diễn đạt api của ta và làm việc với api dễ dàng hơn.
 
 2. OpenAPI: là được dưới dưới cú pháp yaml và là một chuẩn mô tả api restful cho phép đn api một cách rõ ràng ai cũng có thể đọc được con người và cả máy móc.
+
+# Docker and Deploy:
+
+## Helmet and cors:
+
+1. ĐN: bảo mật và cho phép các url khác có thể truy cập đến server api của ta
+2. Note: riêng postman có thể pass qua cors này
