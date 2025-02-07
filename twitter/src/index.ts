@@ -22,6 +22,7 @@ import swaggerUi from 'swagger-ui-express'
 import swaggerJsdoc from 'swagger-jsdoc'
 import { envConfig, isProduction } from './constants/config'
 import helmet from 'helmet'
+import { rateLimit } from 'express-rate-limit'
 
 const app = express()
 const port = envConfig.port
@@ -29,6 +30,13 @@ const httpServer = createServer(app)
 const corsOptions: CorsOptions = {
   origin: isProduction ? envConfig.clientUrl : '*'
 }
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes).
+  standardHeaders: 'draft-8', // draft-6: `RateLimit-*` headers; draft-7 & draft-8: combined `RateLimit` header
+  legacyHeaders: false // Disable the `X-RateLimit-*` headers.
+  // store: ... , // Redis, Memcached, etc. See below.
+})
 
 // Swagger ui
 //C1: YAML + swagger jsdoc + swagger ui
@@ -57,6 +65,8 @@ dbService.connect().then(() => {
 // Create a uploads folder
 initFolder()
 
+// Apply the rate limiting middleware to all requests.
+app.use(limiter)
 //helmet
 app.use(helmet())
 // Doc file yaml

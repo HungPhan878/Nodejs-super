@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon --env=development",
+    "dev": "npx nodemon",
     "dev:stag": "npx nodemon --env=staging",
     "dev:prod": "npx nodemon --env=production",
     "build": "rimraf ./dist && tsc && tsc-alias",
@@ -52,6 +52,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-rate-limit": "^7.5.0",
     "express-validator": "^7.2.0",
     "formidable": "^3.5.2",
     "helmet": "^8.0.0",

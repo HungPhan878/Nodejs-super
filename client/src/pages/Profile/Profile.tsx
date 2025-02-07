@@ -17,5 +17,6 @@ export default function Profile() {
       setProfileToLS(profileData)
     }
   }, [profileData, setProfile])
+
   return <div>Profile</div>
 }
