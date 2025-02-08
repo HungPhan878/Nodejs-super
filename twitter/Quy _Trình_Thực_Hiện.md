@@ -416,3 +416,14 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 
 1. ĐN: bảo mật và cho phép các url khác có thể truy cập đến server api của ta
 2. Note: riêng postman có thể pass qua cors này
+
+## Deploy:
+
+### Flow:
+
+1.  thuê 1 vps chạy linux or windows server
+2.  Cài đặt nodejs , MongoDB server, nginx, PM2, git, ...
+3.  Pull code từ github về vps
+4.  Build code
+5.  Run code
+6.  Cấu hình nginx để trỏ domain, quản lý server
