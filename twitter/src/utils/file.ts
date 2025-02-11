@@ -49,7 +49,7 @@ export const handleUploadImage = async (req: Request) => {
 
 export const handleUploadVideo = async (req: Request) => {
   // Create unique Id from beginning of video file
-  const nanoId = (await import('nanoId')).nanoid
+  const nanoId = (await import('nanoid')).nanoid
   const name = nanoId()
   const folderPath = path.resolve(UPLOAD_DIR_VIDEO, name)
   fs.mkdirSync(folderPath)
