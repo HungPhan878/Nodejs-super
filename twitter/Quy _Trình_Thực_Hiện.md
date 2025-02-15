@@ -427,3 +427,8 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 4.  Build code
 5.  Run code
 6.  Cấu hình nginx để trỏ domain, quản lý server
+
+### Note:
++ Cần cấu hình ecosystem là node dist/index.js
++ Cấu hình dockerfile cho đúng
++ from node cho đúng
