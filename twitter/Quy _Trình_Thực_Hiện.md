@@ -429,6 +429,19 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 6.  Cấu hình nginx để trỏ domain, quản lý server
 
 ### Note:
-+ Cần cấu hình ecosystem là node dist/index.js
-+ Cấu hình dockerfile cho đúng
-+ from node cho đúng
+
+- Cần cấu hình ecosystem là node dist/index.js
+- Cấu hình dockerfile cho đúng
+- from node cho đúng
+
+### Docker hub:
+
+1. Định nghĩa: dùng để lưu docker image trên repo docker hub.
+2. Cách dùng: Flow push and pull docker image trên repo docker hub
+
+- Login vào docker hub.
+- Tạo repo pub hay private trên docker hub
+- Đổi tên docker image trùng tên với repo trên docker hub đó
+- Dùng lệnh docker push username/tagname:tag là xong.
+- Dùng lệnh docker pull username/tagname:tag là kéo code về thôi.
+ 
