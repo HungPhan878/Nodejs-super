@@ -1,4 +1,4 @@
-FROM node:20-alpine3.16
+FROM node:20.12-alpine
 WORKDIR /app
 
 COPY package.json .
@@ -16,6 +16,6 @@ RUN npm install pm2 -g
 RUN npm install
 RUN npm run build
 
-EXPOSE 3600
+EXPOSE 3000
 
 CMD ["pm2-runtime", "start", "ecosystem.config.js", "--env", "production"]
