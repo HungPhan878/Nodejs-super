@@ -1,0 +1,8 @@
+version: '3.8'
+
+services:
+  twitter:
+    image: hung/twitter:v0 # Sử dụng image đã build sẵn
+    ports:
+      - '4000:4000' # Ánh xạ cổng
+    restart: always # Tự động khởi động lại nếu container gặp lỗi
