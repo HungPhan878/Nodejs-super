@@ -433,6 +433,8 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 - Cần cấu hình ecosystem là node dist/index.js
 - Cấu hình dockerfile cho đúng
 - from node cho đúng
+- Image mà được build ở mỗi máy tính sẽ có sự khác nhau. Có thể sẽ không chạy được trên máy khác.
+- Ví dụ: Image được build trên máy Macbook M2 dùng chip **ARM**, sẽ không chạy được trên máy ubuntu dùng chip **Intel (hoặc AMD)** -> Cách giải quyết: dùng github action sẽ dùng chip amd đồng bộ với vps sẽ chạy được trên vps thôi nha.
 
 ### Docker hub:
 
@@ -444,4 +446,7 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 - Đổi tên docker image trùng tên với repo trên docker hub đó
 - Dùng lệnh docker push username/tagname:tag là xong.
 - Dùng lệnh docker pull username/tagname:tag là kéo code về thôi.
- 
+
+### Vấn đề:
+
+sau khi làm ci/cd xong rồi làm lại deploy vps thử nha

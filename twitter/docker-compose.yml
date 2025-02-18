@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   twitter:
-    image: twitter:v0 # Sử dụng image đã build sẵn
+    image: phanhung8/twitter:v1 # Sử dụng image đã build sẵn
     ports:
-      - '4000:4000' # Ánh xạ cổng
+      - '3000:3000' # Ánh xạ cổng
     restart: always # Tự động khởi động lại nếu container gặp lỗi
