@@ -40,4 +40,4 @@ jobs:
             docker pull phanhung8/twitter:v1            
             docker stop twitter-clone            
             docker rm twitter-clone            
-            docker run -dp 4000:3000 --name twitter-clone  phanhung8/twitter:v1
+            docker run -dp 4000:3000 --name twitter-clone --restart unless-stopped  phanhung8/twitter:v1
