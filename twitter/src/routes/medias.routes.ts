@@ -18,7 +18,7 @@ const mediaRouter = Router()
  * Description: Upload image files
  * Path: /upload-image
  * Method: POST
- * Body: {}
+ * Headers: {Authorization: "Bearer <access_token>"}
  */
 mediaRouter.post(
   '/upload-image',
@@ -31,7 +31,7 @@ mediaRouter.post(
  * Description: Upload video files
  * Path: /upload-video
  * Method: POST
- * Body: {}
+ * Headers: {Authorization: "Bearer <access_token>"}
  */
 mediaRouter.post(
   '/upload-video',

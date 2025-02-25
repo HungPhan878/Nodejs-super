@@ -354,7 +354,11 @@ class UserService {
     //Send email attachment Link https://twitter.com/forgot-password?token=value  to  client
     await sendForgotPasswordEmail(email, forgot_password_token)
     return {
-      message: MESSAGES_ERROR.CHECK_EMAIL_SUCCESSFULLY
+      message: MESSAGES_ERROR.CHECK_EMAIL_SUCCESSFULLY,
+      result: {
+        message: 'Token included for Swagger testing purposes only',
+        forgot_password_token
+      }
     }
   }
 

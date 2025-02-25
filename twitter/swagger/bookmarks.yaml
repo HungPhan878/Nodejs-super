@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: Clone Twitter - OpenAPI 3.0
+  version: 1.0.11
+
+tags:
+  - name: bookmarks
+    description: Các API bookmarks liên quan đến đánh dấu một tweet(bài blog ...) đã xem và xóa tweet đã đánh dấu.
+paths:
+  /bookmarks:
+    post:
+      summary: Bookmark tweet
+      description: Add a tweet to bookmarks
+      operationId: bookmarkTweet
+      tags:
+        - bookmarks
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tweet_id:
+                  type: string
+                  example: '67ba98d5e040a304740eac49'
+      responses:
+        '200':
+          description: Bookmark successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bookmark successfully
+                  result:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: '67be0a53a22851e8ab455b07'
+        '400':
+          description: Invalid tweet id
+  /bookmarks/tweet/{tweet_id}:
+    delete:
+      summary: Unbookmark tweet
+      description: Remove a tweet from bookmarks
+      operationId: unbookmarkTweet
+      tags:
+        - bookmarks
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tweet_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '67738c4e87108d0aa1470b2f'
+      responses:
+        '200':
+          description: Delete bookmark successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Delete bookmark successfully
+        '400':
+          description: Invalid tweet id

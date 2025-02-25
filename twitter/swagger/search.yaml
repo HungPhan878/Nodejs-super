@@ -1,0 +1,58 @@
+openapi: 3.0.3
+info:
+  title: Clone Twitter - OpenAPI 3.0
+  version: 1.0.11
+
+tags:
+  - name: search
+    description: Các API search
+paths:
+  /search:
+    get:
+      summary: Search text
+      description: Search tweets based on query parameters
+      tags:
+        - search
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+        - in: query
+          name: content
+          schema:
+            type: string
+            example: 'Campana'
+        - in: query
+          name: media_type
+          schema:
+            type: string
+            enum: [image, video]
+            example: 'image'
+        - in: query
+          name: people_followed
+          schema:
+            type: string
+            enum: ['0', '1']
+            example: '1'
+            description: Filter by people followed ('0' for all, '1' for followed users)
+      responses:
+        '200':
+          description: Search successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  result:
+                    $ref: '#/components/schemas/SearchResponse'
+        '401':
+          description: Access token is required

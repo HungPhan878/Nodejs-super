@@ -1,0 +1,150 @@
+openapi: 3.0.3
+info:
+  title: Clone Twitter - OpenAPI 3.0
+  version: 1.0.11
+
+tags:
+  - name: tweets
+    description: Các API liên quan đến tweet(bài đăng, bài blog và tin tức)
+
+paths:
+  /tweets:
+    post:
+      summary: Create a tweet
+      tags:
+        - tweets
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTweetBody'
+      responses:
+        '200':
+          description: Successfully created tweet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Create tweet successfully'
+                  result:
+                    $ref: '#/components/schemas/TweetResponse'
+    get:
+      summary: Get new feeds
+      tags:
+        - tweets
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Successfully retrieved new feeds
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Get new feeds successfully'
+                  result:
+                    $ref: '#/components/schemas/GetNewFeedsResponse'
+        '422':
+          description: Invalid validation error
+  /tweets/{tweet_id}:
+    get:
+      summary: Get a tweet detail
+      tags:
+        - tweets
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tweet_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '67ba98d5e040a304740eac49'
+      responses:
+        '200':
+          description: Successfully retrieved tweet
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Get tweet successfully'
+                  result:
+                    $ref: '#/components/schemas/TweetDetailResponse'
+  /tweets/{tweet_id}/children:
+    get:
+      summary: Get tweet children
+      tags:
+        - tweets
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tweet_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '67738c7fc72cdd632393aeee'
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 10
+        - name: tweet_type
+          in: query
+          required: false
+          schema:
+            type: number
+            enum: [0, 1, 2, 3]
+            example: 2
+          description: |
+            - 0: Tweet
+            - 1: Retweet
+            - 2: Comment
+            - 3: QuoteTweet
+      responses:
+        '200':
+          description: Successfully retrieved tweet children
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Get tweet children successfully'
+                  result:
+                    $ref: '#/components/schemas/TweetChildrenResponse'
+        '422':
+          description: Invalid parameters

@@ -450,3 +450,12 @@ là đường ống tổng hợp hay liên kết các collection lại với nha
 ### Vấn đề:
 
 sau khi làm ci/cd xong rồi làm lại deploy vps thử nha
+
+### HOSTING:
+
+1. Cloudpanel:
+
+- là một hosting là một vps ảo vậy nên đã có nginx rồi cấu hình trong nó là được, đừng nên tạo một nginx sẽ bị ghi đè.
+
+2. Continue:
+   đã viết xong swagger đến công đoạn test và thêm error nữa thôi tầm 30 phut

@@ -1,0 +1,76 @@
+openapi: 3.0.3
+info:
+  title: Clone Twitter - OpenAPI 3.0
+  version: 1.0.11
+
+tags:
+  - name: likes
+    description: Các API likes liên quan đến thích một tweet(bài blog ...) đã xem, xóa tweet đã like.
+paths:
+  /likes:
+    post:
+      summary: Likes tweet
+      description: Add a tweet to likes
+      operationId: likeTweet
+      tags:
+        - likes
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tweet_id:
+                  type: string
+                  example: '67ba98d5e040a304740eac49'
+      responses:
+        '200':
+          description: Like successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Like successfully
+                  result:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: '67be0a53a22851e8ab455b07'
+        '400':
+          description: Invalid tweet id
+  /likes/tweet/{tweet_id}:
+    delete:
+      summary: Unlike tweet
+      description: Remove a tweet from likes
+      operationId: unlikeTweet
+      tags:
+        - likes
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: tweet_id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '67738c4e87108d0aa1470b2f'
+      responses:
+        '200':
+          description: Delete like successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Delete like successfully
+        '400':
+          description: Invalid tweet id

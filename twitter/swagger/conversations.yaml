@@ -1,0 +1,49 @@
+openapi: 3.0.3
+info:
+  title: Clone Twitter - OpenAPI 3.0
+  version: 1.0.11
+
+tags:
+  - name: conversations
+    description: Các API conversations trong Twitter dùng để lấy danh sách cuộc trò chuyện.
+paths:
+  /conversations/receivers/{receiver_id}:
+    get:
+      summary: Get conversation
+      description: Retrieve conversations with a specific receiver.
+      tags:
+        - conversations
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: receiver_id
+          required: true
+          schema:
+            type: string
+            example: '6789f96c54f8cd1b1bbb3bbe'
+        - in: query
+          name: page
+          schema:
+            type: integer
+            example: 4
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: Get conversations successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Get conversations successfully'
+                  result:
+                    $ref: '#/components/schemas/ConversationResponse'
+        '401':
+          description: Access token is required

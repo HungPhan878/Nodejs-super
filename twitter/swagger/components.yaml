@@ -18,7 +18,7 @@ components:
         refresh_token:
           type: string
           example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjc4OTI4YTMxMzY4M2Q0MDkwZGJiZDc1IiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjoxLCJpYXQiOjE3Mzg3NTQ0MTYsImV4cCI6MTc0NzM5NDQxNn0.Mq8AyBQI8uN7hfP6FIT9Wg-S_KY69GlPpzFziKNSRNY.bFnaBfxWl-Q48HCwAeMpNzZwTO9LEjcBd7Zyipjqr64
-    UserProfile:
+    MyProfile:
       type: object
       properties:
         _id:
@@ -70,10 +70,746 @@ components:
         cover_photo:
           type: string
           example: 'https://localhost:4000/images/cover.jpg'
+    RegisterRequest:
+      type: object
+      properties:
+        confirm_password:
+          type: string
+          example: 'Hung789789!'
+        password:
+          type: string
+          example: 'Hung789789!'
+        email:
+          type: string
+          format: email
+          example: 'richgrimes452@gmail.com'
+        name:
+          type: string
+          example: 'Rich Grimes'
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: '2024-11-15T03:38:33.033Z'
     UserVerifyStatus:
       type: number
       enum: ['Unverified', 'Verified', 'Banned']
       example: 1
+    RefreshTokenRequest:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjdiODJhNGJhYzg3MGJlYjYyNmUxN2ExIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjowLCJleHAiOjE3NDg3NjI2OTksImlhdCI6MTc0MDEyMzQ3Nn0.uJilxr6nrx88CnsvYd7ZNVBrTKVoa3iSCz9ke9baGlY'
+    RefreshTokenResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Refresh token successfully'
+        result:
+          type: object
+          properties:
+            new_access_token:
+              type: string
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjdiODJhNGJhYzg3MGJlYjYyNmUxN2ExIiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjowLCJpYXQiOjE3NDAxMjM0NzYsImV4cCI6MTc0MDIwOTg3Nn0.vB3RGwJvH2ilIP9pALPYJ2YTJQLtTUs2w1qPRmAsGO4'
+            new_refresh_token:
+              type: string
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjdiODJhNGJhYzg3MGJlYjYyNmUxN2ExIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjowLCJleHAiOjE3NDg3NjI2OTksImlhdCI6MTc0MDEyMzQ3Nn0.uJilxr6nrx88CnsvYd7ZNVBrTKVoa3iSCz9ke9baGlY'
+    ForgotPasswordRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: 'richgrimes452@gmail.com'
+    ForgotPasswordResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Check email successfully'
+        result:
+          type: object
+          properties:
+            forgot_password_token:
+              type: string
+              example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjc4OTI4YTMxMzY4M2Q0MDkwZGJiZDc1IiwidG9rZW5fdHlwZSI6MiwidmVyaWZ5IjoxLCJpYXQiOjE3NDAyMDM4NTgsImV4cCI6MTc0MDgwODY1OH0.GxiHb7sj9a_JCcf_sZwZE3VigvuaF1hsNgQMOwf24jQ'
+    VerifyForgotPasswordRequest:
+      type: object
+      properties:
+        forgot_password_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjc4OTI4YTMxMzY4M2Q0MDkwZGJiZDc1IiwidG9rZW5fdHlwZSI6MiwidmVyaWZ5IjoxLCJpYXQiOjE3NDAyMDM4NTgsImV4cCI6MTc0MDgwODY1OH0.GxiHb7sj9a_JCcf_sZwZE3VigvuaF1hsNgQMOwf24jQ'
+    VerifyForgotPasswordResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Verify forgot password success'
+    ResetPasswordRequest:
+      type: object
+      properties:
+        forgot_password_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjc4OTI4YTMxMzY4M2Q0MDkwZGJiZDc1IiwidG9rZW5fdHlwZSI6MiwidmVyaWZ5IjoxLCJpYXQiOjE3NDAyMDM4NTgsImV4cCI6MTc0MDgwODY1OH0.GxiHb7sj9a_JCcf_sZwZE3VigvuaF1hsNgQMOwf24jQ'
+        password:
+          type: string
+          example: 'Hung789789!'
+        confirm_password:
+          type: string
+          example: 'Hung789789!'
+    ResetPasswordResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Reset password successfully'
+    UserProfile:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '675281891ad3a4ccb79be11c'
+        name:
+          type: string
+          example: 'RIch'
+        email:
+          type: string
+          example: 'rich25@gmail.com'
+        date_of_birth:
+          type: string
+          format: ISO8601
+          example: '2024-11-15T03:38:33.033Z'
+        bio:
+          type: string
+          example: ''
+        location:
+          type: string
+          example: ''
+        website:
+          type: string
+          example: ''
+        username:
+          type: string
+          example: 'user675281891ad3a4ccb79be11c'
+        avatar:
+          type: string
+          example: ''
+        cover_photo:
+          type: string
+          example: ''
+    FollowRequest:
+      type: object
+      properties:
+        followed_user_id:
+          type: string
+          example: '678928a313683d4090dbbd75'
+    FollowResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Follow success'
+    UnfollowResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Unfollow success'
+    ChangePasswordBody:
+      type: object
+      properties:
+        old_password:
+          type: string
+          example: 'Hung789@'
+        password:
+          type: string
+          example: 'Hung789!'
+        confirm_password:
+          type: string
+          example: 'hung789@'
+    ChangePasswordResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Change password successfully'
+    TweetTypes:
+      type: number
+      enum: ['Tweet', 'Retweet', 'Comment', 'QuoteTweet']
+      example: 0
+    TweetAudience:
+      type: number
+      enum: ['Everyone', 'TwitterCircle']
+      example: 0
+    MediaType:
+      type: number
+      enum: ['Image', 'Video', 'HLS']
+      example: 0
+    Media:
+      type: object
+      properties:
+        url:
+          type: string
+        type:
+          $ref: '#/components/schemas/MediaType'
+    CreateTweetBody:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/TweetTypes'
+        audience:
+          $ref: '#/components/schemas/TweetAudience'
+        content:
+          type: string
+          example: 'This is a sample tweet.'
+        parent_id:
+          type: string
+          nullable: true
+          example: null
+        hashtags:
+          type: array
+          items:
+            type: string
+          example: ['example', 'tweet']
+        mentions:
+          type: array
+          items:
+            type: string
+          example: ['user123']
+        medias:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+    TweetResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '67ba98d5e040a304740eac49'
+        user_id:
+          type: string
+          example: '678928a313683d4090dbbd75'
+        type:
+          type: integer
+          example: 0
+        audience:
+          type: integer
+          example: 0
+        content:
+          type: string
+          example: 'This is a sample tweet.'
+        parent_id:
+          type: string
+          nullable: true
+          example: null
+        hashtags:
+          type: array
+          items:
+            type: string
+          example: ['example', 'tweet']
+        mentions:
+          type: array
+          items:
+            type: string
+          example: ['user123']
+        medias:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+        guest_views:
+          type: integer
+          example: 0
+        user_views:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-02-23T03:41:09.245Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2025-02-23T03:41:09.245Z'
+    TweetDetailResponse:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: '67ba98d5e040a304740eac49'
+        user_id:
+          type: string
+          example: '678928a313683d4090dbbd75'
+        type:
+          type: integer
+          example: 0
+        audience:
+          type: integer
+          example: 0
+        content:
+          type: string
+          example: 'This is a sample tweet.'
+        parent_id:
+          type: string
+          nullable: true
+          example: null
+        hashtags:
+          type: array
+          items:
+            type: string
+          example: ['example', 'tweet']
+        mentions:
+          type: array
+          items:
+            type: string
+          example: ['user123']
+        medias:
+          type: array
+          items:
+            $ref: '#/components/schemas/Media'
+        guest_views:
+          type: integer
+          example: 0
+        user_views:
+          type: integer
+          example: 1
+        views:
+          type: integer
+          example: 1
+        created_at:
+          type: string
+          format: date-time
+          example: '2025-02-23T03:41:09.245Z'
+        updated_at:
+          type: string
+          format: date-time
+          example: '2025-02-23T03:41:09.245Z'
+    TweetChildrenResponse:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: '67ba98d5e040a304740eac49'
+              user_id:
+                type: string
+                example: '678928a313683d4090dbbd75'
+              type:
+                type: integer
+                example: 0
+              audience:
+                type: integer
+                example: 0
+              content:
+                type: string
+                example: 'This is a sample tweet.'
+              parent_id:
+                type: string
+                nullable: true
+                example: 67738c7fc72cdd632393aeee
+              hashtags:
+                type: array
+                items:
+                  type: string
+                example: ['example', 'tweet']
+              mentions:
+                type: array
+                items:
+                  type: string
+                example: ['user123']
+              medias:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Media'
+              guest_views:
+                type: integer
+                example: 0
+              user_views:
+                type: integer
+                example: 1
+              bookmarks:
+                type: integer
+                example: 0
+              likes:
+                type: integer
+                example: 0
+              retweet_count:
+                type: integer
+                example: 0
+              comment_count:
+                type: integer
+                example: 0
+              quote_count:
+                type: integer
+                example: 0
+              views:
+                type: integer
+                example: 1
+              created_at:
+                type: string
+                format: date-time
+                example: '2025-02-23T03:41:09.245Z'
+              updated_at:
+                type: string
+                format: date-time
+                example: '2025-02-23T03:41:09.245Z'
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        tweet_type:
+          type: number
+          enum: ['Tweet', 'Retweet', 'Comment', 'QuoteTweet']
+          example: 2
+        total_page:
+          type: integer
+          example: 1
+    GetNewFeedsResponse:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: '67ba98d5e040a304740eac49'
+              user_id:
+                type: string
+                example: '678928a313683d4090dbbd75'
+              type:
+                type: integer
+                example: 0
+              audience:
+                type: integer
+                example: 0
+              content:
+                type: string
+                example: 'comment12'
+              parent_id:
+                type: string
+                nullable: true
+                example: null
+              hashtags:
+                type: array
+                items:
+                  type: string
+                example: []
+              mentions:
+                type: array
+                items:
+                  type: string
+                example: []
+              medias:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    url:
+                      type: string
+                      example: 'https://example.com/image.jpg'
+                    type:
+                      type: string
+                      example: 'image'
+                example: []
+              guest_views:
+                type: integer
+                example: 0
+              user_views:
+                type: integer
+                example: 3
+              created_at:
+                type: string
+                format: date-time
+                example: '2025-02-23T03:41:09.245Z'
+              updated_at:
+                type: string
+                format: date-time
+                example: '2025-02-24T03:52:08.167Z'
+              user:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: '678928a313683d4090dbbd75'
+                  name:
+                    type: string
+                    example: 'Lalisa 2'
+                  email:
+                    type: string
+                    example: 'richgrimes452@gmail.com'
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: '2025-01-16T15:41:23.453Z'
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: '2025-02-23T03:22:38.605Z'
+                  verify:
+                    type: integer
+                    example: 1
+                  bio:
+                    type: string
+                    example: 'Middle leadership'
+                  location:
+                    type: string
+                    example: ''
+                  website:
+                    type: string
+                    example: ''
+                  username:
+                    type: string
+                    example: 'user678928a313683d4090dbbd75'
+                  avatar:
+                    type: string
+                    example: ''
+                  cover_photo:
+                    type: string
+                    example: ''
+              bookmarks:
+                type: integer
+                example: 0
+              likes:
+                type: integer
+                example: 0
+              retweet_count:
+                type: integer
+                example: 0
+              comment_count:
+                type: integer
+                example: 0
+              quote_count:
+                type: integer
+                example: 0
+              views:
+                type: integer
+                example: 3
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        total_page:
+          type: integer
+          example: 1
+    UploadImageResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            example: 'https://twitter-clone-2025-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/images/250c8a7df185fb31f99496100.jpg'
+          type:
+            type: integer
+            example: 0
+            description: 0 = image, 1 = video
+    UploadVideoResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            example: 'https://twitter-clone-2025-ap-southeast-1.s3.ap-southeast-1.amazonaws.com/videos/XeiTTYm2Quo8mM95pcqaM.mp4'
+          type:
+            type: integer
+            example: 1
+            description: 0 = image, 1 = video
+    UploadVideoHLSResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          url:
+            type: string
+            example: 'http://localhost:4000/static/video-hls/4O9zibJwAREIihxek_0uD/master.m3u8'
+          type:
+            type: integer
+            example: 2
+            description: 0 = image, 1 = video, 2 = video (HLS)
+    SearchResponse:
+      type: object
+      properties:
+        tweets:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: '677cc7c21d563c99db802b68'
+              user_id:
+                type: string
+                example: '677cc7b81d563c99db8025ca'
+              type:
+                type: integer
+                example: 0
+              audience:
+                type: integer
+                example: 0
+              content:
+                type: string
+                example: 'This is a Campana.'
+              parent_id:
+                type: string
+                nullable: true
+                example: null
+              hashtags:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      example: '677cc7bd1d563c99db802667'
+                    name:
+                      type: string
+                      example: 'NodeJS'
+              mentions:
+                type: array
+                items:
+                  type: string
+                example: []
+              medias:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    type:
+                      type: integer
+                      example: 0
+                    url:
+                      type: string
+                      example: 'https://loremflickr.com/3153/2496?lock=6612345369857086'
+              guest_views:
+                type: integer
+                example: 0
+              user_views:
+                type: integer
+                example: 9
+              created_at:
+                type: string
+                format: date-time
+                example: '2025-01-07T06:20:50.895Z'
+              updated_at:
+                type: string
+                format: date-time
+                example: '2025-02-25T18:42:51.385Z'
+              user:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                    example: '677cc7b81d563c99db8025ca'
+                  name:
+                    type: string
+                    example: 'Everardo_Cruickshank15'
+                  email:
+                    type: string
+                    example: 'Eloisa_Hackett@yahoo.com'
+                  created_at:
+                    type: string
+                    format: date-time
+                    example: '2025-01-07T06:20:40.712Z'
+                  updated_at:
+                    type: string
+                    format: date-time
+                    example: '2025-01-07T06:20:40.712Z'
+                  verify:
+                    type: integer
+                    example: 1
+                  bio:
+                    type: string
+                    example: 'Software Developer'
+                  location:
+                    type: string
+                    example: 'San Francisco, CA'
+                  website:
+                    type: string
+                    example: 'https://example.com'
+                  username:
+                    type: string
+                    example: 'user677cc7b81d563c99db8025ca'
+                  avatar:
+                    type: string
+                    example: 'https://example.com/avatar.jpg'
+                  cover_photo:
+                    type: string
+                    example: 'https://example.com/cover.jpg'
+              bookmarks:
+                type: integer
+                example: 0
+              likes:
+                type: integer
+                example: 10
+              retweet_count:
+                type: integer
+                example: 2
+              comment_count:
+                type: integer
+                example: 3
+              quote_count:
+                type: integer
+                example: 1
+              views:
+                type: integer
+                example: 15
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        total_page:
+          type: integer
+          example: 12
+    ConversationResponse:
+      type: object
+      properties:
+        conversations:
+          type: array
+          items:
+            type: object
+            properties:
+              _id:
+                type: string
+                example: '679f409c8b59763285c8a5d6'
+              sender_id:
+                type: string
+                example: '678928a313683d4090dbbd75'
+              receiver_id:
+                type: string
+                example: '6789f96c54f8cd1b1bbb3bbe'
+              content:
+                type: string
+                example: 'Hello'
+              created_at:
+                type: string
+                format: date-time
+                example: '2025-02-02T09:53:32.168Z'
+              updated_at:
+                type: string
+                format: date-time
+                example: '2025-02-02T09:53:32.168Z'
+        page:
+          type: integer
+          example: 4
+        limit:
+          type: integer
+          example: 10
+        total_page:
+          type: integer
+          example: 4
   securitySchemes:
     BearerAuth:
       type: http

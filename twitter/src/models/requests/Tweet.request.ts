@@ -22,5 +22,5 @@ export interface TweetQuery extends Pagination, Query {
 
 export interface Pagination {
   limit: string
-  page: string
+  page: string 
 }

@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: Clone Twitter - OpenAPI 3.0
+  version: 1.0.11
+
+tags:
+  - name: medias
+    description: Các API medias trong Twitter dùng để tải lên, lấy danh sách, và xóa phương tiện như ảnh, video, HLS.
+paths:
+  /medias/upload-image:
+    post:
+      summary: Upload image files
+      description: Upload image files to the server
+      operationId: uploadImage
+      requestBody:
+        required: false
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      tags:
+        - medias
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Image uploaded successfully
+                  result:
+                    $ref: '#/components/schemas/UploadImageResponse'
+        '500':
+          description: 'No image file found'
+  /medias/upload-video:
+    post:
+      summary: Upload video files
+      description: Upload video files to the server
+      operationId: uploadVideo
+      tags:
+        - medias
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Video uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Video uploaded successfully
+                  result:
+                    $ref: '#/components/schemas/UploadVideoResponse'
+        '500':
+          description: 'No video file found'
+  /medias/upload-video-hls:
+    post:
+      summary: Upload video files (HLS)
+      description: Upload HLS video files to the server (recommendation that users should upload files under 10MB)
+      operationId: uploadVideoHls
+      tags:
+        - medias
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '200':
+          description: Video uploaded successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Video uploaded successfully
+                  result:
+                    $ref: '#/components/schemas/UploadVideoHLSResponse'
+  /medias/video-status/{id}:
+    get:
+      summary: Get status of video
+      description: Retrieve the status of a video by its ID
+      operationId: getVideoStatus
+      tags:
+        - medias
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            example: '4O9zibJwAREIihxek_0uD'
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Get status video successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Get status video successfully
+                  result:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        example: '67bbf9ed1c4ce2ad4ca4e027'
+                      status:
+                        type: integer
+                        example: 2
+                      name:
+                        type: string
+                        example: '4O9zibJwAREIihxek_0uD'
+                      message:
+                        type: string
+                        example: ''
+                      createdAt:
+                        type: string
+                        format: date-time
+                        example: '2025-02-24T04:47:41.833Z'
+                      updatedAt:
+                        type: string
+                        format: date-time
+                        example: '2025-02-24T04:47:55.072Z'
+        '401':
+          description: 'Access token is required'
