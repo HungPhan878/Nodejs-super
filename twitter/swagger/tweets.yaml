@@ -34,6 +34,8 @@ paths:
                     example: 'Create tweet successfully'
                   result:
                     $ref: '#/components/schemas/TweetResponse'
+        '422':
+          description: Invalid validation error
     get:
       summary: Get new feeds
       tags:
@@ -55,7 +57,7 @@ paths:
             example: 10
       responses:
         '200':
-          description: Successfully retrieved new feeds
+          description: Get new feeds successfully
           content:
             application/json:
               schema:
@@ -84,7 +86,7 @@ paths:
             example: '67ba98d5e040a304740eac49'
       responses:
         '200':
-          description: Successfully retrieved tweet
+          description: Get tweet successfully
           content:
             application/json:
               schema:
@@ -95,6 +97,8 @@ paths:
                     example: 'Get tweet successfully'
                   result:
                     $ref: '#/components/schemas/TweetDetailResponse'
+        '401':
+          description: Jwt expired
   /tweets/{tweet_id}/children:
     get:
       summary: Get tweet children

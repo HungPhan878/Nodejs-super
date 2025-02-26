@@ -13,6 +13,8 @@ paths:
       description: Search tweets based on query parameters
       tags:
         - search
+      security:
+        - BearerAuth: []
       parameters:
         - in: query
           name: page
@@ -34,13 +36,12 @@ paths:
           schema:
             type: string
             enum: [image, video]
-            example: 'image'
         - in: query
           name: people_followed
           schema:
             type: string
             enum: ['0', '1']
-            example: '1'
+            example: '0'
             description: Filter by people followed ('0' for all, '1' for followed users)
       responses:
         '200':

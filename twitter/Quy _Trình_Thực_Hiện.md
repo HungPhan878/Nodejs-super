@@ -458,4 +458,7 @@ sau khi làm ci/cd xong rồi làm lại deploy vps thử nha
 - là một hosting là một vps ảo vậy nên đã có nginx rồi cấu hình trong nó là được, đừng nên tạo một nginx sẽ bị ghi đè.
 
 2. Continue:
-   đã viết xong swagger đến công đoạn test và thêm error nữa thôi tầm 30 phut
+
+- đã viết xong swagger đến công đoạn test và thêm error nữa thôi tầm 30 phut đã xong
+  c1: - thêm swagger verify email và resend verify email nha và gợi ý cho họ.
+  c2: gợi ý cho user về media test bằng postman

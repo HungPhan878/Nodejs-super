@@ -23,7 +23,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: http://localhost:4000
+  - url: https://hung.vuahocvualamduan.org
 tags:
   - name: users
     description: Các API liên quan đến người dùng twitter
@@ -81,6 +81,8 @@ paths:
                     example: 'Get my profile successfully'
                   result:
                     $ref: '#/components/schemas/MyProfile'
+        '401':
+          description: access token is required
     patch:
       tags:
         - users
@@ -104,14 +106,6 @@ paths:
                 bio:
                   type: string
                 location:
-                  type: string
-                website:
-                  type: string
-                username:
-                  type: string
-                avatar:
-                  type: string
-                cover_photo:
                   type: string
       responses:
         '200':
@@ -166,6 +160,8 @@ paths:
                       deletedCount:
                         type: integer
                         example: 1
+        '401':
+          description: JWT expired
   /users/register:
     post:
       tags:
@@ -254,6 +250,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/VerifyForgotPasswordResponse'
+        '401':
+          description: Jwt expired
   /users/reset-password:
     post:
       tags:
@@ -273,6 +271,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResetPasswordResponse'
+        '422':
+          description: Invalid input
   /users/{username}:
     get:
       summary: Get user profile by username
@@ -284,6 +284,7 @@ paths:
           required: true
           schema:
             type: string
+            example: 'user675281891ad3a4ccb79be11c'
       responses:
         '200':
           description: Successfully retrieved profile
@@ -297,6 +298,8 @@ paths:
                     example: 'Get profile success'
                   result:
                     $ref: '#/components/schemas/UserProfile'
+        '404':
+          description: User not found
   /users/follow:
     post:
       summary: Follow a user
@@ -317,6 +320,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/FollowResponse'
+        '403':
+          description: 'User not verified'
   /users/follow/{user_id}:
     delete:
       summary: Unfollow a user
@@ -330,6 +335,7 @@ paths:
           required: true
           schema:
             type: string
+            example: '678928a313683d4090dbbd75'
       responses:
         '200':
           description: Successfully unfollowed user
@@ -337,6 +343,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UnfollowResponse'
+        '404':
+          description: User not found
   /users/change-password:
     put:
       summary: Change password

@@ -5,7 +5,7 @@ components:
       properties:
         email:
           type: string
-          example: 'richgrimes452+1@gmail.com'
+          example: 'richgrimes452@gmail.com'
         password:
           type: string
           example: 'Hung789789!'
@@ -73,19 +73,19 @@ components:
     RegisterRequest:
       type: object
       properties:
-        confirm_password:
-          type: string
-          example: 'Hung789789!'
-        password:
-          type: string
-          example: 'Hung789789!'
         email:
           type: string
           format: email
           example: 'richgrimes452@gmail.com'
+        confirm_password:
+          type: string
+          example: 'Hung789!'
+        password:
+          type: string
+          example: 'Hung789!'
         name:
           type: string
-          example: 'Rich Grimes'
+          example: 'Username'
         date_of_birth:
           type: string
           format: ISO8601
@@ -276,7 +276,7 @@ components:
           type: array
           items:
             type: string
-          example: ['user123']
+          example: []
         medias:
           type: array
           items:

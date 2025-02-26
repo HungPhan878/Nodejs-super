@@ -19,11 +19,9 @@ paths:
             schema:
               type: object
               properties:
-                files:
-                  type: array
-                  items:
-                    type: string
-                    format: binary
+                file:
+                  type: string
+                  format: binary
       tags:
         - medias
       security:
@@ -113,6 +111,8 @@ paths:
                     example: Video uploaded successfully
                   result:
                     $ref: '#/components/schemas/UploadVideoHLSResponse'
+        '500':
+          description: 'No video file found'            
   /medias/video-status/{id}:
     get:
       summary: Get status of video
