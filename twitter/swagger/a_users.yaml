@@ -23,7 +23,7 @@ externalDocs:
   description: Find out more about Swagger
   url: http://swagger.io
 servers:
-  - url: https://hung.vuahocvualamduan.org
+  - url: https//hung.vuahocvualamduan.org
 tags:
   - name: users
     description: Các API liên quan đến người dùng twitter
@@ -33,11 +33,11 @@ paths:
     post:
       tags:
         - users
-      summary: Đăng nhập
-      description: Đăng nhập vào hệ thống X clone
+      summary: Login
+      description: Log in to the X clone system
       operationId: loginUser
       requestBody:
-        description: Dữ liệu đăng nhập
+        description: Login data
         required: true
         content:
           application/json:
@@ -45,7 +45,7 @@ paths:
               $ref: '#/components/schemas/LoginBody'
       responses:
         '200':
-          description: Đăng nhập thành công
+          description: Login successfully
           content:
             application/json:
               schema:
@@ -62,15 +62,15 @@ paths:
     get:
       tags:
         - users
-      summary: Lấy thông tin người dùng đang đăng nhập
-      description: Lấy thông tin người dùng đang đăng nhập
+      summary: Get the currently logged-in user information
+      description: Get the information of the currently logged-in user
       operationId: getMe
       security:
         - BearerAuth: []
 
       responses:
         '200':
-          description: Lấy thông tin của tôi thành công
+          description: Get my information successfully
           content:
             application/json:
               schema:
@@ -167,7 +167,20 @@ paths:
       tags:
         - users
       summary: Register a new user
-      description: Registers a new user with the provided details
+      description: |
+        Registers a new user with the provided details
+
+         **⚠️ Lưu ý quan trọng:**  
+         - Hệ thống gửi email xác thực qua **AWS SES**, nhưng hiện tại **chưa được đưa ra khỏi môi trường Sandbox**.  
+         - Nếu bạn đăng ký bằng email chưa được xác minh, hệ thống sẽ trả về lỗi **500** nhưng tài khoản vẫn sẽ được tạo.  
+         - Để nhận email xác thực, vui lòng sử dụng một trong các email sau:  
+            richgrimes452+number@gmail.com
+          ```
+          và dùng resend-verify-email để gửi lại email_verify_token và dùng verify-email để xác minh email
+          ```
+          Ví dụ:  
+          - `richgrimes452+10@gmail.com`  
+         **Xin lỗi vì sự bất tiện này!**
       requestBody:
         required: true
         content:
@@ -212,6 +225,56 @@ paths:
                 $ref: '#/components/schemas/RefreshTokenResponse'
         '401':
           description: Invalid signature
+  /users/resend-verify-email:
+    post:
+      summary: Resend Verify Email Address
+      description: Resend verification email to the user.
+      tags:
+        - users
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: Resend verify email successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Resend verify email successfully'
+                  result:
+                    $ref: '#/components/schemas/ResendVerifyEmailResponse'
+  /users/verify-email:
+    post:
+      summary: Verify Email Address
+      description: Verify the user's email address using the provided token.
+      tags:
+        - users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_verify_token:
+                  type: string
+                  example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjdjNGNhMmQ4NWE2ZDcyNjA4OWZhNTVlIiwidG9rZW5fdHlwZSI6MCwidmVyaWZ5IjoxLCJpYXQiOjE3NDA5NTAzNTMsImV4cCI6MTc0MTAzNjc1M30.FsnhbqVCIitLtJ2YDCzzxfrrgz2af_dmdutw-nYpuv4'
+      responses:
+        '200':
+          description: Email verify successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: 'Email verify successfully'
+                  result:
+                    $ref: '#/components/schemas/SuccessAuthentication'
   /users/forgot-password:
     post:
       tags:

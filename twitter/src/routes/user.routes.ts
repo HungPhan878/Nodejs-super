@@ -115,12 +115,10 @@ userRouter.post(
 )
 
 /**
- *  Description: Verify email address
- *  Path: /verify-email
+ *  Description: Resend Verify email address
+ *  Path: /resend-verify-email
  *  Method: POST
- *  Body:{
- *      email_verify_token:string
- *      }
+ * headers:  {'Authorization: Bearer <access_token>'}
  */
 userRouter.post(
   '/resend-verify-email',

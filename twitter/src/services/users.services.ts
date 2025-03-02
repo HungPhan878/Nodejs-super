@@ -326,7 +326,11 @@ class UserService {
       }
     ])
     return {
-      message: MESSAGES_ERROR.RESEND_VERIFY_EMAIL_SUCCESSFULLY
+      message: MESSAGES_ERROR.RESEND_VERIFY_EMAIL_SUCCESSFULLY,
+      result: {
+        message: 'Token included for Swagger testing purposes only',
+        email_verify_token
+      }
     }
   }
 

@@ -10,7 +10,25 @@ paths:
   /medias/upload-image:
     post:
       summary: Upload image files
-      description: Upload image files to the server
+      description: |
+        Upload image files to the server
+
+        **Lưu ý:**  
+        - Nếu bạn đang thử nghiệm API này trong **Swagger UI** và bị lỗi, vui lòng **sử dụng Postman thay thế**.  
+        - Swagger UI có thể không hỗ trợ upload nhiều file đúng cách.  
+
+        **Hướng dẫn test bằng Postman:**  
+        1. Mở **Postman**.  
+        2. Chọn phương thức **POST** và nhập URL: `https://hung.vuahocvualamduan.org/medias/upload-image`.  
+        3. Chuyển sang tab **Body** → Chọn **form-data**.  
+        4. Thêm một key mới:
+           - **Tên (Key):** `image`  
+           - **Type:** File  
+           - **Chọn nhiều file từ máy tính của bạn.**  
+        5. Nhấn **Send** để gửi request.  
+
+        **Thật sự rất xin lỗi vì sự bất tiện này!**
+        **Rất biết ơn vì bạn đã thông cảm**
       operationId: uploadImage
       requestBody:
         required: false
@@ -44,7 +62,25 @@ paths:
   /medias/upload-video:
     post:
       summary: Upload video files
-      description: Upload video files to the server
+      description: |
+        Upload video files to the server
+
+        **Lưu ý:**  
+        - Nếu bạn đang thử nghiệm API này trong **Swagger UI** và bị lỗi, vui lòng **sử dụng Postman thay thế**.  
+        - Swagger UI có thể không hỗ trợ upload file đúng cách.  
+
+        **Hướng dẫn test bằng Postman:**  
+        1. Mở **Postman**.  
+        2. Chọn phương thức **POST** và nhập URL: `https://hung.vuahocvualamduan.org/medias/upload-video`.  
+        3. Chuyển sang tab **Body** → Chọn **form-data**.  
+        4. Thêm một key mới:
+           - **Tên (Key):** `video`  
+           - **Type:** File  
+           - **Chọn file từ máy tính của bạn.**  
+        5. Nhấn **Send** để gửi request.  
+
+        **Thật sự rất xin lỗi vì sự bất tiện này!**
+        **Rất biết ơn vì bạn đã thông cảm**
       operationId: uploadVideo
       tags:
         - medias
@@ -80,7 +116,25 @@ paths:
   /medias/upload-video-hls:
     post:
       summary: Upload video files (HLS)
-      description: Upload HLS video files to the server (recommendation that users should upload files under 10MB)
+      description: |
+        Upload HLS video files to the server (recommendation that users should upload files under 10MB)
+
+        **Lưu ý:**  
+        - Nếu bạn đang thử nghiệm API này trong **Swagger UI** và bị lỗi, vui lòng **sử dụng Postman thay thế**.  
+        - Swagger UI có thể không hỗ trợ upload file đúng cách.  
+
+        **Hướng dẫn test bằng Postman:**  
+        1. Mở **Postman**.  
+        2. Chọn phương thức **POST** và nhập URL: `https://hung.vuahocvualamduan.org/medias/upload-video`.  
+        3. Chuyển sang tab **Body** → Chọn **form-data**.  
+        4. Thêm một key mới:
+          - **Tên (Key):** `video`  
+          - **Type:** File  
+          - **Chọn file từ máy tính của bạn.**  
+        5. Nhấn **Send** để gửi request.  
+
+        **Thật sự rất xin lỗi vì sự bất tiện này!**
+        **Rất biết ơn vì bạn đã thông cảm**
       operationId: uploadVideoHls
       tags:
         - medias
@@ -112,7 +166,7 @@ paths:
                   result:
                     $ref: '#/components/schemas/UploadVideoHLSResponse'
         '500':
-          description: 'No video file found'            
+          description: 'No video file found'
   /medias/video-status/{id}:
     get:
       summary: Get status of video

@@ -115,6 +115,15 @@ components:
             new_refresh_token:
               type: string
               example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjdiODJhNGJhYzg3MGJlYjYyNmUxN2ExIiwidG9rZW5fdHlwZSI6MSwidmVyaWZ5IjowLCJleHAiOjE3NDg3NjI2OTksImlhdCI6MTc0MDEyMzQ3Nn0.uJilxr6nrx88CnsvYd7ZNVBrTKVoa3iSCz9ke9baGlY'
+    ResendVerifyEmailResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Token included for Swagger testing purposes only'
+        email_verify_token:
+          type: string
+          example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiNjdjNGNhMmQ4NWE2ZDcyNjA4OWZhNTVlIiwidG9rZW5fdHlwZSI6MywidmVyaWZ5IjowLCJpYXQiOjE3NDA5NTAzMzcsImV4cCI6MTc0MTU1NTEzN30.M6FMBwdeogmCt7k584MIPyuPK9NvQS7w2Ha9GmGKkeE'
     ForgotPasswordRequest:
       type: object
       properties:
