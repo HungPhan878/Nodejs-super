@@ -76,7 +76,7 @@ components:
         email:
           type: string
           format: email
-          example: 'richgrimes452@gmail.com'
+          example: 'richgrimes452+228@gmail.com'
         confirm_password:
           type: string
           example: 'Hung789!'
