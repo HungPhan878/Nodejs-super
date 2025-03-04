@@ -102,14 +102,16 @@ export const BOOKMARK_MESSAGES = {
   BOOKMARK_ALREADY_EXISTS: 'Bookmark already exists',
   BOOKMARK_NOT_FOUND: 'Bookmark not found',
   BOOKMARK_SUCCESSFULLY: 'Bookmark successfully',
-  DELETE_BOOKMARK_SUCCESSFULLY: 'Delete bookmark successfully'
+  DELETE_BOOKMARK_SUCCESSFULLY: 'Delete bookmark successfully',
+  GET_BOOKMARKS_SUCCESSFULLY: 'Get bookmarks successfully'
 } as const
 
 export const LIKE_MESSAGES = {
   LIKE_ALREADY_EXISTS: 'Like already exists',
   LIKE_NOT_FOUND: 'Like not found',
   LIKE_SUCCESSFULLY: 'Like successfully',
-  DELETE_LIKE_SUCCESSFULLY: 'Delete like successfully'
+  DELETE_LIKE_SUCCESSFULLY: 'Delete like successfully',
+  GET_LIKES_SUCCESSFULLY: 'Get likes successfully'
 } as const
 
 export const SEARCH_MESSAGES = {

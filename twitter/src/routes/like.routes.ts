@@ -1,6 +1,10 @@
 import { Router } from 'express'
-import { likeTweetController, unlikeTweetController } from '~/controllers/likes.controllers'
-import { tweetIdValidator } from '~/middlewares/tweet.middlewares'
+import {
+  GetLikedTweetsController,
+  likeTweetController,
+  unlikeTweetController
+} from '~/controllers/likes.controllers'
+import { paginationValidator, tweetIdValidator } from '~/middlewares/tweet.middlewares'
 
 import { accessTokenValidator, verifiedUserValidator } from '~/middlewares/users.middlewares'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
@@ -34,6 +38,22 @@ likeRouter.delete(
   verifiedUserValidator,
   tweetIdValidator, // Create a tweetIdValidator to use routes
   wrapRequestHandler(unlikeTweetController)
+)
+
+/**
+ * Description: Get List liked tweet
+ * Path: /
+ * Method: GET
+ * headers:{Authorization: bearer <access_token>}
+ * Query Parameters:{
+ * page: number,
+ * limit: number,
+ */
+likeRouter.get(
+  '/',
+  paginationValidator,
+  accessTokenValidator,
+  wrapRequestHandler(GetLikedTweetsController)
 )
 
 export default likeRouter
