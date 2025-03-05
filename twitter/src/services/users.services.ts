@@ -485,6 +485,49 @@ class UserService {
     )
     return { message: MESSAGES_ERROR.CHANGE_PASSWORD_SUCCESS }
   }
+
+  async getListUsersToFollow({ limit, page }: { limit: number; page: number }) {
+    const $sample = {
+      size: 100
+    }
+    const [users, total] = await Promise.all([
+      dbService.users
+        .aggregate([
+          {
+            $sample
+          },
+          {
+            $project: {
+              forgot_password_token: 0,
+              email_verify_token: 0,
+              date_of_birth: 0,
+              password: 0,
+              twitter_circle: 0,
+              verify: 0
+            }
+          },
+          {
+            $skip: limit * (page - 1)
+          },
+          {
+            $limit: limit
+          }
+        ])
+        .toArray(),
+      dbService.users
+        .aggregate([
+          {
+            $sample
+          },
+          {
+            $count: 'total'
+          }
+        ])
+        .toArray()
+    ])
+
+    return { users, total: total[0]?.total || 0 }
+  }
 }
 
 const userService = new UserService()

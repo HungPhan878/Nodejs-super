@@ -333,6 +333,6 @@ export const paginationValidator = validate(
         }
       }
     },
-    ['query'] 
+    ['query']
   )
 )

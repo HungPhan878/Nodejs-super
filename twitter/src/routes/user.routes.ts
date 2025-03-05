@@ -31,12 +31,14 @@ import {
   followController,
   unFollowController,
   changePasswordController,
-  oauthController
+  oauthController,
+  GetListUsersToFollowController
 } from '~/controllers/users.controllers'
 import { registerController } from '~/controllers/users.controllers'
 import { wrapRequestHandler } from '~/utils/wrapRequestHandler'
 import { filterMiddleware } from '~/middlewares/common.middlewares'
 import { UpdateMeBodyReq } from '~/models/requests/User.requests'
+import { paginationValidator } from '~/middlewares/tweet.middlewares'
 
 const userRouter = Router()
 
@@ -201,6 +203,23 @@ userRouter.patch(
     'website'
   ]),
   wrapRequestHandler(updateMeController)
+)
+
+/**
+ *  Description: Suggest list of users to follow
+ *  Path: /suggestions
+ *  Method: GET
+ * headers: { 'Authorization: Bearer <access_token>'}
+ * Query Params: {
+ * limit: number,
+ * page: number
+ * }
+ */
+userRouter.get(
+  '/suggestions',
+  paginationValidator,
+  accessTokenValidator,
+  wrapRequestHandler(GetListUsersToFollowController)
 )
 
 /**

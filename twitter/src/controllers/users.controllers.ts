@@ -232,3 +232,18 @@ export const changePasswordController = async (
 
   res.json(result)
 }
+
+export const GetListUsersToFollowController = async (req: Request, res: Response) => {
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { users, total } = await userService.getListUsersToFollow({ limit, page })
+  res.status(200).json({
+    messages: MESSAGES_ERROR.GET_LIST_USERS_TO_FOLLOW_SUCCESSFULLY,
+    result: {
+      users,
+      page,
+      limit,
+      total_page: Math.ceil(total / limit)
+    }
+  })
+}

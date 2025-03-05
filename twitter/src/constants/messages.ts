@@ -74,7 +74,8 @@ const MESSAGES_ERROR = {
   GET_STATUS_VIDEO_SUCCESSFULLY: 'Get status video successfully',
   CONTENT_MUST_BE_A_STRING: 'Content must be a string.',
   MEDIA_TYPE_IS_INVALID: 'Media type must be one of image, video',
-  PEOPLE_FOLLOWED_IS_INVALID: 'People follow must be 0 or 1'
+  PEOPLE_FOLLOWED_IS_INVALID: 'People follow must be 0 or 1',
+  GET_LIST_USERS_TO_FOLLOW_SUCCESSFULLY: 'Get list users to follow successfully'
 } as const
 
 export const TWEET_MESSAGES = {
