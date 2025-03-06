@@ -72,3 +72,21 @@ export const getNewFeedsController = async (
     }
   })
 }
+
+export const getNewFeedsNofollowController = async (
+  req: Request<ParamsDictionary, any, any, Pagination>,
+  res: Response
+) => {
+  const limit = Number(req.query.limit as string)
+  const page = Number(req.query.page as string)
+  const { tweets, total } = await tweetService.getNewFeedsNofollow({ limit, page })
+  res.status(200).json({
+    message: TWEET_MESSAGES.GET_NEW_FEEDS_SUCCESSFULLY,
+    result: {
+      tweets,
+      page,
+      limit,
+      total_page: Math.ceil(total / limit)
+    }
+  })
+}

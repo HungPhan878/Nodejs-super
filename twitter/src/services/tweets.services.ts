@@ -473,6 +473,22 @@ class TweetService {
       total: total[0]?.total || 0 // if total is not then total[0] will throw error so this how
     }
   }
+
+  async getNewFeedsNofollow({ limit, page }: { limit: number; page: number }) {
+    const [tweets, total] = await Promise.all([
+      dbService.tweets
+        .find({ audience: 0 })
+        .sort({
+          created_at: -1
+        })
+        .skip(limit * (page - 1))
+        .limit(limit)
+        .toArray(),
+      await dbService.tweets.countDocuments({ audience: 0 })
+    ])
+    tweets.sort(() => Math.random() - 0.5)
+    return { tweets, total }
+  }
 }
 
 const tweetService = new TweetService()

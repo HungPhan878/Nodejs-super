@@ -2,6 +2,7 @@ import { Router } from 'express'
 import {
   createTweetController,
   getNewFeedsController,
+  getNewFeedsNofollowController,
   getTweetChildrenController,
   getTweetController
 } from '~/controllers/tweets.controllers'
@@ -34,6 +35,23 @@ tweetRouter.post(
   verifiedUserValidator,
   createTweetValidator,
   wrapRequestHandler(createTweetController)
+)
+
+/**
+ * Description: Get new feeds When user hasn't followed anyone
+ * Path: /new-feeds
+ * Method: Get
+ * Headers: {Authorization: "Bearer <access_token>"}
+ * Query Parameters:{
+ * page: number,
+ * limit: number,
+ * }
+ * */
+tweetRouter.get(
+  '/new-feeds',
+  paginationValidator,
+  accessTokenValidator,
+  wrapRequestHandler(getNewFeedsNofollowController)
 )
 
 /**
@@ -74,7 +92,7 @@ tweetRouter.get(
 )
 
 /**
- * Description: Get new feeds
+ * Description: Get new feeds followed users
  * Path: /
  * Method: Get
  * Headers: {Authorization: "Bearer <access_token>"}
